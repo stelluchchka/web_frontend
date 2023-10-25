@@ -1,0 +1,121 @@
+.body {
+    background-color: #FBAF00; 
+    height: 100vh; 
+    position: relative;
+}
+.div {
+    position: relative; 
+    background-color: #FBAF00; 
+    color: #ffffff; 
+    height: 130px; 
+    margin-bottom: 1%;
+}
+.header {
+    text-align: center; 
+    font-weight: 900; 
+    margin-top: 25px; 
+    font-family: sans-serif; 
+    color: white; 
+    text-shadow: 0 0 3px #ffffff;
+}
+.content-container {
+    background-color: white; 
+    height: 100%; 
+    width: 70%; 
+    margin-left: 15%; 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: space-around; 
+    position: absolute
+}
+.p {
+    text-align: left; 
+    border-radius: 10px;
+}
+.left-container {
+    width: 40%;
+}
+.title {
+    font-size: 25px;
+    font-family: sans-serif;
+    font-weight: 600;
+    text-align: center;
+    color: #FBAF00;
+    margin-bottom: 3%;
+}
+.dish-img {
+    width: 90%;
+    height: 30; 
+    margin-top: 3%; 
+    border-radius: 15px; 
+    margin-left: 10%; 
+    background-color: white;
+}
+.dish-chef-div {
+    position: relative;
+    display: flex;
+    width: 80%;
+    margin: 0 auto;
+}
+.dish-chef-img {
+    display: inline-block;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 80px;
+    height: 80px;
+    margin-top: 5%;
+}
+.dish-chef-p {
+    position: absolute;
+    width: 90%;
+    font-size: 18px;
+    font-family: sans-serif;
+    font-weight: 200;
+    color: #3c3a3a;
+    text-align: right;
+    font-style: italic;
+}
+
+.mid-container {
+    width: 23%; 
+    margin-top: 3%;
+}
+.weight-section {
+    display: flex; 
+    justify-content: space-between; 
+    position: relative;
+}
+.dish-text {
+    font-size: 15px;
+    font-family: sans-serif;
+    font-weight: 500;
+    color: #3c3a3a;
+    text-align: left;
+    margin-top: 3%;
+    word-wrap: break-word;
+}
+.dish-digit {
+    font-size: 32px;
+    font-family: Merriweather;
+    font-weight: 800;
+    color: #FBAF00;
+    text-align: right;
+}
+.statistic {
+    display: flex; 
+    justify-content: space-between;
+}
+.content-section {
+    width: 23%; 
+    margin-top: 3%;
+}
+.line {
+    margin-bottom: 10%;
+    margin-top: 10%;
+    border-bottom: 1px solid #FBAF00;
+}
+.gray-line {
+    margin-bottom: 5%;
+    margin-top: 5%;
+    border-bottom: 1px solid #635f5f;
+}
