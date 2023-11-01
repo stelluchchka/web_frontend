@@ -18,13 +18,12 @@ export type CardProps = {
 
 const OneCard: React.FC<CardProps> = ({id, title, tag, price, src, chef, onButtonClick, onImageClick }) => {
   return (
-    <Card style={{marginRight: '1%', marginLeft: '1%', width: 'auto'}}>
+    <Card style={{marginRight: '3%', marginLeft: '3%', width: '345px', boxShadow: '0 0 10px #3c3a3a'}}>
       <Link to={`/dishes/${id}`} style={{ textDecoration: 'none', color: 'black' }}>
         <div style={{ backgroundColor: '#ffffff',
-                      width: '400px',
+                      width: '345px',
                       borderRadius: '5px',
-                      marginBottom: '10%',
-                      boxShadow: '0 0 10px #3c3a3a'}}>
+                      marginBottom: '0%'}}>
           <Image
             style={{  width: '70%', 
                       height: '313', 
@@ -53,14 +52,18 @@ const OneCard: React.FC<CardProps> = ({id, title, tag, price, src, chef, onButto
             <h5 style={{fontFamily: 'sans-serif', backgroundColor: '#f53100', color: 'white', fontWeight: '800', right: '0', margin: '5px', padding: '3px 15px 3px', borderRadius: '5px'}}>{tag}</h5>         
         </div>
 
-        <h4 style={{fontFamily: 'sans-serif', marginLeft: '3%', fontWeight: '800', color: '#3c3a3a', fontSize: 'large', marginTop: '0', marginBottom: '5%'}}>{price}$</h4>
-        <h4 style={{fontFamily: 'sans-serif', marginLeft: '3%', fontWeight: '100', marginTop: '2%', marginBottom: '2%'}}>{chef}</h4>
-        <div className='mt-auto'>
-          <Button style={{ backgroundColor: '#3D348B', padding: '10px 20px', borderColor: "#000" }} onClick={onButtonClick} variant="primary">Добавить</Button>
+        <h4 style={{fontFamily: 'sans-serif', marginLeft: '3%', fontWeight: '800', color: '#3c3a3a', fontSize: 'large', marginTop: '0', marginBottom: '0%', textAlign: 'center'}}>{price}$</h4>
+        <h4 style={{fontFamily: 'sans-serif', marginLeft: '3%', fontWeight: '100', marginTop: '2%', marginBottom: '2%', textAlign: 'center'}}>{chef}</h4>
+        <div style={{textAlign: 'right', marginRight: '5px'}}>
+          <Button style={{padding: '10px 20px', marginBottom: "5px"}} onClick={onButtonClick} variant="primary">🗑</Button>
         </div>
+        
       </Card.Body>
     </Card>
   );
 };
 
 export default OneCard;
+
+// #f53100 red
+// #00AF54 green

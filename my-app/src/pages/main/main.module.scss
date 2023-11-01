@@ -7,17 +7,22 @@
 }
 
 .header {
-    text-align: center; 
     font-family: sans-serif;
   
     &__title {
-      font-weight: 900; 
+      font-weight: 900;
+      text-align: center;
       margin-top: 25px; 
       color: white; 
       text-shadow: 0 0 1px #ffffff;
     }
     &__slogan {
+      text-align: center;
       margin-bottom: 30px; 
+    }
+    &__logo {
+      text-align: left;
+      margin-left: 1%;
     }
 }
 

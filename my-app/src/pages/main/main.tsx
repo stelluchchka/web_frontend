@@ -53,8 +53,8 @@ const mockDishes = [
         weight: 100,
         energy_value: 1,
         content: "dd",
-        chef_name: "aaaaa",
-        chef_post: "asdf",
+        chef_name: "aaaaa иван",
+        chef_post: "шеф-повр",
         chef_src: "https://velobaza.ru/upload/medialibrary/6fe/gornii_velosiped_3.jpg",
         expiry_date: "12 суток"
     },
@@ -68,8 +68,8 @@ const mockDishes = [
         weight: 100,
         energy_value: 1,
         content: "dd",
-        chef_name: "aaaaa",
-        chef_post: "asdf",
+        chef_name: "aaaaa щщщщ",
+        chef_post: "шеф",
         chef_src: "https://velobaza.ru/upload/medialibrary/6fe/gornii_velosiped_3.jpg",
         expiry_date: "12 суток"
     },
@@ -83,8 +83,8 @@ const mockDishes = [
         weight: 100,
         energy_value: 1,
         content: "dd",
-        chef_name: "aaaaa",
-        chef_post: "asdf",
+        chef_name: "aaaaоооa",
+        chef_post: "кондитер",
         chef_src: "https://velobaza.ru/upload/medialibrary/6fe/gornii_velosiped_3.jpg",
         expiry_date: "12 суток"
     },
@@ -198,7 +198,7 @@ const MainPage: React.FC = () => {
                 const filteredArray = mockDishes.filter(mockDishes => mockDishes.title.includes(titleValue));
                 setDishes(filteredArray);
             } else if (minPriceValue) {
-                const filteredArray = mockDishes.filter(mockDishes => mockDishes.price <= minPriceValue);
+                const filteredArray = mockDishes.filter(mockDishes => mockDishes.price >= minPriceValue);
                 setDishes(filteredArray);
             } else if (maxPriceValue) {
                 const filteredArray = mockDishes.filter(mockDishes => mockDishes.price <= maxPriceValue);
@@ -251,12 +251,12 @@ const MainPage: React.FC = () => {
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item">
-                        <Link style={{color: '#3D348B'}} to="/">dishes</Link>
+                        <Link style={{color: 'black', textAlign: 'left', fontStyle: 'italic'}} to="/">блюда</Link>
                     </li>
                 </ol>
             </nav>
             <div className={styles["hat"]}>
-                <h5>**логотип</h5>
+                <h5 className={styles["header__logo"]}>**логотип</h5>
                 <h1 className={styles["header__title"]}>
                 ЗАЯВКИ ДЛЯ ПОВАРОВ В БЫСТРОМ ПИТАНИИ
                 </h1>
@@ -309,13 +309,13 @@ const MainPage: React.FC = () => {
                                     fontFamily: 'sans-serif'}} 
 
                             onClick={() => handleSearchButtonClick()}>
-                                Подтвердить
+                                Поиск
                             </Button>
                     </div>
-                    <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'start', width: '100%', margin: '0 auto'}}>
+                    <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'left', width: '100%', margin: '0 auto'}}>
                         {
                         dishes.map((dish: Dish) => (
-                            <OneCard id={dish.id} src={dish.src} chef={dish.chef_post} title={dish.title} tag={dish.tag} price={Number(dish.price)} onButtonClick={() => console.log('add to application')}></OneCard>
+                            <OneCard id={dish.id} src={dish.src} chef={dish.chef_post} title={dish.title} tag={dish.tag} price={Number(dish.price)} onButtonClick={() => console.log('add to order')}></OneCard>
                         ))}
                     </div>
                 {dishes.length === 0 && <p className="dish-text"> <big>таких блюд у нас нет🥹</big></p>}
