@@ -41,7 +41,7 @@ const mockDishes = [
       content: "dd",
       chef_name: "иван",
       chef_post: "кондитер",
-      chef_src: "https://velobaza.ru/upload/medialibrary/6fe/gornii_velosiped_3.jpg",
+      chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
       expiry_date: "12 суток"
   },
   {
@@ -56,7 +56,7 @@ const mockDishes = [
       content: "dd",
       chef_name: "иван",
       chef_post: "кондитер",
-      chef_src: "https://velobaza.ru/upload/medialibrary/6fe/gornii_velosiped_3.jpg",
+      chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
       expiry_date: "12 суток"
   },
   {
@@ -86,7 +86,7 @@ const mockDishes = [
       content: "dd",
       chef_name: "анна",
       chef_post: "шеф",
-      chef_src: "https://velobaza.ru/upload/medialibrary/6fe/gornii_velosiped_3.jpg",
+      chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
       expiry_date: "12 суток"
   },
   {
@@ -101,7 +101,7 @@ const mockDishes = [
       content: "dd",
       chef_name: "анна",
       chef_post: "шеф",
-      chef_src: "https://velobaza.ru/upload/medialibrary/6fe/gornii_velosiped_3.jpg",
+      chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
       expiry_date: "12 суток"
   }
 ]

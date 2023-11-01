@@ -55,14 +55,14 @@ const mockDishes = [
         content: "dd",
         chef_name: "aaaaa иван",
         chef_post: "шеф-повр",
-        chef_src: "https://velobaza.ru/upload/medialibrary/6fe/gornii_velosiped_3.jpg",
+        chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
         expiry_date: "12 суток"
     },
     {
         id: 2,
         title: "сок",
         price: 200,
-        src: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
+        src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
         tag: "напиток",
         status: "есть",
         weight: 100,
@@ -70,7 +70,7 @@ const mockDishes = [
         content: "dd",
         chef_name: "aaaaa щщщщ",
         chef_post: "шеф",
-        chef_src: "https://velobaza.ru/upload/medialibrary/6fe/gornii_velosiped_3.jpg",
+        chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
         expiry_date: "12 суток"
     },
     {
@@ -85,7 +85,7 @@ const mockDishes = [
         content: "dd",
         chef_name: "aaaaоооa",
         chef_post: "кондитер",
-        chef_src: "https://velobaza.ru/upload/medialibrary/6fe/gornii_velosiped_3.jpg",
+        chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
         expiry_date: "12 суток"
     },
     {
@@ -100,14 +100,14 @@ const mockDishes = [
         content: "dd",
         chef_name: "aaaaa",
         chef_post: "asdf",
-        chef_src: "https://velobaza.ru/upload/medialibrary/6fe/gornii_velosiped_3.jpg",
+        chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
         expiry_date: "12 суток"
     },
     {
         id: 5,
         title: "сок2",
         price: 500,
-        src: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
+        src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
         tag: "напиток",
         status: "есть",
         weight: 100,
@@ -115,7 +115,7 @@ const mockDishes = [
         content: "dd",
         chef_name: "aaaaa",
         chef_post: "asdf",
-        chef_src: "https://velobaza.ru/upload/medialibrary/6fe/gornii_velosiped_3.jpg",
+        chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
         expiry_date: "12 суток"
     }
 ]
@@ -285,9 +285,16 @@ const MainPage: React.FC = () => {
                                     id="dropdown-basic">
                                         {tagValue || "тег"}
                                     </Dropdown.Toggle>
-                                    <Dropdown.Menu style={{width: '200px', textAlign: 'left',}}>
+                                    <Dropdown.Menu style={{
+                                        width: '200px',
+                                        textAlign: 'left',
+                                        textDecoration: 'none'
+                                    }}>
                                         {tags.map(tag => (
-                                        <Dropdown.Item key={tag.key} eventKey={tag.key}>{tag.value}</Dropdown.Item>
+                                            <Dropdown.Item key={tag.key} eventKey={tag.key}
+                                            style={{display: 'block', backgroundColor: 'white', color: '#827e7e'}}>
+                                                {tag.value}
+                                            </Dropdown.Item>
                                         ))}
                                     </Dropdown.Menu>
                                 </Dropdown>
