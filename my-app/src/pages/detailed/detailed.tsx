@@ -112,7 +112,7 @@ const OrderPage = () => {
   const id = params.id === undefined ? '' : params.id;
 
   const [dish, setDish] = useState<Dish>();
-  let currentUrl = '/'
+  let currentUrl = '/web_frontend/'
 
   const fetchDish = async () => {
       try {
@@ -138,7 +138,7 @@ const OrderPage = () => {
           setDish(dish)
       }
       
-      currentUrl += 'dish/' + id
+      currentUrl += 'dishes/' + id
   };
   useEffect(() => {
       fetchDish();
