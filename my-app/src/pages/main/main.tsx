@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -248,13 +248,13 @@ const MainPage: React.FC = () => {
     return (
         <div className={styles.main_page}>
             <Header/>
-            <nav aria-label="breadcrumb">
+            {/* <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item">
                         <Link style={{color: 'black', textAlign: 'left', fontStyle: 'italic'}} to="/">блюда</Link>
                     </li>
                 </ol>
-            </nav>
+            </nav> */}
             <div className={styles["hat"]}>
                 <h5 className={styles["header__logo"]}>**логотип</h5>
                 <h1 className={styles["header__title"]}>

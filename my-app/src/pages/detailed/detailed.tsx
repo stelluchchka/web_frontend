@@ -1,7 +1,7 @@
 import styles from './detailed.module.scss'
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import Header from '../../components/header';
 
 export type Dish = {
@@ -152,16 +152,6 @@ const OrderPage = () => {
         height: '100vh',
         position: 'relative'}}>
       <Header/>
-      <nav aria-label="breadcrumb" >
-          <ol>
-              <li className="breadcrumb-item">
-                  <Link style={{color: 'black', fontStyle: 'italic'}} to="/">блюда</Link>
-              </li>
-              <li className="breadcrumb-item">
-                <Link style={{color: 'black', fontStyle: 'italic'}} to={`/dishes/${dish?.id}`}>{dish?.title}</Link>
-              </li>
-          </ol>
-      </nav>  
     <div className={styles.fafa}></div>
       <div style={{backgroundColor: 'white', 
           height: '100%', 
@@ -178,7 +168,7 @@ const OrderPage = () => {
                   fontFamily: 'sans-serif',
                   fontWeight: '600',
                   textAlign: 'center',
-                  color: '#FBAF00',
+                  color: 'black',
                   marginBottom: '3%'}}>{dish?.title}</div>
               <img style={{width: '90%',
                   height: '30', 
