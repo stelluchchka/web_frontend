@@ -8,7 +8,7 @@ export type Dish = {
   id: number,
   title: string,
   price: number,
-  src: string,
+  url: string,
   tag: string,
   status: string,
   weight: number,
@@ -16,7 +16,7 @@ export type Dish = {
   content: string,
   chef_name: string,
   chef_post: string,
-  chef_src: string,
+  chef_url: string,
   expiry_date: string
 }
 
@@ -25,7 +25,7 @@ export type ReceivedDishData = {
   title: string,
   price: number,
   tag: string,
-  src: string,
+  url: string,
 }
 
 const mockDishes = [
@@ -33,7 +33,7 @@ const mockDishes = [
       id: 1,
       title: "бургер",
       price: 100,
-      src: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
+      url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
       tag: "блюдо",
       status: "есть",
       weight: 100,
@@ -41,14 +41,14 @@ const mockDishes = [
       content: "dd",
       chef_name: "иван",
       chef_post: "кондитер",
-      chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
+      chef_url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
       expiry_date: "12 суток"
   },
   {
       id: 2,
       title: "сок",
       price: 200,
-      src: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
+      url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
       tag: "напиток",
       status: "есть",
       weight: 100,
@@ -56,14 +56,14 @@ const mockDishes = [
       content: "dd",
       chef_name: "иван",
       chef_post: "кондитер",
-      chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
+      chef_url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
       expiry_date: "12 суток"
   },
   {
       id: 3,
       title: "бургер1",
       price: 300,
-      src: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
+      url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
       tag: "блюдо",
       status: "есть",
       weight: 100,
@@ -71,14 +71,14 @@ const mockDishes = [
       content: "dd",
       chef_name: "анна",
       chef_post: "шеф",
-      chef_src: "https://velobaza.ru/upload/medialibrary/6fe/gornii_velosiped_3.jpg",
+      chef_url: "https://velobaza.ru/upload/medialibrary/6fe/gornii_velosiped_3.jpg",
       expiry_date: "12 суток"
   },
   {
       id: 4,
       title: "бургер2",
       price: 400,
-      src: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
+      url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
       tag: "блюдо",
       status: "есть",
       weight: 100,
@@ -86,14 +86,14 @@ const mockDishes = [
       content: "dd",
       chef_name: "анна",
       chef_post: "шеф",
-      chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
+      chef_url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
       expiry_date: "12 суток"
   },
   {
       id: 5,
       title: "сок2",
       price: 500,
-      src: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
+      url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
       tag: "напиток",
       status: "есть",
       weight: 100,
@@ -101,7 +101,7 @@ const mockDishes = [
       content: "dd",
       chef_name: "анна",
       chef_post: "шеф",
-      chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
+      chef_url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
       expiry_date: "12 суток"
   }
 ]
@@ -112,17 +112,18 @@ const OrderPage = () => {
   const id = params.id === undefined ? '' : params.id;
 
   const [dish, setDish] = useState<Dish>();
-  let currentUrl = '/web_frontend/'
+  let currentUrl = '/'
 
   const fetchDish = async () => {
       try {
           const response = await fetch(`http://127.0.0.1:8000/dishes/${id}`);
           const jsonData = await response.json();
+          console.log(jsonData)
           setDish({
               id: Number(jsonData.id),
               title: jsonData.title,
               price: jsonData.price,
-              src: jsonData.src,
+              url: jsonData.url,
               tag: jsonData.tag,
               status: jsonData.status,
               weight: jsonData.weight,
@@ -130,7 +131,7 @@ const OrderPage = () => {
               content: jsonData.content,
               chef_name: jsonData.chef_name,
               chef_post: jsonData.chef_post,
-              chef_src: jsonData.chef_src,
+              chef_url: jsonData.chef_url,
               expiry_date: jsonData.expiry_date
           })
       } catch {
@@ -176,7 +177,7 @@ const OrderPage = () => {
                   borderRadius: '15px', 
                   marginLeft: '10%', 
                   backgroundColor: 'white',}} 
-                  src={dish?.src} alt="dish"/>
+                  src={dish?.url} alt="dish"/>
               <div style={{position: 'relative',
                     display: 'flex',
                     width: '80%',
@@ -186,7 +187,7 @@ const OrderPage = () => {
                     overflow: 'hidden',
                     width: '80px',
                     height: '80px',
-                    marginTop: '5%'}} src={dish?.chef_src} alt="chef"/>
+                    marginTop: '5%'}} src={dish?.chef_url} alt="chef"/>
                   <div>
                       <p style={{position: 'absolute',
                         width: '90%',

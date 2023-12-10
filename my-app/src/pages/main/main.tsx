@@ -12,7 +12,7 @@ export type Dish = {
     id: number,
     title: string,
     price: number,
-    src: string,
+    url: string,
     tag: string,
     status: string,
     weight: number,
@@ -20,7 +20,7 @@ export type Dish = {
     content: string,
     chef_name: string,
     chef_post: string,
-    chef_src: string,
+    chef_url: string,
     expiry_date: string
 }
 
@@ -29,17 +29,22 @@ export type ReceivedDishData = {
     title: string,
     price: number,
     tag: string,
-    src: string,
+    url: string,
 }
 
-const tags =[     {
-        key: "dish",
-        value: "блюдо"
+const tags = [ 
+    {
+        key: "tag",
+        value: "тег"
+    },
+     {
+        key: "hot",
+        value: "остро"
     },
     {
-        key: "drink",
-        value: "напиток"
-    },
+        key: "veg",
+        value: "вег"
+    }
 ]
 
 const mockDishes = [
@@ -47,151 +52,111 @@ const mockDishes = [
         id: 1,
         title: "бургер",
         price: 100,
-        src: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
-        tag: "блюдо",
+        url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
+        tag: "вег",
         status: "есть",
         weight: 100,
         energy_value: 1,
         content: "dd",
         chef_name: "aaaaa иван",
         chef_post: "шеф-повр",
-        chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
+        chef_url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
         expiry_date: "12 суток"
     },
     {
         id: 2,
         title: "сок",
         price: 200,
-        src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
-        tag: "напиток",
+        url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
+        tag: "остро",
         status: "есть",
         weight: 100,
         energy_value: 1,
         content: "dd",
         chef_name: "aaaaa щщщщ",
         chef_post: "шеф",
-        chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
+        chef_url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
         expiry_date: "12 суток"
     },
     {
         id: 3,
         title: "бургер1",
         price: 300,
-        src: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
-        tag: "блюдо",
+        url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
+        tag: "вег",
         status: "есть",
         weight: 100,
         energy_value: 1,
         content: "dd",
         chef_name: "aaaaоооa",
         chef_post: "кондитер",
-        chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
+        chef_url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
         expiry_date: "12 суток"
     },
     {
         id: 4,
         title: "бургер2",
         price: 400,
-        src: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
-        tag: "блюдо",
+        url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
+        tag: "вег",
         status: "есть",
         weight: 100,
         energy_value: 1,
         content: "dd",
         chef_name: "aaaaa",
         chef_post: "asdf",
-        chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
+        chef_url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
         expiry_date: "12 суток"
     },
     {
         id: 5,
         title: "сок2",
         price: 500,
-        src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
-        tag: "напиток",
+        url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
+        tag: "остро",
         status: "есть",
         weight: 100,
         energy_value: 1,
         content: "dd",
         chef_name: "aaaaa",
         chef_post: "asdf",
-        chef_src: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
+        chef_url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
         expiry_date: "12 суток"
     }
 ]
 
 const MainPage: React.FC = () => {
     const [dishes, setDishes] = useState<Dish[]>([]);
-    const [tagValue, setTagValue] = useState<string>('');
+    const [tagValue, setTagValue] = useState<string>('тег');
     const [titleValue, setTitleValue] = useState<string>('')
-    const [minPriceValue, setMinPriceValue] = useState<number | undefined>(undefined);
-    const [maxPriceValue, setMaxPriceValue] = useState<number | undefined>(undefined);
+    const [minPriceValue, setMinPriceValue] = useState<number>(0);
+    const [maxPriceValue, setMaxPriceValue] = useState<number>(10000000);
 
     const fetchDishes = async () => {
-        let response = null;
         let url = 'http://127.0.0.1:8000/dishes'
-
-        if (titleValue) {
-            url += `?title=${titleValue}`
-            if (maxPriceValue) {
-                url += `&max_price=${maxPriceValue}`
-            }
-            if(minPriceValue) {
-                url += `&min_price=${minPriceValue}`
-            }
-            if (tagValue){
-                url += `&tag=${tagValue}`
-            }
-        } else if (tagValue) {
-            url += `?tag=${tagValue}`
-            if (maxPriceValue) {
-                url += `&max_price=${maxPriceValue}`
-            }
-            if(minPriceValue) {
-                url += `&min_price=${minPriceValue}`
-            }
-            if (titleValue){
-                url += `&title=${titleValue}`
-            }
-        } else if (minPriceValue){
-            url += `?min_price=${minPriceValue}`
-            if (maxPriceValue) {
-                url += `&max_price=${maxPriceValue}`
-            }
-            if(minPriceValue) {
-                url += `&tag=${tagValue}`
-            }
-            if (titleValue){
-                url += `&title=${titleValue}`
-            }
-        } else if (maxPriceValue){
-            url += `?max_price=${maxPriceValue}`
-            if (maxPriceValue) {
-                url += `&min_price=${minPriceValue}`
-            }
-            if(minPriceValue) {
-                url += `&tag=${tagValue}`
-            }
-            if (titleValue){
-                url += `&title=${titleValue}`
-            }
-        }
+        url += `?title=${titleValue}`
+        url += `&max_price=${maxPriceValue}`
+        url += `&min_price=${minPriceValue}`
+        url += `&tag=${tagValue}`
         console.log(url)
         try {
-            response = await fetch(url);
-
+            const response = await fetch(url, {
+                credentials: 'include'
+            });
             const jsonData = await response.json();
-            const newRecipesArr = jsonData.map((raw: ReceivedDishData) => ({
+            const newRecipesArr = jsonData.dishes.map((raw: ReceivedDishData) => ({
                 id: raw.id,
                 title: raw.title,
                 price: raw.price,
-                tag: raw.tag,
-                src: raw.src,
+                tag: raw.tags,
+                url: raw.url,
             }))
+            console.log(jsonData.dishes)
+            console.log(jsonData.dishes.url)
             setDishes(newRecipesArr);
         }
         catch {
-            if (tagValue) {
+            if (tagValue && tagValue != 'тег') {
                 const filteredArray = mockDishes.filter(mockDishes => mockDishes.tag === tagValue);
                 setDishes(filteredArray);
             } else if (titleValue) {
@@ -204,15 +169,14 @@ const MainPage: React.FC = () => {
                 const filteredArray = mockDishes.filter(mockDishes => mockDishes.price <= maxPriceValue);
                 setDishes(filteredArray);
             }
-            
             else {
                 setDishes(mockDishes);
             }
-
         }
-        
     };
 
+
+    
     useEffect(() => {
         fetchDishes();
     }, []);
@@ -248,13 +212,7 @@ const MainPage: React.FC = () => {
     return (
         <div className={styles.main_page}>
             <Header/>
-            {/* <nav aria-label="breadcrumb">
-                <ol className="breadcrumb">
-                    <li className="breadcrumb-item">
-                        <Link style={{color: 'black', textAlign: 'left', fontStyle: 'italic'}} to="/">блюда</Link>
-                    </li>
-                </ol>
-            </nav> */}
+
             <div className={styles["hat"]}>
                 <h5 className={styles["header__logo"]}>**логотип</h5>
                 <h1 className={styles["header__title"]}>
@@ -322,7 +280,7 @@ const MainPage: React.FC = () => {
                     <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'left', width: '100%', margin: '0 auto'}}>
                         {
                         dishes.map((dish: Dish) => (
-                            <OneCard id={dish.id} src={dish.src} chef={dish.chef_post} title={dish.title} tag={dish.tag} price={Number(dish.price)} onButtonClick={() => console.log('add to order')}></OneCard>
+                            <OneCard key={dish.id} id={dish.id} url={dish.url} chef={dish.chef_post} title={dish.title} tag={dish.tag} price={Number(dish.price)} onButtonClick={() => console.log('add to order')}></OneCard>
                         ))}
                     </div>
                 {dishes.length === 0 && <p className="dish-text"> <big>таких блюд у нас нет🥹</big></p>}

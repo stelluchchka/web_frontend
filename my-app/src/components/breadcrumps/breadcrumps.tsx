@@ -29,5 +29,4 @@ const Breadcrumps = () => {
     </div>
   );
 };
-
 export default Breadcrumps;

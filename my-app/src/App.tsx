@@ -11,7 +11,7 @@ function App() {
       <Breadcrumps />
       <Routes>
       <Route path="/" element={<Navigate to="/dishes" replace />} />
-        <Route path="/web_frontend" element={<Navigate to="/dishes" replace />} />
+        <Route path="/" element={<Navigate to="/dishes" replace />} />
         <Route path="/dishes" element={<MainPage />} />
         <Route path="/dishes/:id" element={<DetailedPage />} />
       </Routes>

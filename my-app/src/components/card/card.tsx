@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 export type CardProps = {
   id?: number,
-  src?: string;
+  url?: string;
   title: React.ReactNode;
   tag?: React.ReactNode;
   price?: number;
@@ -16,7 +16,7 @@ export type CardProps = {
   onImageClick?: React.MouseEventHandler;
 };
 
-const OneCard: React.FC<CardProps> = ({id, title, tag, price, src, chef, onButtonClick, onImageClick }) => {
+const OneCard: React.FC<CardProps> = ({id, title, tag, price, url, chef, onButtonClick, onImageClick }) => {
   return (
     <Card style={{marginRight: '3%', marginLeft: '3%', width: '345px', boxShadow: '0 0 10px #3c3a3a'}}>
       <Link to={`/dishes/${id}`} style={{ textDecoration: 'none', color: 'black' }}>
@@ -29,7 +29,7 @@ const OneCard: React.FC<CardProps> = ({id, title, tag, price, src, chef, onButto
                       height: '313', 
                       marginTop: '5%'}}
             onClick={onImageClick}
-            src={src ? src : "https://www.solaredge.com/us/sites/nam/files/Placeholders/Placeholder-4-3.jpg"}
+            src={url ? url : "https://www.solaredge.com/us/sites/nam/files/Placeholders/Placeholder-4-3.jpg"}
           />
         </div>
       </Link>
