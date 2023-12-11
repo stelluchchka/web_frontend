@@ -2,7 +2,7 @@ import styles from './detailed.module.scss'
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
-import Header from '../../components/header';
+import Breadcrumps from '../../components/breadcrumps';
 
 export type Dish = {
   id: number,
@@ -113,7 +113,9 @@ const OrderPage = () => {
 
   const [dish, setDish] = useState<Dish>();
   let currentUrl = '/'
-
+  const [linksMap, setLinksMap] = useState<Map<string, string>>(
+    new Map<string, string>([['блюда', '/']])
+  );
   const fetchDish = async () => {
       try {
           const response = await fetch(`http://127.0.0.1:8000/dishes/${id}`);
@@ -134,6 +136,9 @@ const OrderPage = () => {
               chef_url: jsonData.chef_url,
               expiry_date: jsonData.expiry_date
           })
+          const newLinksMap = new Map<string, string>(linksMap); // Копирование старого Map
+          newLinksMap.set(jsonData.title, '/dishes/' + id);
+          setLinksMap(newLinksMap)
       } catch {
           const dish = mockDishes.find(item => item.id === Number(id));
           setDish(dish)
@@ -152,7 +157,8 @@ const OrderPage = () => {
         width: '100%',
         height: '100vh',
         position: 'relative'}}>
-      <Header/>
+      {/* <Header/> */}
+      <Breadcrumps links={linksMap}/>
     <div className={styles.fafa}></div>
       <div style={{backgroundColor: 'white', 
           height: '100%', 

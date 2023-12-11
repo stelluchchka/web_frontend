@@ -1,0 +1,40 @@
+
+.hat {
+    position: relative; 
+    background-color: #F5AB00; 
+    color: #ffffff; 
+    height: 340px; 
+}
+
+.header {
+    font-family: sans-serif;
+  
+    &__title {
+      font-weight: 900;
+      text-align: center;
+      margin-top: 25px; 
+      color: white; 
+      text-shadow: 0 0 1px #ffffff;
+    }
+    &__slogan {
+      text-align: center;
+      margin-bottom: 30px; 
+    }
+    &__logo {
+      text-align: left;
+      margin-left: 1%;
+    }
+}
+
+.submit-btn {
+  color: white; 
+  background-color: #f53100; 
+  border: none; 
+  height: 60px; 
+  font-size: 20px; 
+  border-radius: 10px 10px 10px 10px; 
+  width: 200px; 
+  margin-left: 20px;
+  font-family: sans-serif;
+}
+
