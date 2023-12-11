@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Link } from 'react-r-dom';
+import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form';
 import styles from './login.module.scss'
@@ -110,8 +110,8 @@ const LoginPage: React.FC = () => {
                     </div>
                     
                     {
-                    isDataValid ? <Button type='submit' style={{backgroundColor: "#2787F5", padding: "10px 20px", borderColor: "#000", fontSize: 18, height: 50}}>войти</Button>
-                    : <Button disabled type='submit' style={{backgroundColor: "#2787F5", padding: "10px 20px", borderColor: "#000", fontSize: 18, height: 50}}>войти</Button>
+                    isDataValid ? <Button type='submit' style={{marginTop: "20px", backgroundColor: "#f53100", color: "white", padding: "10px 20px", borderColor: "#000", fontSize: 18, height: 50}}>войти</Button>
+                    : <Button disabled type='submit' style={{marginTop: "20px", backgroundColor: "#f53100", color: "white", padding: "10px 20px", borderColor: "#000", fontSize: 18, height: 50}}>войти</Button>
                     }
                     <Link className={styles['login__page-link']} to='/registration'>у вас еще нет аккаунта?</Link>
                 </Form>

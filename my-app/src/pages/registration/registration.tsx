@@ -155,8 +155,8 @@ const RegistrationPage: React.FC = () => {
                     </div>
                     
                     {
-                        isDataValid ? <Button type='submit' style={{backgroundColor: "#2787F5", padding: "10px 20px", borderColor: "#000", fontSize: 18, height: 50}}>зарегистрироваться</Button>
-                        : <Button disabled type='submit' style={{backgroundColor: "#2787F5", padding: "10px 20px", borderColor: "#000", fontSize: 18, height: 50}}>зарегистрироваться</Button>
+                        isDataValid ? <Button type='submit' style={{marginTop: "20px", backgroundColor: "#f53100", padding: "10px 20px", borderColor: "#000", fontSize: 18, height: 50, color: "white"}}>зарегистрироваться</Button>
+                        : <Button disabled type='submit' style={{marginTop: "20px", backgroundColor: "#f53100", padding: "10px 20px", borderColor: "#000", fontSize: 18, height: 50, color: "white"}}>зарегистрироваться</Button>
                     }
                     <Link className={styles['registration__page-link']} to='/login'>у вас уже есть аккаунт?</Link>
                 </Form>

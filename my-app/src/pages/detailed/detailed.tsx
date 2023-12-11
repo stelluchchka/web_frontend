@@ -1,4 +1,4 @@
-import styles from './detailed.module.scss'
+// import styles from './detailed.module.scss'
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
@@ -31,7 +31,7 @@ export type ReceivedDishData = {
 const mockDishes = [
   {
       id: 1,
-      title: "бургер",
+      title: "бургер99",
       price: 100,
       url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
       tag: "блюдо",
@@ -157,9 +157,7 @@ const OrderPage = () => {
         width: '100%',
         height: '100vh',
         position: 'relative'}}>
-      {/* <Header/> */}
       <Breadcrumps links={linksMap}/>
-    <div className={styles.fafa}></div>
       <div style={{backgroundColor: 'white', 
           height: '100%', 
           width: '70%', 

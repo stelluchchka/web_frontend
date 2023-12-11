@@ -1,11 +1,40 @@
 @import '../../styles/variables.scss';
 @import '../../styles/mixins.scss';
 
+
+.hat {
+    position: relative; 
+    background-color: #F5AB00; 
+    color: #ffffff; 
+    height: 360px; 
+}
+
+.header {
+    font-family: sans-serif;
+  
+    &__title {
+      font-weight: 900;
+      text-align: center;
+      margin-top: 30px; 
+      color: white; 
+      text-shadow: 0 0 1px #ffffff;
+    }
+    &__slogan {
+      text-align: center;
+      margin-bottom: 30px; 
+    }
+    &__logo {
+      text-align: left;
+      margin-left: 1%;
+    }
+}
+
+
 .main__page {
     position: relative;
 
     &-wrapper {
-        padding-top: 70px;
+        padding-top: 20px;
         max-width: 1240px;
         margin: 0 auto;
     }
@@ -59,7 +88,7 @@
         }
         
         &-info {
-            background-color: #e8eff6;
+            background-color: #FFD639;
             border-radius: 10px;
             max-width: 600px;
             padding: 30px;
@@ -95,7 +124,7 @@
         gap: 80px;
 
         &-item {
-            background-color: #dce8f3;
+            background-color: #FFD639;
             padding: 20px;
             border-radius: 10px;
         }

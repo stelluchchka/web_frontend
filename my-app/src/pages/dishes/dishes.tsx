@@ -50,7 +50,7 @@ const tags = [
 const mockDishes = [
     {
         id: 1,
-        title: "бургер",
+        title: "бургер99",
         price: 100,
         url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
         tag: "вег",
