@@ -9,7 +9,7 @@ console.log("1")
 function App() {
   return (
     <>
-      {/* <Header /> */}
+      <Header />
       {/* <Breadcrumps /> */}
       <Routes>
         {/* <Route path="/" element={<Navigate to="/dishes" replace />} /> */}
