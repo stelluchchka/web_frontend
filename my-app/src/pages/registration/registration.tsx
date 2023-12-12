@@ -11,7 +11,6 @@ import { setUserAction, setIsAuthAction } from "../../slices/authSlice";
 import { toast } from 'react-toastify';
 
 const RegistrationPage: React.FC = () => {
-    console.log("gag")
     const dispatch = useDispatch();
     const [emailValue, setEmailValue] = useState('')
     const [passwordValue, setPasswordValue] = useState('')
@@ -35,8 +34,8 @@ const RegistrationPage: React.FC = () => {
     };
 
     const  passwordValidation = (value: string): void => {
-        if ((value.length < 8 || value.length > 20) && value.length !== 0) {
-            setPasswordError('Пароль должен быть от 8 до 20 символов!');
+        if ((value.length < 1 || value.length > 20) && value.length !== 0) {
+            setPasswordError('Пароль должен быть от 2 до 20 символов!');
         } else if (value.length === 0) {
             setPasswordError('Это обязательное поле!');
         } else {

@@ -32,8 +32,8 @@ const LoginPage: React.FC = () => {
     };
 
     const  passwordValidation = (value: string): void => {
-        if ((value.length < 8 || value.length > 20) && value.length !== 0) {
-            setPasswordError('пароль должен быть от 8 до 20 символов!');
+        if ((value.length < 2 || value.length > 20) && value.length !== 0) {
+            setPasswordError('пароль должен быть от 2 до 20 символов!');
         } else if (value.length === 0) {
             setPasswordError('это обязательное поле!');
         } else {

@@ -1,80 +1,74 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 
-interface CategoryData {
-  id: number;
-  title: string;
-}
 
-interface SubscriptionData {
+interface DishesData {
   id: number;
   title: string;
   price: number;
-  info: string;
-  src: string;
-  categoryTitle: string;
+  tag: string;
+  url: string;
 }
 
 interface DataState {
-  categories: CategoryData[];
-  categoryValue: string;
   titleValue: string;
-  subscriptions: SubscriptionData[];
-  priceValues: number[];
+  tagValue: string;
+  minPriceValue: number;
+  maxPriceValue: number;
+  dishes: DishesData[]
 }
 
 const dataSlice = createSlice({
   name: "data",
   initialState: {
-    categories: [],
-    categoryValue: 'Все категории',
     titleValue: '',
-    subscriptions: [],
-    priceValues: [0, 10000]
+    tagValue: 'тег',
+    minPriceValue: 0, 
+    maxPriceValue: 10000000,
+    dishes: []
   } as DataState,
   reducers: {
-    setCategories(state, action: PayloadAction<CategoryData[]>) {
-      state.categories = action.payload
-    },
-    setCategoryValue(state, action: PayloadAction<string>) {
-      state.categoryValue = action.payload
-    },
     setTitleValue(state, action: PayloadAction<string>) {
       state.titleValue = action.payload
     },
-    setSubscriptions(state, action: PayloadAction<SubscriptionData[]>) {
-      console.log('pay is', action.payload)
-      state.subscriptions = action.payload
+    setTagValue(state, action: PayloadAction<string>) {
+      state.tagValue = action.payload
     },
-    setPriceValues(state, action: PayloadAction<number[]>) {
-      state.priceValues = action.payload
-    }
+    setMinPriceValue(state, action: PayloadAction<number>) {
+      state.minPriceValue = action.payload
+    },
+    setMaxPriceValue(state, action: PayloadAction<number>) {
+      state.maxPriceValue = action.payload
+    },
+    setDishes(state, action: PayloadAction<DishesData[]>) {
+      console.log('pay is', action.payload)
+      state.dishes = action.payload
+    },
   },
 });
 
 // Состояние, которое будем отображать в компонентах
-export const useCategories = () =>
-  useSelector((state: { mainData: DataState }) => state.mainData.categories);
-
-export const useCategoryValue = () =>
-  useSelector((state: { mainData: DataState }) => state.mainData.categoryValue);
-  
 export const useTitleValue = () =>
   useSelector((state: { mainData: DataState }) => state.mainData.titleValue);
 
-export const useSubscriptions = () =>
-  useSelector((state: { mainData: DataState }) => state.mainData.subscriptions);
+export const useTagValue = () =>
+  useSelector((state: { mainData: DataState }) => state.mainData.tagValue);
 
-export const usePriceValues = () =>
-  useSelector((state: { mainData: DataState }) => state.mainData.priceValues);
+export const useMinPriceValue = () =>
+  useSelector((state: { mainData: DataState }) => state.mainData.minPriceValue);
 
+export const useMaxPriceValue = () =>
+  useSelector((state: { mainData: DataState }) => state.mainData.maxPriceValue);
+
+export const useDishes = () =>
+  useSelector((state: { mainData: DataState }) => state.mainData.dishes);
 // Action, который будем применять в различных обработках
 export const {
-    setCategories: setCategoriesAction,
-    setCategoryValue: setCategoryValueAction,
     setTitleValue: setTitleValueAction,
-    setSubscriptions: setSubscriptionsAction,
-    setPriceValues: setPriceValuesAction
-} = dataSlice.actions;
+    setTagValue: setTagValueAction,
+    setMinPriceValue: setMinPriceValueAction,
+    setMaxPriceValue: setMaxPriceValueAction,
+    setDishes: setDishesAction
+  } = dataSlice.actions;
 
 export default dataSlice.reducer;
