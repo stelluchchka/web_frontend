@@ -8,7 +8,6 @@ interface DishesData {
   tag: string;
   url: string;
 }
-
 interface OrderData {
   id: number;
   status: string;
@@ -49,13 +48,14 @@ const dataSlice = createSlice({
   },
 });
 
+
 export const useCurrentOrderId = () =>
   useSelector((state: { ordersData: DataState }) => state.ordersData.currentOrderId);
 
 export const useCurrentOrderDate = () =>
   useSelector((state: { ordersData: DataState }) => state.ordersData.currentOrderDate);
 
-export const useSubscripitonsFromOrder = () =>
+export const useDishesFromOrder = () =>
   useSelector((state: { ordersData: DataState }) => state.ordersData.dishesFromOrder);
 
 export const useOrders = () =>

@@ -13,6 +13,8 @@ import axios, {AxiosResponse} from 'axios';
 import { setCurrentOrderDateAction, setDishesFromOrderAction, setCurrentOrderIdAction} from '../src/slices/orderSlice'
 import { setDishesAction} from "../src/slices/mainSlice";
 import React from 'react';
+import OrderPage from "./pages/order";
+import OrdersPage from "./pages/orders";
 
 const mockDishes = [
   {
@@ -104,7 +106,7 @@ export type ReceivedDishData = {
 
 function App() {
   const dispatch = useDispatch();
-  const isAuth = useIsAuth();
+  // const isAuth = useIsAuth();
   const getInitialUserInfo = async () => {
 
     console.log("aa")
@@ -195,6 +197,9 @@ function App() {
         <Route path="/dishes/:id" element={<DetailedPage />} />
         <Route path='/registration' element={<RegistrationPage/>} />
         <Route path='/login' element={<LoginPage/>} />
+        {<Route path='/order' element={<OrderPage/>}/>}
+        {<Route path='/orders' element={<OrdersPage/>}/>}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );

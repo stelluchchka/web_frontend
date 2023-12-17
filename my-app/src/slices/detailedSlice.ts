@@ -1,45 +1,45 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 
-interface UserData {
-  email: string;
-  fullname: string;
-  phoneNumber: string;
-  isSuperuser: boolean
+interface DishData {
+  id: number,
+  title: string,
+  price: number,
+  tag: string,
+  url: string
 }
 
 interface DataState {
-    user: UserData,
-    isAuth: boolean,
+  dish: DishData,
+  LinksMapData: Map<string, string>
 }
 
 const dataSlice = createSlice({
   name: "data",
   initialState: {
-    user: {},
-    isAuth: false,
+    dish: {},
+    LinksMapData: new Map<string, string>([['блюда', '/']])
   } as DataState,
   reducers: {
-    setUser(state, action: PayloadAction<UserData>) {
-      state.user = action.payload
-      console.log(`user is ${action.payload.email}`)
+    setDish(state, action: PayloadAction<DishData>) {
+        state.dish = action.payload
     },
-    setIsAuth(state, action: PayloadAction<boolean>) {
-      state.isAuth = action.payload
-      console.log(`is auth: ${action.payload}`)
-    }
+    setLinksMapData(state, action: PayloadAction<Map<string, string>>) {
+      console.log(action.payload)
+      state.LinksMapData = action.payload
+  },
   },
 });
 
-export const useUser = () =>
-  useSelector((state: { authData: DataState }) => state.authData.user);
+export const useDish = () =>
+  useSelector((state: { detailedData: DataState }) => state.detailedData.dish);
 
-export const useIsAuth = () =>
-  useSelector((state: { authData: DataState }) => state.authData.isAuth);
+export const useLinksMapData = () =>
+  useSelector((state: { detailedData: DataState }) => state.detailedData.LinksMapData);
 
 export const {
-  setUser: setUserAction,
-  setIsAuth: setIsAuthAction,
+    setDish: setDishAction,
+    setLinksMapData: setLinksMapDataAction
 } = dataSlice.actions;
 
 export default dataSlice.reducer;

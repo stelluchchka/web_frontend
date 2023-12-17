@@ -28,7 +28,7 @@ export type ReceivedDishData = {
     id: number,
     title: string,
     price: number,
-    tag: string,
+    tags: string,
     url: string,
 }
 
@@ -133,7 +133,7 @@ const MainPage: React.FC = () => {
     const [maxPriceValue, setMaxPriceValue] = useState<number>(10000000);
 
     const linksMap = new Map<string, string>([
-        ['блюда', '/']
+        ['главная', '/']
     ]);
 
     const fetchDishes = async () => {
@@ -148,6 +148,7 @@ const MainPage: React.FC = () => {
                 credentials: 'include'
             });
             const jsonData = await response.json();
+            console.log(response)
             const newRecipesArr = jsonData.dishes.map((raw: ReceivedDishData) => ({
                 id: raw.id,
                 title: raw.title,
@@ -155,8 +156,6 @@ const MainPage: React.FC = () => {
                 tag: raw.tags,
                 url: raw.url,
             }))
-            console.log(jsonData.dishes)
-            console.log(jsonData.dishes.url)
             setDishes(newRecipesArr);
         }
         catch {
