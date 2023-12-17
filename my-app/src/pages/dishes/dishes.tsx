@@ -1,12 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ChangeEvent } from 'react';
-// import { Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import OneCard from '../../components/card';
 import styles from './dishes.module.scss';
 import Breadcrumps from '../../components/breadcrumps';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import {useDispatch} from "react-redux";
+import {useTitleValue, useDishes, setTitleValueAction, setDishesAction, setMinPriceValueAction, 
+    setMaxPriceValueAction, useMaxPriceValue, useMinPriceValue, useTagValue, setTagValueAction} from "../../slices/mainSlice";
+import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
+import { useDishesFromOrder, setDishesFromOrderAction } from '../../slices/orderSlice';
+
+
 
 export type Dish = {
     id: number,
@@ -14,14 +22,6 @@ export type Dish = {
     price: number,
     url: string,
     tag: string,
-    status: string,
-    weight: number,
-    energy_value: number,
-    content: string,
-    chef_name: string,
-    chef_post: string,
-    chef_url: string,
-    expiry_date: string
 }
 
 export type ReceivedDishData = {
@@ -30,6 +30,15 @@ export type ReceivedDishData = {
     price: number,
     tags: string,
     url: string,
+}
+
+export type ReceivedUserData = {
+    id: number,
+    email: string,
+    first_name: string,
+    last_name: string,
+    password: string,
+    is_superuser: boolean,
 }
 
 const tags = [ 
@@ -53,90 +62,55 @@ const mockDishes = [
         title: "бургер99",
         price: 100,
         url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
-        tag: "вег",
-        status: "есть",
-        weight: 100,
-        energy_value: 1,
-        content: "dd",
-        chef_name: "aaaaa иван",
-        chef_post: "шеф-повр",
-        chef_url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
-        expiry_date: "12 суток"
+        tag: "вег"
     },
     {
         id: 2,
         title: "сок",
         price: 200,
         url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
-        tag: "остро",
-        status: "есть",
-        weight: 100,
-        energy_value: 1,
-        content: "dd",
-        chef_name: "aaaaa щщщщ",
-        chef_post: "шеф",
-        chef_url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
-        expiry_date: "12 суток"
+        tag: "остро"
     },
     {
         id: 3,
         title: "бургер1",
         price: 300,
         url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
-        tag: "вег",
-        status: "есть",
-        weight: 100,
-        energy_value: 1,
-        content: "dd",
-        chef_name: "aaaaоооa",
-        chef_post: "кондитер",
-        chef_url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
-        expiry_date: "12 суток"
+        tag: "вег"
     },
     {
         id: 4,
         title: "бургер2",
         price: 400,
         url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
-        tag: "вег",
-        status: "есть",
-        weight: 100,
-        energy_value: 1,
-        content: "dd",
-        chef_name: "aaaaa",
-        chef_post: "asdf",
-        chef_url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
-        expiry_date: "12 суток"
+        tag: "вег"
     },
     {
         id: 5,
         title: "сок2",
         price: 500,
         url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
-        tag: "остро",
-        status: "есть",
-        weight: 100,
-        energy_value: 1,
-        content: "dd",
-        chef_name: "aaaaa",
-        chef_post: "asdf",
-        chef_url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
-        expiry_date: "12 суток"
+        tag: "остро"
     }
 ]
 
 const MainPage: React.FC = () => {
-    const [dishes, setDishes] = useState<Dish[]>([]);
-    const [tagValue, setTagValue] = useState<string>('тег');
-    const [titleValue, setTitleValue] = useState<string>('')
-    const [minPriceValue, setMinPriceValue] = useState<number>(0);
-    const [maxPriceValue, setMaxPriceValue] = useState<number>(10000000);
+    const dispatch = useDispatch()
+    const dishes = useDishes();
+    const tagValue = useTagValue();
+    const titleValue = useTitleValue();
+    const minPriceValue = useMinPriceValue();
+    const maxPriceValue = useMaxPriceValue();
+    const dishesFromOrder = useDishesFromOrder();
+    const linksMap = useLinksMapData();
 
-    const linksMap = new Map<string, string>([
-        ['главная', '/']
-    ]);
+    React.useEffect(() => {
+        dispatch(setLinksMapDataAction(new Map<string, string>([
+            ['блюда', '/dishes']
+        ])))
+    }, [])
 
-    const fetchDishes = async () => {
+    const getDishes = async () => {
         let url = 'http://127.0.0.1:8000/dishes'
         url += `?title=${titleValue}`
         url += `&max_price=${maxPriceValue}`
@@ -144,11 +118,12 @@ const MainPage: React.FC = () => {
         url += `&tag=${tagValue}`
         console.log(url)
         try {
-            const response = await fetch(url, {
-                credentials: 'include'
+            const response = await axios(url, {
+                method: 'GET',
+                withCredentials: true 
             });
-            const jsonData = await response.json();
             console.log(response)
+            const jsonData = await response.data;
             const newRecipesArr = jsonData.dishes.map((raw: ReceivedDishData) => ({
                 id: raw.id,
                 title: raw.title,
@@ -156,48 +131,64 @@ const MainPage: React.FC = () => {
                 tag: raw.tags,
                 url: raw.url,
             }))
-            setDishes(newRecipesArr);
+            dispatch(setDishesAction(newRecipesArr));
         }
         catch {
-            if (tagValue && tagValue != 'тег') {
+            console.log("a")
+            if (tagValue && tagValue !== 'тег') {
                 const filteredArray = mockDishes.filter(mockDishes => mockDishes.tag === tagValue);
-                setDishes(filteredArray);
+                dispatch(setDishesAction(filteredArray));
             } else if (titleValue) {
                 const filteredArray = mockDishes.filter(mockDishes => mockDishes.title.includes(titleValue));
-                setDishes(filteredArray);
+                dispatch(setDishesAction(filteredArray));
             } else if (minPriceValue) {
                 const filteredArray = mockDishes.filter(mockDishes => mockDishes.price >= minPriceValue);
-                setDishes(filteredArray);
+                dispatch(setDishesAction(filteredArray));
             } else if (maxPriceValue) {
                 const filteredArray = mockDishes.filter(mockDishes => mockDishes.price <= maxPriceValue);
-                setDishes(filteredArray);
+                dispatch(setDishesAction(filteredArray));
             }
             else {
-                setDishes(mockDishes);
+                dispatch(setDishesAction(mockDishes));
             }
         }
     };
 
 
-    
-    useEffect(() => {
-        fetchDishes();
-    }, []);
+    const postDishToOrder = async (id: number) => {
+        try {
+            const response = await axios(`http://localhost:8000/dishes/${id}/post`, {
+                method: 'POST',
+                withCredentials: true,
+            })
+            const addedDish = {
+                id: response.data.id,
+                title: response.data.title,
+                price: response.data.price,
+                tag: response.data.tag,
+                url: response.data.url,
+            }
+            dispatch(setDishesFromOrderAction([...dishesFromOrder, addedDish]))
+            toast.success("Блюдо успешно добавлено в заказ!");
+        } catch {
+            toast.error("Это блюдо уже добавлено в заказ!");
+        }
+    }
 
     const handleSearchButtonClick = () => {
-        fetchDishes();
+        getDishes();
     }
 
     const handleTitleValueChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setTitleValue(event.target.value);
+        dispatch(setTitleValueAction(event.target.value));
     };
 
     const handleMinPriceValueChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setMinPriceValue(Number(event.target.value));
+        dispatch(setMinPriceValueAction(Number(event.target.value)));
     };
 
     const handleMaxPriceValueChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setMaxPriceValue(Number(event.target.value));
+        dispatch(setMaxPriceValueAction(Number(event.target.value)));
     };
 
     // const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -208,7 +199,7 @@ const MainPage: React.FC = () => {
         if (eventKey) {
           const selectedTag = tags.find(tag => tag.key === eventKey);
           if (selectedTag) {
-            setTagValue(selectedTag.value);
+            dispatch(setTagValueAction(selectedTag.value));
           }
         }
     };
@@ -280,9 +271,8 @@ const MainPage: React.FC = () => {
                             </Button>
                     </div>
                     <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'left', width: '100%', margin: '0 auto'}}>
-                        {
-                        dishes.map((dish: Dish) => (
-                            <OneCard key={dish.id} id={dish.id} url={dish.url} chef={dish.chef_post} title={dish.title} tag={dish.tag} price={Number(dish.price)} onButtonClick={() => console.log('add to order')}></OneCard>
+                        {dishes.map((dish: Dish) => (
+                            <OneCard key={dish.id} id={dish.id} url={dish.url} title={dish.title} tag={dish.tag} price={Number(dish.price)} onButtonClick={() => postDishToOrder(dish.id)}></OneCard>
                         ))}
                     </div>
                 {dishes.length === 0 && <p className="dish-text"> <big>таких блюд у нас нет🥹</big></p>}

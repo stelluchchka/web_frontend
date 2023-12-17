@@ -2,12 +2,12 @@
 @import '../../styles/mixins.scss';
 
 th {
-    background-color: #3D348B !important;
+    background-color: #F5AB00 !important;
     color: #fff !important;
 }
 
 td {
-    background-color: #dddce4 !important;
+    background-color: #FFD639 !important;
 
 }
 
@@ -71,7 +71,7 @@ thead {
                     transform: translateY(-50%);
                     width: 8px;
                     height: 8px;
-                    background-color: #0b5ed7;
+                    background-color: black;
                     border-radius: 50%;
                     margin-right: 10px;
                 }

@@ -1,8 +1,11 @@
 // import styles from './detailed.module.scss'
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
 import Breadcrumps from '../../components/breadcrumps';
+import {useDispatch} from "react-redux";
+import { useDish, useLinksMapData, setDishAction, setLinksMapDataAction } from '../../slices/detailedSlice';
+import axios from 'axios';
 
 export type Dish = {
   id: number,
@@ -10,7 +13,6 @@ export type Dish = {
   price: number,
   url: string,
   tag: string,
-  status: string,
   weight: number,
   energy_value: number,
   content: string,
@@ -107,27 +109,27 @@ const mockDishes = [
 ]
 
 
-const OrderPage = () => {  
+const DetailesPage = () => {  
+  const dispatch = useDispatch();
+  const dish = useDish();
   const params = useParams();
   const id = params.id === undefined ? '' : params.id;
+  const linksMap = useLinksMapData();
 
-  const [dish, setDish] = useState<Dish>();
-  let currentUrl = '/'
-  const [linksMap, setLinksMap] = useState<Map<string, string>>(
-    new Map<string, string>([['блюда', '/']])
-  );
-  const fetchDish = async () => {
+  // let currentUrl = '/'
+  // const [linksMap, setLinksMap] = useState<Map<string, string>>(
+  //   new Map<string, string>([['блюда ', '/dishes']])
+  // );
+  const getDish = async () => {
       try {
-          const response = await fetch(`http://127.0.0.1:8000/dishes/${id}`);
-          const jsonData = await response.json();
-          console.log(jsonData)
-          setDish({
+          const response = await axios.get(`http://127.0.0.1:8000/dishes/${id}`);
+          const jsonData = await response.data;
+          dispatch(setDishAction({
               id: Number(jsonData.id),
               title: jsonData.title,
               price: jsonData.price,
               url: jsonData.url,
               tag: jsonData.tag,
-              status: jsonData.status,
               weight: jsonData.weight,
               energy_value: jsonData.energy_value,
               content: jsonData.content,
@@ -135,21 +137,22 @@ const OrderPage = () => {
               chef_post: jsonData.chef_post,
               chef_url: jsonData.chef_url,
               expiry_date: jsonData.expiry_date
-          })
+          }))
           const newLinksMap = new Map<string, string>(linksMap); // Копирование старого Map
           newLinksMap.set(jsonData.title, '/dishes/' + id);
-          setLinksMap(newLinksMap)
+          dispatch(setLinksMapDataAction(newLinksMap))
       } catch {
           const dish = mockDishes.find(item => item.id === Number(id));
-          setDish(dish)
+          if (dish) {
+            dispatch(setDishAction(dish))
+          }
       }
-      
-      currentUrl += 'dishes/' + id
   };
   useEffect(() => {
-      fetchDish();
-      // console.log(currentUrl)
-  }, []);
+      getDish();
+      return () => {
+        dispatch(setLinksMapDataAction(new Map<string, string>([['Блюда', '/dishes']])))
+    }  }, []);
 
   return (
     <div style={{backgroundColor: '#FBAF00', 
@@ -301,4 +304,4 @@ const OrderPage = () => {
   );
 }
 
-export default OrderPage;
+export default DetailesPage;

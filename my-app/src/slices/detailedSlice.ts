@@ -6,7 +6,14 @@ interface DishData {
   title: string,
   price: number,
   tag: string,
-  url: string
+  url: string,
+  weight: number,
+  energy_value: number,
+  content: string,
+  chef_name: string,
+  chef_post: string,
+  chef_url: string,
+  expiry_date: string
 }
 
 interface DataState {

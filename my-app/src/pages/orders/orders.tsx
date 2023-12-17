@@ -31,9 +31,9 @@ const OrdersListPage = () => {
           const newArr = response.data.map((raw: ReceivedOrderData) => ({
             id: raw.id,
             status: raw.status,
-            creationDate: raw.created_at,
-            publicationDate: raw.processed_at,
-            approvingDate: raw.completed_at,
+            created_at: raw.created_at,
+            processed_at: raw.processed_at,
+            completed_at: raw.completed_at,
         }));
         dispatch(setOrdersAction(newArr))
         } catch(error) {
@@ -52,9 +52,8 @@ const OrdersListPage = () => {
         <div className={styles.orders__page}>
             <div className={styles['orders__page-wrapper']}>
                 <BreadCrumbs links={linksMap}></BreadCrumbs>
-                <h1 className={styles['orders__page-title']}>История ваших заявок</h1>
+                <h1 className={styles['orders__page-title']}>История заказов</h1>
                 <h5 className={styles['orders__page-subtitle']}>
-                    На этой странице расположена вся история ваших заявок. Вы можете посмотреть информацию о каждой заявке, а также добавленные в нее абонементы!
                 </h5>
                 <OrdersTable orders={orders}/>
                 <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>

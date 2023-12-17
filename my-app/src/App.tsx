@@ -106,10 +106,9 @@ export type ReceivedDishData = {
 
 function App() {
   const dispatch = useDispatch();
-  // const isAuth = useIsAuth();
+  const isAuth = useIsAuth();
   const getInitialUserInfo = async () => {
 
-    console.log("aa")
     console.log(cookies.get("session_id"))
     try {
       const response: AxiosResponse = await axios('http://localhost:8000/user_info',
@@ -186,6 +185,7 @@ function App() {
       getInitialUserInfo();
     }
     getDishes();
+    console.log("isAuth: ", isAuth)
   }, [])
     
   return (
@@ -195,7 +195,7 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/dishes" element={<Dishes />} />
         <Route path="/dishes/:id" element={<DetailedPage />} />
-        <Route path='/registration' element={<RegistrationPage/>} />
+        <Route>{!isAuth && <Route path='/registration' element={<RegistrationPage/>} />}</Route>
         <Route path='/login' element={<LoginPage/>} />
         {<Route path='/order' element={<OrderPage/>}/>}
         {<Route path='/orders' element={<OrdersPage/>}/>}

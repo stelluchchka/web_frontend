@@ -20,16 +20,14 @@ interface DishData {
   id: number;
   title: string;
   price: number;
-  tag: string;
-  url: string;
+  quantity: number;
 }
 
 export type ReceivedDishData = {
   id: number;
   title: string;
   price: number;
-  tag: string;
-  url: string;
+  quantity: number;
 }
 
 export type DishesTableProps = {
@@ -41,7 +39,6 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
   const dispatch = useDispatch();
   const [isModalWindowOpened, setIsModalWindowOpened] = useState(false);
   const [currentDishes, setCurrentDishes] = useState<DishData[]>([])
-
   const getCurrentOrder = async (id: number) => {
     try {
       const response = await axios(`http://localhost:8000/orders/${id}`, {
@@ -52,11 +49,9 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
         id: raw.id,
         title: raw.title,
         price: raw.price,
-        tag: raw.tag,
-        url: raw.url,
+        quantity: raw.quantity
     }));
     setCurrentDishes(newArr)
-    console.log('newArr is', newArr)
     } catch(error) {
       throw error;
     }
@@ -104,14 +99,14 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
     </div>
 
       <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>
-      <h3 className={styles.modal__title}>Добавленные блюда</h3>
+      {/* <h3 className={styles.modal__title}>Добавленные блюда</h3> */}
       <div className={styles.modal__list}>
         {currentDishes.map((dish: DishData, index: number) => (
           <div className={styles['modal__list-item']}>
             <div className={styles['modal__list-item-title']}>
-              {dish.title} "{dish.title}"
+              {dish.title}
             </div>
-            <b>{dish.price} ₽</b>
+            <b>{dish.quantity} x {dish.price} ₽</b>
           </div>
         ))}
       </div>
