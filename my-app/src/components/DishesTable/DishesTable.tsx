@@ -47,7 +47,7 @@ const DishesTable: React.FC<DishesTableProps> = ({dishes_orders, className, flag
       })
 
       dispatch(setDishOrderAction(dishes_orders.filter(dish => dish.id !== id)))
-      localStorage.setItem('dish_orders', JSON.stringify([]));
+      // localStorage.setItem('dish_orders', JSON.stringify([]));
       toast.success("успешно удаленo!");
     } catch(error) {
       throw error;

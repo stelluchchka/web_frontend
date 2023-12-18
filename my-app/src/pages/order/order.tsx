@@ -43,7 +43,7 @@ const OrderPage = () => {
       console.log(response)
       dispatch(setDishesFromOrderAction([]));
       dispatch(setCurrentOrderDateAction(''));
-      localStorage.setItem('dish_orders', JSON.stringify([]));
+      // localStorage.setItem('dish_orders', JSON.stringify([]));
       toast.success("Заказ успешно отправлен на проверку!");
     } catch(error) {
       throw error;
@@ -59,7 +59,7 @@ const OrderPage = () => {
 
     dispatch(setDishesFromOrderAction([]));
     dispatch(setCurrentOrderDateAction(''));
-    localStorage.setItem('dish_orders', JSON.stringify([]));
+    // localStorage.setItem('dish_orders', JSON.stringify([]));
     toast.success("Заказ успешно удален!");
     }
     catch(error) {

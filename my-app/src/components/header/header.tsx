@@ -39,7 +39,7 @@ const Header: React.FC = () => {
             cookies.remove("session_id", { path: "/" }); 
 
             dispatch(setIsAuthAction(false))
-            localStorage.setItem('dish_orders', JSON.stringify([]));
+            // localStorage.setItem('dish_orders', JSON.stringify([]));
             dispatch(setUserAction({
                 email: "",
                 first_name: "",

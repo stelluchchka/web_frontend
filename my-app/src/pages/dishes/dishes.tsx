@@ -127,6 +127,7 @@ const DishesPage: React.FC = () => {
                 withCredentials: true 
             });
             const jsonData = await response.data;
+            console.log(response.data)
             const newArr = jsonData.dishes.map((raw: ReceivedDishData) => ({
                 id: raw.id,
                 title: raw.title,
