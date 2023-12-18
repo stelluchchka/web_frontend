@@ -15,12 +15,19 @@ interface OrderData {
   processed_at: string;
   completed_at: string;
 }
+interface DishOrder {
+  id: number;
+  dish: DishesData;
+  order: OrderData;
+  quantity: number;
+}
 
 interface DataState {
   currentOrderId: number | null;
   currentOrderDate: string;
   dishesFromOrder: DishesData[];
   orders: OrderData[];
+  dishes_orders: DishOrder[];
 }
 
 const dataSlice = createSlice({
@@ -29,7 +36,8 @@ const dataSlice = createSlice({
     currentOrderId: null,
     currentOrderDate: '',
     dishesFromOrder: [],
-    orders: []
+    orders: [],
+    dishes_orders: []
   } as DataState,
   reducers: {
     setCurrentOrderId(state, action: PayloadAction<number>) {
@@ -44,6 +52,10 @@ const dataSlice = createSlice({
     setOrders(state, action: PayloadAction<OrderData[]>) {
       state.orders = action.payload;
       console.log('orders is', action.payload)
+    },
+    setDishOrder(state, action: PayloadAction<DishOrder[]>) {
+      state.dishes_orders = action.payload;
+      console.log('dish_orders is', action.payload)
     }
   },
 });
@@ -61,12 +73,15 @@ export const useDishesFromOrder = () =>
 export const useOrders = () =>
   useSelector((state: { ordersData: DataState }) => state.ordersData.orders);
 
+export const useDishOrder = () =>
+  useSelector((state: { ordersData: DataState }) => state.ordersData.dishes_orders);
+
 export const {
     setCurrentOrderId: setCurrentOrderIdAction,
     setCurrentOrderDate: setCurrentOrderDateAction,
     setDishesFromOrder: setDishesFromOrderAction,
-    setOrders: setOrdersAction
-
+    setOrders: setOrdersAction,
+    setDishOrder: setDishOrderAction
 } = dataSlice.actions;
 
 export default dataSlice.reducer;

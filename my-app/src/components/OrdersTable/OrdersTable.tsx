@@ -20,7 +20,7 @@ interface DishData {
   id: number;
   title: string;
   price: number;
-  quantity: number;
+  quantity: number
 }
 
 export type ReceivedDishData = {

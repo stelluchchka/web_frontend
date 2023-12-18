@@ -12,8 +12,7 @@ import {useDispatch} from "react-redux";
 import {useTitleValue, useDishes, setTitleValueAction, setDishesAction, setMinPriceValueAction, 
     setMaxPriceValueAction, useMaxPriceValue, useMinPriceValue, useTagValue, setTagValueAction} from "../../slices/mainSlice";
 import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
-import { useDishesFromOrder, setDishesFromOrderAction } from '../../slices/orderSlice';
-
+import { setDishOrderAction, useDishOrder } from '../../slices/orderSlice';
 
 
 export type Dish = {
@@ -23,7 +22,6 @@ export type Dish = {
     url: string,
     tag: string,
 }
-
 export type ReceivedDishData = {
     id: number,
     title: string,
@@ -31,7 +29,11 @@ export type ReceivedDishData = {
     tags: string,
     url: string,
 }
-
+export type DishOrder = {
+    id: number,
+    dish: Dish,
+    quantity: number
+}
 export type ReceivedUserData = {
     id: number,
     email: string,
@@ -40,7 +42,6 @@ export type ReceivedUserData = {
     password: string,
     is_superuser: boolean,
 }
-
 const tags = [ 
     {
         key: "tag",
@@ -55,7 +56,6 @@ const tags = [
         value: "вег"
     }
 ]
-
 const mockDishes = [
     {
         id: 1,
@@ -94,20 +94,24 @@ const mockDishes = [
     }
 ]
 
-const MainPage: React.FC = () => {
+const DishesPage: React.FC = () => {
     const dispatch = useDispatch()
     const dishes = useDishes();
     const tagValue = useTagValue();
     const titleValue = useTitleValue();
     const minPriceValue = useMinPriceValue();
     const maxPriceValue = useMaxPriceValue();
-    const dishesFromOrder = useDishesFromOrder();
+    const dish_order = useDishOrder();
     const linksMap = useLinksMapData();
 
     React.useEffect(() => {
         dispatch(setLinksMapDataAction(new Map<string, string>([
             ['блюда', '/dishes']
         ])))
+        const storedDishOrder = localStorage.getItem('dish_order');
+        if (storedDishOrder) {
+            dispatch(setDishOrderAction(JSON.parse(storedDishOrder)));
+        }
     }, [])
 
     const getDishes = async () => {
@@ -122,19 +126,18 @@ const MainPage: React.FC = () => {
                 method: 'GET',
                 withCredentials: true 
             });
-            console.log(response)
             const jsonData = await response.data;
-            const newRecipesArr = jsonData.dishes.map((raw: ReceivedDishData) => ({
+            const newArr = jsonData.dishes.map((raw: ReceivedDishData) => ({
                 id: raw.id,
                 title: raw.title,
                 price: raw.price,
                 tag: raw.tags,
                 url: raw.url,
             }))
-            dispatch(setDishesAction(newRecipesArr));
+            dispatch(setDishesAction(newArr));
         }
         catch {
-            console.log("a")
+            console.log("запрос не прошел !")
             if (tagValue && tagValue !== 'тег') {
                 const filteredArray = mockDishes.filter(mockDishes => mockDishes.tag === tagValue);
                 dispatch(setDishesAction(filteredArray));
@@ -161,15 +164,17 @@ const MainPage: React.FC = () => {
                 method: 'POST',
                 withCredentials: true,
             })
-            const addedDish = {
-                id: response.data.id,
-                title: response.data.title,
-                price: response.data.price,
-                tag: response.data.tag,
-                url: response.data.url,
+            console.log(response.data)
+            const addedDishOrder = {
+                id: response.data.dish.id,
+                dish: response.data.dish,
+                order: response.data.order,
+                quantity: response.data.quantity
             }
-            dispatch(setDishesFromOrderAction([...dishesFromOrder, addedDish]))
+            dispatch(setDishOrderAction([...dish_order, addedDishOrder]))
+            localStorage.setItem('dish_order', JSON.stringify([...dish_order, addedDishOrder]));
             toast.success("Блюдо успешно добавлено в заказ!");
+            getDishes()
         } catch {
             toast.error("Это блюдо уже добавлено в заказ!");
         }
@@ -281,4 +286,4 @@ const MainPage: React.FC = () => {
      )
 };
   
-export default MainPage;
+export default DishesPage;

@@ -4,12 +4,12 @@ import styles from './header.module.scss'
 import { useState } from 'react';
 import ProfileWindow from "../../components/ProfileWindow";
 import { motion, AnimatePresence } from "framer-motion";
-import axios, {AxiosResponse} from 'axios';
+import axios from 'axios';
 import {useDispatch} from "react-redux";
 import {useUser, useIsAuth, setIsAuthAction, setUserAction} from "../../slices/authSlice";
 import Cookies from "universal-cookie";
 import { toast } from 'react-toastify';
-import { useDishesFromOrder } from '../../slices/orderSlice';
+import { useDishOrder } from '../../slices/orderSlice';
 import ProfileIcon from '../../components/Icons/ProfileIcon';
 import ApplicationIcon from '../../components/Icons/ApplicationIcon';
 
@@ -21,13 +21,13 @@ const Header: React.FC = () => {
     const dispatch = useDispatch();
     const [isProfileButtonClicked, setIsProfileButtonClicked] = useState(false);
     const isUserAuth = useIsAuth();
-    const dishesFromOrders = useDishesFromOrder();
+    const dishes_orders = useDishOrder();
     let user = useUser();
 
     const logout = async () => {
         try {
             console.log(cookies.get('session_id'))
-            const response: AxiosResponse = await axios('http://localhost:8000/logout',
+            await axios('http://localhost:8000/logout',
             {
                 method: "POST",
                 withCredentials: true,
@@ -39,6 +39,7 @@ const Header: React.FC = () => {
             cookies.remove("session_id", { path: "/" }); 
 
             dispatch(setIsAuthAction(false))
+            localStorage.setItem('dish_orders', JSON.stringify([]));
             dispatch(setUserAction({
                 email: "",
                 first_name: "",
@@ -65,8 +66,7 @@ const Header: React.FC = () => {
                 {isUserAuth && 
                         <div className={styles['application__icon-wrapper']}>
                             <Link to={'/order'}>
-                                <div className={styles['application__icon-circle']}>{dishesFromOrders.length}</div>
-                                <ApplicationIcon/>
+                                <div className={styles['application__icon-circle']}> <ApplicationIcon/>{dishes_orders.length} <br /> </div>
                             </Link>
                         </div>
                     }
@@ -99,6 +99,7 @@ const Header: React.FC = () => {
                     </motion.div>
                 )}
                 </AnimatePresence>
+                <div>                a</div>
             </div>
         </div>
     )
