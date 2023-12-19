@@ -33,7 +33,7 @@ export type DishesTableProps = {
 };
 
 const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
-  const dispatch = useDispatch();
+  useDispatch();
   const [isModalWindowOpened, setIsModalWindowOpened] = useState(false);
   const [currentDishes, setCurrentDishes] = useState<DishData[]>([])
   const getCurrentOrder = async (id: number) => {
@@ -99,7 +99,7 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
       <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>
       {/* <h3 className={styles.modal__title}>Добавленные блюда</h3> */}
       <div className={styles.modal__list}>
-        {currentDishes.map((dish: DishData, index: number) => (
+        {currentDishes.map((dish: DishData) => (
           <div className={styles['modal__list-item']}>
             <div className={styles['modal__list-item-title']}>
               {dish.title}

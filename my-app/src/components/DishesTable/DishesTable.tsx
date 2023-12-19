@@ -5,7 +5,6 @@ import styles from './DishesTable.module.scss'
 import Table from 'react-bootstrap/Table';
 import cn from 'classnames';
 import { useDispatch } from 'react-redux';
-import { setDishOrderAction, setDishesFromOrderAction, useDishOrder } from '../../slices/orderSlice'
 import BasketIcon from '../Icons/BasketIcon';
 
 
@@ -51,7 +50,7 @@ export type DishesTableProps = {
 };
 
 const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
-  const dispatch = useDispatch();
+  useDispatch();
   // const dishes_orders = useDishOrder();
   console.log("dishes", dishes)
 

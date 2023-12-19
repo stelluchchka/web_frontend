@@ -22,6 +22,7 @@ const Header: React.FC = () => {
     const [isProfileButtonClicked, setIsProfileButtonClicked] = useState(false);
     const isUserAuth = useIsAuth();
     const dishes_orders = useDishOrder();
+    console.log(dishes_orders)
     let user = useUser();
 
     const logout = async () => {

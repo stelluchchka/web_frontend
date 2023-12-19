@@ -4,21 +4,20 @@ import { toast } from 'react-toastify';
 import styles from './order.module.scss'
 import Button from 'react-bootstrap/Button'
 import BreadCrumbs from '../../components/breadcrumps';
-import { useCurrentOrderId, useDishesFromOrder, useDishesFromOrderData } from '../../slices/orderSlice'
+import { useCurrentOrderId, useDishesFromOrderData } from '../../slices/orderSlice'
 import DishesTable from '../../components/DishesTable'
 import { useDispatch } from 'react-redux'
-import { useCurrentOrderDate, useDishFromOrder,
-  setCurrentOrderDateAction, setDishFromOrderAction } from '../../slices/orderSlice'
+import { useCurrentOrderDate, setCurrentOrderDateAction, setDishFromOrderAction } from '../../slices/orderSlice'
 import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
 
 
-interface DishesData {
-  id: number;
-  title: string;
-  price: number;
-  tag: string;
-  url: string;
-}
+// interface DishesData {
+//   id: number;
+//   title: string;
+//   price: number;
+//   tag: string;
+//   url: string;
+// }
 // interface DishFromOrder {
 //   id: number;
 //   dish: DishesData;
@@ -56,30 +55,7 @@ const OrderPage = () => {
   const currentOrderId = useCurrentOrderId();
   const linksMap = useLinksMapData();
 
-  // const getCurrentOrder = async () => {
-  //   try {
-  //     const response = await axios(`http://localhost:8000/orders/${currentOrderId}`, {
-  //       method: 'GET',
-  //       withCredentials: true,
-  //     })
-  //     dispatch(setDishesFromOrderAction(response.data))
-  //     const newDishesFromOrderArr = response.data.map((raw: RecievedDishesFromOrder) => ({
-  //       id: raw.id,
-  //       status: raw.status,
-  //       created_at: raw.created_at,
-  //       processed_at: raw.processed_at,
-  //       completed_at: raw.completed_at,
-  //       dish: raw.dish
-  //   }));
-  //   dispatch(setDishesFromOrderAction(newDishesFromOrderArr))
-  //   console.log("newDishesFromOrderArr", newDishesFromOrderArr)
-  //   } catch(error) {
-  //     throw error;
-  //   }
-  // }
-
   React.useEffect(() => {
-    // getCurrentOrder();
     dispatch(setLinksMapDataAction(new Map<string, string>([
       ['Текущий заказ', '/order']
   ])))
@@ -94,7 +70,6 @@ const OrderPage = () => {
       console.log(response)
       dispatch(setDishFromOrderAction([]));
       dispatch(setCurrentOrderDateAction(''));
-      // localStorage.setItem('dish_orders', JSON.stringify([]));
       toast.success("Заказ успешно отправлен на проверку!");
     } catch(error) {
       throw error;
@@ -110,7 +85,6 @@ const OrderPage = () => {
 
     dispatch(setDishFromOrderAction([]));
     dispatch(setCurrentOrderDateAction(''));
-    // localStorage.setItem('dish_orders', JSON.stringify([]));
     toast.success("Заказ успешно удален!");
     }
     catch(error) {

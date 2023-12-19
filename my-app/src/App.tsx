@@ -10,7 +10,7 @@ import Cookies from "universal-cookie";
 import {setUserAction, setIsAuthAction, useIsAuth} from "../src/slices/authSlice";
 import {useDispatch} from "react-redux";
 import axios, {AxiosResponse} from 'axios';
-import { setCurrentOrderIdAction, setDishesFromOrderDataAction, useCurrentOrderId} from '../src/slices/orderSlice'
+import { setCurrentOrderIdAction} from '../src/slices/orderSlice'
 import { setDishesAction} from "../src/slices/mainSlice";
 import React from 'react';
 import OrderPage from "./pages/order";

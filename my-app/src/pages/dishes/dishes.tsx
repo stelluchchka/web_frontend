@@ -12,7 +12,7 @@ import {useDispatch} from "react-redux";
 import {useTitleValue, useDishes, setTitleValueAction, setDishesAction, setMinPriceValueAction, 
     setMaxPriceValueAction, useMaxPriceValue, useMinPriceValue, useTagValue, setTagValueAction} from "../../slices/mainSlice";
 import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
-import { setDishOrderAction, setDishesFromOrderDataAction, useCurrentOrderDate, useCurrentOrderId, useDishOrder } from '../../slices/orderSlice';
+import { setDishOrderAction, setDishesFromOrderDataAction, useCurrentOrderId } from '../../slices/orderSlice';
 
 
 export type Dish = {
@@ -113,7 +113,7 @@ const DishesPage: React.FC = () => {
     const titleValue = useTitleValue();
     const minPriceValue = useMinPriceValue();
     const maxPriceValue = useMaxPriceValue();
-    const dish_order = useDishOrder();
+    // const dish_order = useDishOrder();
     const linksMap = useLinksMapData();
 
     React.useEffect(() => {
@@ -171,7 +171,7 @@ const DishesPage: React.FC = () => {
     const getOrder = async () => {
     try {
         // console.log("id")
-        // const id = useCurrentOrderId()
+        const id = useCurrentOrderId()
         // console.log("id", id)
         const order_response = await axios(`http://localhost:8000/orders/${id}`, {
           method: 'GET',
