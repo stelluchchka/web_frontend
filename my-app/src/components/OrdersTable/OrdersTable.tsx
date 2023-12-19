@@ -17,16 +17,13 @@ interface OrderData {
 }
 
 interface DishData {
-  id: number;
   title: string;
   price: number;
-  quantity: number
 }
 
 export type ReceivedDishData = {
   id: number;
-  title: string;
-  price: number;
+  dish: DishData
   quantity: number;
 }
 
@@ -45,10 +42,11 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
         method: 'GET',
         withCredentials: true,
       })
+      console.log("data", response.data)
       const newArr = response.data.dishes.map((raw: ReceivedDishData) => ({
         id: raw.id,
-        title: raw.title,
-        price: raw.price,
+        title: raw.dish.title,
+        price: raw.dish.price,
         quantity: raw.quantity
     }));
     setCurrentDishes(newArr)

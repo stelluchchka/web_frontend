@@ -4,31 +4,82 @@ import { toast } from 'react-toastify';
 import styles from './order.module.scss'
 import Button from 'react-bootstrap/Button'
 import BreadCrumbs from '../../components/breadcrumps';
-import { useCurrentOrderId, useDishOrder } from '../../slices/orderSlice'
+import { useCurrentOrderId, useDishesFromOrder, useDishesFromOrderData } from '../../slices/orderSlice'
 import DishesTable from '../../components/DishesTable'
 import { useDispatch } from 'react-redux'
-import { useCurrentOrderDate, useDishesFromOrder,
-  setCurrentOrderDateAction, setDishesFromOrderAction } from '../../slices/orderSlice'
+import { useCurrentOrderDate, useDishFromOrder,
+  setCurrentOrderDateAction, setDishFromOrderAction } from '../../slices/orderSlice'
 import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
 
 
-export type ReceivedDishesData = {
+interface DishesData {
   id: number;
   title: string;
   price: number;
   tag: string;
   url: string;
 }
+// interface DishFromOrder {
+//   id: number;
+//   dish: DishesData;
+//   quantity: number;
+// }
+
+// interface DishesData {
+//   id: number;
+//   title: string;
+//   price: number;
+//   tag: string;
+//   url: string;
+// }
+// interface DishFromOrder {
+//   id: number;
+//   dish: DishesData
+//   quantity: number;
+// }
+// interface RecievedDishesFromOrder {
+//   id: number;
+//   status: string;
+//   created_at: string;
+//   processed_at: string;
+//   completed_at: string;
+//   dish: DishFromOrder;
+// }
+
 
 const OrderPage = () => {
   const dispatch = useDispatch();
-  const dishes = useDishesFromOrder();
-  const dish_order = useDishOrder()
+  const dishes = useDishesFromOrderData()
+  console.log("dishes_from_order_data", dishes)
+
   const orderDate = useCurrentOrderDate();
   const currentOrderId = useCurrentOrderId();
   const linksMap = useLinksMapData();
-  console.log(dish_order)
+
+  // const getCurrentOrder = async () => {
+  //   try {
+  //     const response = await axios(`http://localhost:8000/orders/${currentOrderId}`, {
+  //       method: 'GET',
+  //       withCredentials: true,
+  //     })
+  //     dispatch(setDishesFromOrderAction(response.data))
+  //     const newDishesFromOrderArr = response.data.map((raw: RecievedDishesFromOrder) => ({
+  //       id: raw.id,
+  //       status: raw.status,
+  //       created_at: raw.created_at,
+  //       processed_at: raw.processed_at,
+  //       completed_at: raw.completed_at,
+  //       dish: raw.dish
+  //   }));
+  //   dispatch(setDishesFromOrderAction(newDishesFromOrderArr))
+  //   console.log("newDishesFromOrderArr", newDishesFromOrderArr)
+  //   } catch(error) {
+  //     throw error;
+  //   }
+  // }
+
   React.useEffect(() => {
+    // getCurrentOrder();
     dispatch(setLinksMapDataAction(new Map<string, string>([
       ['Текущий заказ', '/order']
   ])))
@@ -41,7 +92,7 @@ const OrderPage = () => {
         withCredentials: true
       })
       console.log(response)
-      dispatch(setDishesFromOrderAction([]));
+      dispatch(setDishFromOrderAction([]));
       dispatch(setCurrentOrderDateAction(''));
       // localStorage.setItem('dish_orders', JSON.stringify([]));
       toast.success("Заказ успешно отправлен на проверку!");
@@ -52,12 +103,12 @@ const OrderPage = () => {
 
   const deleteOrder = async () => {
     try {
-      await axios(`http://localhost:8000/orders`, {
+      await axios(`http://localhost:8000/orders/${currentOrderId}`, {
       method: 'DELETE',
       withCredentials: true
     })
 
-    dispatch(setDishesFromOrderAction([]));
+    dispatch(setDishFromOrderAction([]));
     dispatch(setCurrentOrderDateAction(''));
     // localStorage.setItem('dish_orders', JSON.stringify([]));
     toast.success("Заказ успешно удален!");
@@ -84,7 +135,7 @@ const OrderPage = () => {
           Ваш заказ
         </h1><br />
 
-        {dish_order.length !== 0 ? <div>
+        {dishes.length !== 0 ? <div>
           {/* <h5 className={styles['order-subtitle']}>
             У вас есть возможность удалять блюда из заявки, удалить всю заявку или отправить заявку на проверку модераторам!
           </h5> */}
@@ -92,7 +143,7 @@ const OrderPage = () => {
           <div className={styles['order-info']}>
             <h3 className={styles['order-info-title']} style={{textAlign: 'left'}}>Дата создания заказа: <br/><b>{orderDate}</b></h3>
             {/* <h3 className={styles['order-info-title']}>Добавленные блюда:</h3> */}
-            <DishesTable dishes_orders={dish_order} className={styles['order-info-table']}/>
+            <DishesTable dishes={dishes} className={styles['order-info-table']}/>
 
             <div className={styles['order-info-btns']}>
               <Button onClick={() => handleSendButtonClick()} className={styles['order-info-btn']}>Заказать</Button>

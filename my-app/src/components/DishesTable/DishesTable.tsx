@@ -5,8 +5,23 @@ import styles from './DishesTable.module.scss'
 import Table from 'react-bootstrap/Table';
 import cn from 'classnames';
 import { useDispatch } from 'react-redux';
-import { setDishOrderAction } from '../../slices/orderSlice'
+import { setDishOrderAction, setDishesFromOrderAction, useDishOrder } from '../../slices/orderSlice'
 import BasketIcon from '../Icons/BasketIcon';
+
+
+// interface OrderData {
+//   id: number;
+//   status: string;
+//   created_at: string;
+//   processed_at: string;
+//   completed_at: string;
+// }
+// interface DishOrderData {
+//   id: number;
+//   dish: DishesData;
+//   order: OrderData;
+//   quantity: number;
+// }
 
 interface DishesData {
   id: number;
@@ -15,29 +30,30 @@ interface DishesData {
   tag: string;
   url: string;
 }
-interface OrderData {
-  id: number;
-  status: string;
-  created_at: string;
-  processed_at: string;
-  completed_at: string;
-}
-interface DishOrderData {
+interface DishFromOrder {
   id: number;
   dish: DishesData;
-  order: OrderData;
   quantity: number;
 }
+// interface DishesFromOrder {
+//   id: number;
+//   status: string;
+//   created_at: string;
+//   processed_at: string;
+//   completed_at: string;
+//   dish: DishFromOrder[];
+// }
 
 export type DishesTableProps = {
-  dishes_orders: DishOrderData[];
+  dishes: DishFromOrder[];
   className?: string;
   flag?: boolean;
 };
 
-const DishesTable: React.FC<DishesTableProps> = ({dishes_orders, className, flag}) => {
+const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
   const dispatch = useDispatch();
-  console.log("dishes_orders", dishes_orders)
+  // const dishes_orders = useDishOrder();
+  console.log("dishes", dishes)
 
   const deleteDishFromOrder = async (id: number) => {
     try {
@@ -46,13 +62,14 @@ const DishesTable: React.FC<DishesTableProps> = ({dishes_orders, className, flag
         withCredentials: true
       })
 
-      dispatch(setDishOrderAction(dishes_orders.filter(dish => dish.id !== id)))
+      // dispatch(setDishesFromOrderAction(dishes.dish.filter(dish => dish.id !== id)))///////
       // localStorage.setItem('dish_orders', JSON.stringify([]));
       toast.success("успешно удаленo!");
     } catch(error) {
       throw error;
     }
   }
+
 
   const handleDeleteButtonClick = (id: number) => {
     deleteDishFromOrder(id)
@@ -71,13 +88,13 @@ const DishesTable: React.FC<DishesTableProps> = ({dishes_orders, className, flag
           </tr>
         </thead>
         <tbody>
-          {dishes_orders.map((dish_order: DishOrderData, index: number) => (
-            <tr key={dish_order.id}>
+          {dishes.map((dishes: DishFromOrder, index: number) => (
+            <tr key={dishes.id}>
               <td>{++index}</td>
-              <td>{dish_order.dish.title}</td>
-              <td>{dish_order.quantity}</td>
-              <td>{dish_order.dish.price} ₽</td>
-              {!flag && <td className={styles.table__action}><BasketIcon onClick={() => handleDeleteButtonClick(dish_order.id)}/></td>}
+              <td>{dishes.dish.title}</td>
+              <td>{dishes.quantity}</td>
+              <td>{dishes.dish.price} ₽</td>
+              {!flag && <td className={styles.table__action}><BasketIcon onClick={() => handleDeleteButtonClick(dishes.dish.id)}/></td>}
             </tr>
           ))}
         </tbody>

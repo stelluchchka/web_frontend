@@ -10,7 +10,7 @@ import Cookies from "universal-cookie";
 import {setUserAction, setIsAuthAction, useIsAuth} from "../src/slices/authSlice";
 import {useDispatch} from "react-redux";
 import axios, {AxiosResponse} from 'axios';
-import { setCurrentOrderDateAction, setDishesFromOrderAction, setCurrentOrderIdAction} from '../src/slices/orderSlice'
+import { setCurrentOrderIdAction, setDishesFromOrderDataAction, useCurrentOrderId} from '../src/slices/orderSlice'
 import { setDishesAction} from "../src/slices/mainSlice";
 import React from 'react';
 import OrderPage from "./pages/order";
@@ -104,6 +104,27 @@ export type ReceivedDishData = {
   url: string
 }
 
+// interface DishesData {
+//   id: number;
+//   title: string;
+//   price: number;
+//   tag: string;
+//   url: string;
+// }
+// interface RecievedDishesFromOrder {
+//   id: number;
+//   dish: DishesData
+//   quantity: number;
+// }
+// interface RecievedDishesFromOrder {
+//   id: number;
+//   status: string;
+//   created_at: string;
+//   processed_at: string;
+//   completed_at: string;
+//   dish: DishFromOrder;
+// }
+
 function App() {
   const dispatch = useDispatch();
   const isAuth = useIsAuth();
@@ -135,25 +156,26 @@ function App() {
     }
   }
 
-  const getCurrentOrder = async (id: number) => {
-    try {
-      const response = await axios(`http://localhost:8000/orders/${id}`, {
-        method: 'GET',
-        withCredentials: true,
-      })
-      dispatch(setCurrentOrderDateAction(response.data.application.creation_date))
-      const newArr = response.data.dishes.map((raw: ReceivedDishData) => ({
-        id: raw.id,
-        title: raw.title,
-        price: raw.price,
-        tag: raw.tag,
-        url: raw.url
-    }));
-    dispatch(setDishesFromOrderAction(newArr))
-    } catch(error) {
-      throw error;
-    }
-  }
+  // const getCurrentOrder = async (id: number) => {
+  //   try {
+  //     const response = await axios(`http://localhost:8000/orders/${id}`, {
+  //       method: 'GET',
+  //       withCredentials: true,
+  //     })
+  //     dispatch(setCurrentOrderDateAction(response.data.created_at))
+  //     const newDishArr = response.data.dishes.map((raw: ReceivedDishData) => ({
+  //       id: raw.id,
+  //       title: raw.title,
+  //       price: raw.price,
+  //       tag: raw.tag,
+  //       url: raw.url
+  //   }));
+  //   dispatch(setDishFromOrderAction(newDishArr))
+  //   console.log("newDishArr", response.data.dishes)
+  // } catch(error) {
+  //     throw error;
+  //   }
+  // }
 
   const getDishes = async () => {
     try {
@@ -162,10 +184,12 @@ function App() {
             withCredentials: true 
         });
         const dishes = response.data.dishes;
-        if (response.data.order_id) {
-          getCurrentOrder(response.data.order_id);
-          dispatch(setCurrentOrderIdAction(response.data.order_id))
+        console.log("response.data", response.data)
+        if (response.data.order.id) {
+          dispatch(setCurrentOrderIdAction(response.data.order.id))
         }
+        // const id = useCurrentOrderId()
+        // console.log("id", id)
         const newArr = dishes.map((raw: ReceivedDishData) => ({
             id: raw.id,
             title: raw.title,

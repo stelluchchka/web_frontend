@@ -5,8 +5,31 @@ import ModalWindow from '../../components/ModalWindow'
 import OrdersTable from '../../components/OrdersTable'
 import BreadCrumbs from '../../components/breadcrumps'
 import { useDispatch } from 'react-redux'
-import { setOrdersAction, useOrders } from '../../slices/orderSlice'
+import { setDishesFromOrderAction, setOrdersAction, useOrders } from '../../slices/orderSlice'
 import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
+
+export type  DishesData = {
+    id: number;
+    title: string;
+    price: number;
+    tag: string;
+    url: string;
+}
+
+export type DishFromOrderData = {
+    id: number;
+    dish: DishesData
+    quantity: number;
+}
+
+export type ReceivedDishesFromOrderData = {
+    id: number;
+    status: string;
+    created_at: string;
+    processed_at: string;
+    completed_at: string;
+    dish: DishFromOrderData[];
+}
 
 export type ReceivedOrderData = {
     id: number;
@@ -14,11 +37,11 @@ export type ReceivedOrderData = {
     created_at: string;
     processed_at: string;
     completed_at: string;
-  }
-
+}
 const OrdersListPage = () => {
     const dispatch = useDispatch();
     const orders = useOrders();
+    // console.log(orders)
     const linksMap = useLinksMapData();
     const [isModalWindowOpened, setIsModalWindowOpened] = useState(false);
 
@@ -28,14 +51,23 @@ const OrdersListPage = () => {
             method: 'GET',
             withCredentials: true
           })
-          const newArr = response.data.map((raw: ReceivedOrderData) => ({
+          const OrderArr = response.data.map((raw: ReceivedOrderData) => ({
             id: raw.id,
             status: raw.status,
             created_at: raw.created_at,
             processed_at: raw.processed_at,
             completed_at: raw.completed_at,
         }));
-        dispatch(setOrdersAction(newArr))
+          const DishesFromOrderArr = response.data.map((raw: ReceivedDishesFromOrderData) => ({
+            id: raw.id,
+            status: raw.status,
+            created_at: raw.created_at,
+            processed_at: raw.processed_at,
+            completed_at: raw.completed_at,
+            dish: raw.dish
+        }));
+        dispatch(setDishesFromOrderAction(DishesFromOrderArr))
+        dispatch(setOrdersAction(OrderArr))
         } catch(error) {
           throw error
         }

@@ -12,7 +12,7 @@ import {useDispatch} from "react-redux";
 import {useTitleValue, useDishes, setTitleValueAction, setDishesAction, setMinPriceValueAction, 
     setMaxPriceValueAction, useMaxPriceValue, useMinPriceValue, useTagValue, setTagValueAction} from "../../slices/mainSlice";
 import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
-import { setDishOrderAction, useDishOrder } from '../../slices/orderSlice';
+import { setDishOrderAction, setDishesFromOrderDataAction, useCurrentOrderDate, useCurrentOrderId, useDishOrder } from '../../slices/orderSlice';
 
 
 export type Dish = {
@@ -93,6 +93,18 @@ const mockDishes = [
         tag: "остро"
     }
 ]
+interface DishesData {
+    id: number;
+    title: string;
+    price: number;
+    tag: string;
+    url: string;
+}
+interface RecievedDishesFromOrder {
+    id: number;
+    dish: DishesData
+    quantity: number;
+}
 
 const DishesPage: React.FC = () => {
     const dispatch = useDispatch()
@@ -108,10 +120,10 @@ const DishesPage: React.FC = () => {
         dispatch(setLinksMapDataAction(new Map<string, string>([
             ['блюда', '/dishes']
         ])))
-        const storedDishOrder = localStorage.getItem('dish_order');
-        if (storedDishOrder) {
-            dispatch(setDishOrderAction(JSON.parse(storedDishOrder)));
-        }
+        // const storedDishOrder = localStorage.getItem('dish_order');
+        // if (storedDishOrder) {
+        //     dispatch(setDishOrderAction(JSON.parse(storedDishOrder)));
+        // }
     }, [])
 
     const getDishes = async () => {
@@ -127,7 +139,6 @@ const DishesPage: React.FC = () => {
                 withCredentials: true 
             });
             const jsonData = await response.data;
-            console.log(response.data)
             const newArr = jsonData.dishes.map((raw: ReceivedDishData) => ({
                 id: raw.id,
                 title: raw.title,
@@ -157,6 +168,28 @@ const DishesPage: React.FC = () => {
             }
         }
     };
+    const getOrder = async () => {
+    try {
+        // console.log("id")
+        // const id = useCurrentOrderId()
+        // console.log("id", id)
+        const order_response = await axios(`http://localhost:8000/orders/${id}`, {
+          method: 'GET',
+          withCredentials: true,
+        })
+
+        console.log("order_response", order_response)
+        const newDishesFromOrderDataArr = order_response.data.dishes.map((raw: RecievedDishesFromOrder) => ({
+          id: raw.id,
+          dish: raw.dish,
+          quantity: raw.quantity
+      }));
+      dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
+      console.log("newDishesFromOrderDataArr", newDishesFromOrderDataArr)
+      } catch(error) {
+        throw error;
+      }
+    }
 
 
     const postDishToOrder = async (id: number) => {
@@ -165,15 +198,22 @@ const DishesPage: React.FC = () => {
                 method: 'POST',
                 withCredentials: true,
             })
-            console.log(response.data)
-            const addedDishOrder = {
-                id: response.data.dish.id,
-                dish: response.data.dish,
-                order: response.data.order,
-                quantity: response.data.quantity
-            }
-            dispatch(setDishOrderAction([...dish_order, addedDishOrder]))
-            localStorage.setItem('dish_order', JSON.stringify([...dish_order, addedDishOrder]));
+            // const addedDishOrder = {
+            //     id: response.data.dish.id,
+            //     dish: response.data.dish,
+            //     order: response.data.order,
+            //     quantity: response.data.quantity
+            // }
+            const formData = new FormData();
+            formData.append('quantity', response.data.quantity);
+            const dish_order_response = await axios.put(`http://localhost:8000/dishes_orders/${id}`, formData, {
+                method: 'PUT',
+                withCredentials: true,
+            })
+            getOrder()
+            dispatch(setDishOrderAction(dish_order_response.data))
+
+            // localStorage.setItem('dish_order', JSON.stringify([...dish_order, addedDishOrder]));
             toast.success("Блюдо успешно добавлено в заказ!");
             getDishes()
         } catch {
