@@ -10,9 +10,9 @@ function App() {
       {/* <Header /> */}
       {/* <Breadcrumps /> */}
       <Routes>
-      <Route path="/" element={<Navigate to="/dishes" replace />} />
-        <Route path="/" element={<Navigate to="/dishes" replace />} />
-        <Route path="/dishes" element={<MainPage />} />
+      <Route path="/" element={<Navigate to="/web_frontend" replace />}  />
+        <Route path="/web_frontend" element={<MainPage />} />
+        <Route path="/dishes" element={<Navigate to="/web_frontend" replace />} />
         <Route path="/dishes/:id" element={<DetailedPage />} />
       </Routes>
     </>
