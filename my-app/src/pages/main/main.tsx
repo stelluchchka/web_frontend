@@ -131,7 +131,7 @@ const MainPage: React.FC = () => {
     const [tagValue, setTagValue] = useState<string>('тег');
     const [titleValue, setTitleValue] = useState<string>('')
     const [minPriceValue, setMinPriceValue] = useState<number>(0);
-    const [maxPriceValue, setMaxPriceValue] = useState<number>(10000000);
+    const [maxPriceValue, setMaxPriceValue] = useState<number | undefined>(10000000);
 
     const fetchDishes = async () => {
         let url = 'http://127.0.0.1:8000/dishes'
