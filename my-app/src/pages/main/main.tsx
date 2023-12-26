@@ -7,6 +7,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Header from '../../components/header';
 import OneCard from '../../components/card';
 import styles from './main.module.scss';
+import Breadcrumps from "../../components/breadcrumps/breadcrumps";
 
 export type Dish = {
     id: number,
@@ -28,7 +29,7 @@ export type ReceivedDishData = {
     id: number,
     title: string,
     price: number,
-    tag: string,
+    tags: string,
     url: string,
 }
 
@@ -181,6 +182,10 @@ const MainPage: React.FC = () => {
         fetchDishes();
     }, []);
 
+    const linksMap = new Map<string, string>([
+        ['Главная', '/']
+    ]);
+
     const handleSearchButtonClick = () => {
         fetchDishes();
     }
@@ -212,7 +217,7 @@ const MainPage: React.FC = () => {
     return (
         <div className={styles.main_page}>
             <Header/>
-
+            <Breadcrumps links={linksMap}></Breadcrumps>
             <div className={styles["hat"]}>
                 <h5 className={styles["header__logo"]}>**логотип</h5>
                 <h1 className={styles["header__title"]}>

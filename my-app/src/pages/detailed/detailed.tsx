@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
 import Header from '../../components/header';
+import Breadcrumps from "../../components/breadcrumps/breadcrumps";
 
 export type Dish = {
   id: number,
@@ -111,6 +112,9 @@ const OrderPage = () => {
   const params = useParams();
   const id = params.id === undefined ? '' : params.id;
 
+  const [linksMap, setLinksMap] = useState<Map<string, string>>(
+    new Map<string, string>([['Главная', '/']])
+  );
   const [dish, setDish] = useState<Dish>();
   let currentUrl = '/'
 
@@ -134,9 +138,16 @@ const OrderPage = () => {
               chef_url: jsonData.chef_url,
               expiry_date: jsonData.expiry_date
           })
+          const newLinksMap = new Map<string, string>(linksMap);
+          newLinksMap.set(jsonData.title, '/dishes/' + id);
+                setLinksMap(newLinksMap)
+          
       } catch {
           const dish = mockDishes.find(item => item.id === Number(id));
           setDish(dish)
+          const newLinksMap = new Map<string, string>(linksMap);
+          newLinksMap.set('подробнее', '/dishes/' + id);
+          setLinksMap(newLinksMap)
       }
       
       currentUrl += 'dishes/' + id
@@ -153,6 +164,7 @@ const OrderPage = () => {
         height: '100vh',
         position: 'relative'}}>
       <Header/>
+      <Breadcrumps links={linksMap}></Breadcrumps>
     <div className={styles.fafa}></div>
       <div style={{backgroundColor: 'white', 
           height: '100%', 
