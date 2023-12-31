@@ -89,6 +89,7 @@ const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
             <th> Название блюда </th>
             <th>Количество</th>
             <th>Цена</th>
+            <th>Итого</th>
             {!flag && <th></th>}
           </tr>
         </thead>
@@ -98,11 +99,15 @@ const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
               <td>{++index}</td>
               <td>{dishes.title}</td>
               <td>
-              <button style={{marginRight: '20px'}} onClick={() => handleMinusClick(dishes.id, dishes.quantity)}>-</button>
+              {!flag && <button style={{marginRight: '20px'}} onClick={() => handleMinusClick(dishes.id, dishes.quantity)}>-</button>
+              }
               {dishes.quantity}
+              {!flag &&
               <button style={{marginLeft: '20px'}} onClick={() => handlePlusClick(dishes.id, dishes.quantity)}>+</button>
+              }
               </td>
               <td>{dishes.price} ₽</td>
+              <td>{dishes.price * dishes.quantity} ₽</td>
               {!flag && <td className={styles.table__action}><BasketIcon onClick={() => handleDeleteButtonClick(dishes.id)}/></td>}
             </tr>
           ))}

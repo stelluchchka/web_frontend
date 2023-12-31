@@ -9,9 +9,10 @@ import {useDispatch} from "react-redux";
 import {useUser, useIsAuth, setIsAuthAction, setUserAction} from "../../slices/authSlice";
 import Cookies from "universal-cookie";
 import { toast } from 'react-toastify';
-import { useDishesFromOrderData } from '../../slices/orderSlice';
+import { useCurrentOrderId, useDishesFromOrderData } from '../../slices/orderSlice';
 import ProfileIcon from '../../components/Icons/ProfileIcon';
 import ApplicationIcon from '../../components/Icons/ApplicationIcon';
+import order from '../../pages/order';
 
 
 
@@ -23,6 +24,7 @@ const Header: React.FC = () => {
     const isUserAuth = useIsAuth();
     const dishes_orders = useDishesFromOrderData();
     let user = useUser();
+    const order_id = useCurrentOrderId()
 
     const logout = async () => {
         try {
@@ -65,7 +67,7 @@ const Header: React.FC = () => {
                 <Link to='/' className={styles.header__logo}>DISHES</Link>
                 {isUserAuth && dishes_orders.length > 0 &&
                         <div className={styles['application__icon-wrapper']}>
-                            <Link to={'/order'}>
+                            <Link to={`/orders/${order_id}`}>
                                 <div className={styles['application__icon-circle']}> <ApplicationIcon/>{dishes_orders.length} <br /> </div>
                             </Link>
                         </div>

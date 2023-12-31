@@ -81,7 +81,7 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
               <td>{order.processed_at ? order.processed_at : '-'}</td>
               <td>{order.completed_at ? order.completed_at : '-'}</td>
               <td className={styles.table__action}>
-                <Link to={`/order`}>
+                <Link to={`/orders/${order.id}`}>
                   <Button>Подробнее</Button>
                 </Link>
                 {/* <Link to={`/orders/${order.id}`}> */}

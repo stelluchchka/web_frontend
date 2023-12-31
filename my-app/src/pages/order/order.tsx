@@ -7,7 +7,7 @@ import BreadCrumbs from '../../components/breadcrumps';
 import { setDishesFromOrderDataAction, useCurrentOrderId, useDishesFromOrderData, useOrderDate } from '../../slices/orderSlice'
 import DishesTable from '../../components/DishesTable'
 import { useDispatch } from 'react-redux'
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 // import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
 
 interface DishesFromOrder {
@@ -30,21 +30,12 @@ const OrderPage = () => {
   const currentOrderId = useCurrentOrderId();
   // const linksMap = useLinksMapData();
   // const [isLoading, setIsLoading] = useState(true);
-  const dishesFromOrder = useDishesFromOrderData();
-  const order_date = useOrderDate();
-
-  const [formattedDate, setFormattedDate] = useState('');
-
-  useEffect(() => {
-    if (order_date) {
-      const date = new Date(order_date);
-      
-      const formatted = `${date.toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' })} в 
-                         ${date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
-      
-      setFormattedDate(formatted);
-    }
-  }, [order_date]);
+  const CurrentDishesFromOrder = useDishesFromOrderData();
+  const cur_order_date = useOrderDate();
+  const params = useParams();
+  const OrderId = Number(params.id);
+  const [dishesFromOrder, setDishesFromOrder] = useState<DishesFromOrder[]>([]);
+  const flag = (currentOrderId != OrderId)
 
   if (currentOrderId == -1) {
     return <Navigate to="/" replace />;
@@ -54,11 +45,14 @@ const OrderPage = () => {
   //   dispatch(setLinksMapDataAction(new Map<string, string>([
   //     ['Текущий заказ', '/order']
   // ])))
-    if (currentOrderId != -1)
-      getDishesFromOrder()
+
+  if (currentOrderId == OrderId)
+    getDishesFromCurrentOrder()
+  else 
+    getDishesFromOrder()
   }, [])
 
-  const getDishesFromOrder = async () => {
+  const getDishesFromCurrentOrder = async () => {
     try {
       const order_response = await axios(`http://localhost:8000/orders/${currentOrderId}`, {
         method: 'GET',
@@ -80,6 +74,28 @@ const OrderPage = () => {
     }
   };
 
+  const getDishesFromOrder = async () => {
+    try {
+      const order_response = await axios(`http://localhost:8000/orders/${OrderId}`, {
+        method: 'GET',
+        withCredentials: true,
+      })
+      const newDishesFromOrderDataArr = order_response.data.dishes.map((raw: DishesFromOrder) => ({
+        id: raw.id,
+        title: raw.title,
+        price: raw.price,
+        tag: raw.tag,
+        url: raw.url,
+        quantity: raw.quantity,
+      }));
+      setDishesFromOrder(newDishesFromOrderDataArr)
+      // setIsLoading(false);
+    }
+    catch(error) {
+      throw error;
+    }
+  };
+
   const sendOrder = async () => {
     try {
       const formData = new FormData();
@@ -90,7 +106,7 @@ const OrderPage = () => {
       })
       toast.success("Заказ успешно удален!");
       if (currentOrderId != -1)
-        getDishesFromOrder()
+        getDishesFromCurrentOrder()
     }
     catch(error) {
       throw error;
@@ -107,7 +123,7 @@ const OrderPage = () => {
       })
       toast.success("Заказ успешно удален!");
       if (currentOrderId != -1)
-        getDishesFromOrder()
+        getDishesFromCurrentOrder()
     }
     catch(error) {
       throw error;
@@ -126,14 +142,15 @@ const OrderPage = () => {
     <div className={styles.order}>
       <div className={styles['order-wrapper']}>
         {/* <BreadCrumbs links={linksMap}></BreadCrumbs> */}
-        <h1 className={styles['order-title']}>
-          Ваш заказ
-        </h1><br />
-        {dishesFromOrder.length > 0 && <div>
+        {(OrderId == currentOrderId) && (CurrentDishesFromOrder.length > 0) &&
+        <div>
+          <h1 className={styles['order-title']}>
+            Ваш заказ
+          </h1><br />
           <div className={styles['order-info']}>
-            <h3 className={styles['order-info-title']} style={{textAlign: 'left'}}>Дата создания заказа: <br/><b>{formattedDate}</b></h3>
-            {/* <h3 className={styles['order-info-title']}>Добавленные блюда:</h3> */}
-            <DishesTable dishes={dishesFromOrder} className={styles['order-info-table']}/>
+              <h3 className={styles['order-info-title']} style={{textAlign: 'left'}}>Дата и время создания заказа: <br/><b>{cur_order_date}</b></h3>
+
+            <DishesTable dishes={CurrentDishesFromOrder} className={styles['order-info-table']}/>
 
             <div className={styles['order-info-btns']}>
               <Button onClick={() => handleSendButtonClick()} className={styles['order-info-btn']}>Заказать</Button>
@@ -141,7 +158,25 @@ const OrderPage = () => {
             </div>
           </div>
         </div>
-        
+      }
+        {(OrderId != currentOrderId) && (dishesFromOrder.length > 0) &&
+        <div>
+          <h1 className={styles['order-title']}>
+            Заказ
+          </h1><br />
+          <div className={styles['order-info']}>
+
+            <DishesTable dishes={dishesFromOrder} className={styles['order-info-table']} flag={flag}/>
+
+          </div>
+        </div>
+      }
+        {(OrderId != currentOrderId) && (dishesFromOrder.length == 0) &&
+        <div>
+          <h1 className={styles['order-title']}>
+            Заказ пуст
+          </h1><br />
+        </div>
       }
       </div>
     </div>

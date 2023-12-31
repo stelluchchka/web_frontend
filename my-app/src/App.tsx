@@ -199,7 +199,7 @@ function App() {
         <Route path="/dishes/:id" element={<DetailedPage />} />
         <Route>{!isAuth && <Route path='/registration' element={<RegistrationPage/>} />}</Route>
         <Route path='/login' element={<LoginPage/>} />
-        {<Route path='/order' element={<OrderPage/>}/>}
+        {<Route path='/orders/:id' element={<OrderPage/>}/>}
         {<Route path='/orders' element={<OrdersPage/>}/>}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
