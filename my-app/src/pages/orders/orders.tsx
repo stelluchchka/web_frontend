@@ -6,6 +6,7 @@ import OrdersTable from '../../components/OrdersTable'
 import BreadCrumbs from '../../components/breadcrumps'
 import { useDispatch } from 'react-redux'
 import { setOrdersAction, useOrders } from '../../slices/orderSlice'
+import { setLinksMapDataAction, useLinksMapData } from '../../slices/detailedSlice'
 // import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
 
 export type  DishesData = {
@@ -41,7 +42,7 @@ export type ReceivedOrderData = {
 const OrdersListPage = () => {
     const dispatch = useDispatch();
     const orders = useOrders();
-    // const linksMap = useLinksMapData();
+    const linksMap = useLinksMapData();
     const [isModalWindowOpened, setIsModalWindowOpened] = useState(false);
 
     const getAllOrders = async () => {
@@ -64,16 +65,16 @@ const OrdersListPage = () => {
     }
 
     React.useEffect(() => {
-        // dispatch(setLinksMapDataAction(new Map<string, string>([
-        //     ['Заявки', '/orders']
-        // ])))
+        dispatch(setLinksMapDataAction(new Map<string, string>([
+            ['Заказы', '/orders']
+        ])))
         getAllOrders()
     }, [])
     
     return (
         <div className={styles.orders__page}>
             <div className={styles['orders__page-wrapper']}>
-                {/* <BreadCrumbs links={linksMap}></BreadCrumbs> */}
+                <BreadCrumbs links={linksMap}></BreadCrumbs>
                 <h1 className={styles['orders__page-title']}>История заказов</h1>
                 <h5 className={styles['orders__page-subtitle']}>
                 </h5>

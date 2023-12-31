@@ -12,9 +12,6 @@ import { toast } from 'react-toastify';
 import { useCurrentOrderId, useDishesFromOrderData } from '../../slices/orderSlice';
 import ProfileIcon from '../../components/Icons/ProfileIcon';
 import ApplicationIcon from '../../components/Icons/ApplicationIcon';
-import order from '../../pages/order';
-
-
 
 const cookies = new Cookies();
 
@@ -41,7 +38,6 @@ const Header: React.FC = () => {
             cookies.remove("session_id", { path: "/" }); 
 
             dispatch(setIsAuthAction(false))
-            // localStorage.setItem('dish_orders', JSON.stringify([]));
             dispatch(setUserAction({
                 email: "",
                 first_name: "",
@@ -83,7 +79,6 @@ const Header: React.FC = () => {
                 </div>
                 {isUserAuth ? <ProfileIcon className={styles['header__profile-icon']} onClick={handleProfileButtonClick}/> : <Link to='/registration' className={styles.header__profile}><ProfileIcon/></Link>}
 
-
                 <AnimatePresence>
                 {isUserAuth && isProfileButtonClicked && (
                     <motion.div
@@ -106,7 +101,6 @@ const Header: React.FC = () => {
                     </motion.div>
                 )}
                 </AnimatePresence>
-                {/* <div>                a</div> */}
             </div>
         </div>
     )

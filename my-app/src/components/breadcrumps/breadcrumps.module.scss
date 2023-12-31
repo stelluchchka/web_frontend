@@ -1,11 +1,11 @@
 
 .breadcrumbs {
+  margin-top: 30px;
   margin-left: 20px;
   font-size: 20px;
   text-align: left;
 
   &__item {
-
 
       &-link {
           text-decoration: none;
@@ -18,8 +18,7 @@
       }
 
       &-icon {
-          font-size: 45px;
-        //   margin: 0 10px;
+          font-size: 25px;
       }
   }
 }

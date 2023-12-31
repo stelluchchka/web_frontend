@@ -18,15 +18,15 @@ export type CardProps = {
 
 const OneCard: React.FC<CardProps> = ({id, title, tags, price, url, chef, onButtonClick, onImageClick }) => {
   return (
-    <Card style={{marginRight: '3%', marginLeft: '3%', width: '345px', boxShadow: '0 0 10px #3c3a3a'}}>
+    <Card style={{marginRight: '3%', marginLeft: '3%', width: '27%', boxShadow: '0 0 10px #3c3a3a'}}>
       <Link to={`/dishes/${id}`} style={{ textDecoration: 'none', color: 'black' }}>
         <div style={{ backgroundColor: '#ffffff',
-                      width: '345px',
+                      width: '100%',
                       borderRadius: '5px',
                       marginBottom: '0%'}}>
           <Image
-            style={{  width: '70%', 
-                      height: '313', 
+            style={{  width: '80%', 
+                      // height: '100%', 
                       marginTop: '5%'}}
             onClick={onImageClick}
             src={url ? url : "https://www.solaredge.com/us/sites/nam/files/Placeholders/Placeholder-4-3.jpg"}

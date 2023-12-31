@@ -1,10 +1,7 @@
 import React from 'react'
-import { useState } from 'react';
-import axios from 'axios';
 import styles from './OrdersTable.module.scss'
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-import ModalWindow from '../../components/ModalWindow'
 import cn from 'classnames';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -31,32 +28,6 @@ export type DishesTableProps = {
 
 const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
   useDispatch();
-  const [currentDishes, setCurrentDishes] = useState<ReceivedDishData[]>([])
-
-  
-  const getCurrentOrder = async (id: number) => {
-    try {
-      const response = await axios(`http://localhost:8000/orders/${id}`, {
-        method: 'GET',
-        withCredentials: true,
-      })
-      console.log("data", response.data)
-      const newArr = response.data.dishes.map((raw: ReceivedDishData) => ({
-        id: raw.id,
-        title: raw.title,
-        price: raw.price,
-        quantity: raw.quantity
-    }));
-    setCurrentDishes(newArr)
-    } catch(error) {
-      throw error;
-    }
-  }
-
-  const handleDetailedButtonClick = (id: number) => {
-    getCurrentOrder(id);
-    // setIsModalWindowOpened(true)
-  };
 
   return (
     <>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify';
 import styles from './order.module.scss'
@@ -8,7 +8,7 @@ import { setDishesFromOrderDataAction, useCurrentOrderId, useDishesFromOrderData
 import DishesTable from '../../components/DishesTable'
 import { useDispatch } from 'react-redux'
 import { Navigate, useParams } from 'react-router-dom';
-// import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
+import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
 
 interface DishesFromOrder {
   id: number;
@@ -28,8 +28,7 @@ export type ReceivedDishData = {
 const OrderPage = () => {
   const dispatch = useDispatch();
   const currentOrderId = useCurrentOrderId();
-  // const linksMap = useLinksMapData();
-  // const [isLoading, setIsLoading] = useState(true);
+  const linksMap = useLinksMapData();
   const CurrentDishesFromOrder = useDishesFromOrderData();
   const cur_order_date = useOrderDate();
   const params = useParams();
@@ -42,10 +41,13 @@ const OrderPage = () => {
   }
 
   React.useEffect(() => {
-  //   dispatch(setLinksMapDataAction(new Map<string, string>([
-  //     ['Текущий заказ', '/order']
-  // ])))
-
+    console.log(currentOrderId)
+    if (currentOrderId == OrderId) {
+      dispatch(setLinksMapDataAction(new Map<string, string>([
+          ['Текущий заказ', `orders/${currentOrderId}`]
+      ])))
+    }
+  
   if (currentOrderId == OrderId)
     getDishesFromCurrentOrder()
   else 
@@ -141,14 +143,12 @@ const OrderPage = () => {
   return (
     <div className={styles.order}>
       <div className={styles['order-wrapper']}>
-        {/* <BreadCrumbs links={linksMap}></BreadCrumbs> */}
+        <BreadCrumbs links={linksMap}></BreadCrumbs>
         {(OrderId == currentOrderId) && (CurrentDishesFromOrder.length > 0) &&
         <div>
-          <h1 className={styles['order-title']}>
-            Ваш заказ
-          </h1><br />
+          <br />
           <div className={styles['order-info']}>
-              <h3 className={styles['order-info-title']} style={{textAlign: 'left'}}>Дата и время создания заказа: <br/><b>{cur_order_date}</b></h3>
+              <h3 className={styles['order-info-title']} style={{textAlign: 'left'}}>Дата и время создания заказа: <b>{cur_order_date}</b></h3>
 
             <DishesTable dishes={CurrentDishesFromOrder} className={styles['order-info-table']}/>
 

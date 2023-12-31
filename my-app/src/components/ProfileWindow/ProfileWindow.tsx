@@ -43,7 +43,7 @@ const ProfileWindow: React.FC<ModalProps> = ({
                     </div>
                 </div>
             </div>
-            <Button style={{backgroundColor: '#2787F5'}} className={styles.modal__btn} onClick={onClick}>Выйти</Button>
+            <Button style={{backgroundColor: '#f53100', color: 'white'}} className={styles.modal__btn} onClick={onClick}>Выйти</Button>
             
         </div>
     )

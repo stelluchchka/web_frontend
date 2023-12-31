@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import {useDispatch} from "react-redux";
 import {useTitleValue, useDishes, setTitleValueAction, setDishesAction, setMinPriceValueAction, 
     setMaxPriceValueAction, useMaxPriceValue, useMinPriceValue, useTagValue, setTagValueAction} from "../../slices/mainSlice";
-// import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
+import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
 import { setCurrentOrderIdAction, setDishesFromOrderDataAction, useCurrentOrderId } from '../../slices/orderSlice';
 
 
@@ -99,13 +99,13 @@ const DishesPage: React.FC = () => {
     const titleValue = useTitleValue();
     const minPriceValue = useMinPriceValue();
     const maxPriceValue = useMaxPriceValue();
-    // const linksMap = useLinksMapData();
+    const linksMap = useLinksMapData();
     const order_id = useCurrentOrderId()
 
     React.useEffect(() => {
-        // dispatch(setLinksMapDataAction(new Map<string, string>([
-        //     ['блюда', '/dishes']
-        // ])))
+        dispatch(setLinksMapDataAction(new Map<string, string>([
+            ['Блюда  ', '/dishes']
+        ])))
         getDishes()
         if (order_id == -1) {
             setOrderId();
@@ -224,10 +224,6 @@ const DishesPage: React.FC = () => {
         dispatch(setMaxPriceValueAction(Number(event.target.value)));
     };
 
-    // const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    //     event.preventDefault();
-    // };
-
     const handleTagSelect = (eventKey: string | null) => {
         if (eventKey) {
           const selectedTag = tags.find(tag => tag.key === eventKey);
@@ -238,7 +234,7 @@ const DishesPage: React.FC = () => {
     };
     return (
         <div className={styles.main_page}>
-            {/* <Breadcrumps links={linksMap}></Breadcrumps> */}
+            <Breadcrumps links={linksMap}></Breadcrumps>
             <div className={styles["hat"]}>
                 <h5 className={styles["header__logo"]}>**логотип</h5>
                 <h1 className={styles["header__title"]}>
@@ -249,7 +245,7 @@ const DishesPage: React.FC = () => {
                 </h4>
                     <div style={{display: 'flex', justifyContent: 'center' }}>
                             <Form.Group controlId="name">
-                                <Form.Control type="text" placeholder="название" style={{ width: '200px', borderRadius: '10px 0px 0px 10px', height: '60px', fontSize: '18px', border: 'none', marginRight: '5px'}} onChange={handleTitleValueChange}/>
+                                <Form.Control type="text" placeholder="название" style={{ width: '95%', borderRadius: '10px 0px 0px 10px', height: '60px', fontSize: '18px', border: 'none', marginRight: '5px'}} onChange={handleTitleValueChange}/>
                             </Form.Group>
                             <Form.Group controlId="tag">
                                 <Dropdown onSelect={handleTagSelect}>
@@ -257,7 +253,7 @@ const DishesPage: React.FC = () => {
                                         height: '60px',
                                         backgroundColor: "#ffff",
                                         color: '#827e7e',   //gray
-                                        width: '200px',
+                                        width: '95%',
                                         textAlign: 'left',
                                         display: 'flex',
                                         justifyContent: 'space-between',
@@ -270,7 +266,7 @@ const DishesPage: React.FC = () => {
                                         {tagValue || "тег"}
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu style={{
-                                        width: '200px',
+                                        width: '16%',
                                         textAlign: 'left',
                                         textDecoration: 'none'
                                     }}>
@@ -284,10 +280,10 @@ const DishesPage: React.FC = () => {
                                 </Dropdown>
                             </Form.Group>
                             <Form.Group controlId="min_price">
-                                <Form.Control type="text" placeholder="цена от" style={{ width: '200px', borderRadius: '0px 0px 0px 0px', height: '60px', fontSize: '18px', border: 'none', marginRight: '5px' }} onChange={handleMinPriceValueChange}/>
+                                <Form.Control type="text" placeholder="цена от" style={{ width: '95%', borderRadius: '0px 0px 0px 0px', height: '60px', fontSize: '18px', border: 'none', marginRight: '5px' }} onChange={handleMinPriceValueChange}/>
                             </Form.Group>
                             <Form.Group controlId="max_price">
-                                <Form.Control type="text" placeholder="цена до" style={{borderRadius: '0 10px 10px 0', width: '200px', height: '60px', fontSize: '18px', border: 'none' }} onChange={handleMaxPriceValueChange}/>
+                                <Form.Control type="text" placeholder="цена до" style={{borderRadius: '0 10px 10px 0', width: '95%', height: '60px', fontSize: '18px', border: 'none' }} onChange={handleMaxPriceValueChange}/>
                             </Form.Group>
                             <Button variant="primary" type="submit" style={{color: 'white', 
                                     backgroundColor: '#f53100',
@@ -295,7 +291,7 @@ const DishesPage: React.FC = () => {
                                     height: '60px', 
                                     fontSize: '20px',
                                     borderRadius: '10px 10px 10px 10px',
-                                    width: '200px', 
+                                    width: '18%', 
                                     marginLeft: '20px',
                                     fontFamily: 'sans-serif'}} 
 
