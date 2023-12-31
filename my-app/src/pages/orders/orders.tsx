@@ -5,8 +5,8 @@ import ModalWindow from '../../components/ModalWindow'
 import OrdersTable from '../../components/OrdersTable'
 import BreadCrumbs from '../../components/breadcrumps'
 import { useDispatch } from 'react-redux'
-import { setDishesFromOrderAction, setOrdersAction, useOrders } from '../../slices/orderSlice'
-import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
+import { setOrdersAction, useOrders } from '../../slices/orderSlice'
+// import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
 
 export type  DishesData = {
     id: number;
@@ -41,8 +41,7 @@ export type ReceivedOrderData = {
 const OrdersListPage = () => {
     const dispatch = useDispatch();
     const orders = useOrders();
-    // console.log(orders)
-    const linksMap = useLinksMapData();
+    // const linksMap = useLinksMapData();
     const [isModalWindowOpened, setIsModalWindowOpened] = useState(false);
 
     const getAllOrders = async () => {
@@ -58,15 +57,6 @@ const OrdersListPage = () => {
             processed_at: raw.processed_at,
             completed_at: raw.completed_at,
         }));
-          const DishesFromOrderArr = response.data.map((raw: ReceivedDishesFromOrderData) => ({
-            id: raw.id,
-            status: raw.status,
-            created_at: raw.created_at,
-            processed_at: raw.processed_at,
-            completed_at: raw.completed_at,
-            dish: raw.dish
-        }));
-        dispatch(setDishesFromOrderAction(DishesFromOrderArr))
         dispatch(setOrdersAction(OrderArr))
         } catch(error) {
           throw error
@@ -74,16 +64,16 @@ const OrdersListPage = () => {
     }
 
     React.useEffect(() => {
-        dispatch(setLinksMapDataAction(new Map<string, string>([
-            ['Заявки', '/orders']
-        ])))
+        // dispatch(setLinksMapDataAction(new Map<string, string>([
+        //     ['Заявки', '/orders']
+        // ])))
         getAllOrders()
     }, [])
     
     return (
         <div className={styles.orders__page}>
             <div className={styles['orders__page-wrapper']}>
-                <BreadCrumbs links={linksMap}></BreadCrumbs>
+                {/* <BreadCrumbs links={linksMap}></BreadCrumbs> */}
                 <h1 className={styles['orders__page-title']}>История заказов</h1>
                 <h5 className={styles['orders__page-subtitle']}>
                 </h5>

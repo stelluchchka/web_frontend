@@ -1,13 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 
-interface DishesData {
-  id: number;
-  title: string;
-  price: number;
-  tag: string;
-  url: string;
-}
 interface OrderData {
   id: number;
   status: string;
@@ -17,104 +10,83 @@ interface OrderData {
 }
 interface DishesFromOrderData {
   id: number;
-  dish: DishesData
+  title: string;
+  price: number;
+  tag: string;
+  url: string;  
   quantity: number;
-}
-interface DishOrder {
-  id: number;
-  dish: DishesData;
-  order: OrderData;
-  quantity: number;
-}
-interface DishesFromOrder {
-  id: number;
-  status: string;
-  created_at: string;
-  processed_at: string;
-  completed_at: string;
-  dish: DishesFromOrderData[];
 }
 
 interface DataState {
-  currentOrderId: number | null;
+  order_date: string;
+  currentOrderId: number;
   currentOrderDate: string;
-  dishesFromOrder: DishesData[];
   orders: OrderData[];
-  dishes_orders: DishOrder[];
-  dishes_from_order: DishesFromOrder[];
+  order: OrderData;
   dishes_from_order_data: DishesFromOrderData[];
 }
 
 const dataSlice = createSlice({
   name: "data",
   initialState: {
-    currentOrderId: null,
+    order_date: '',
+    currentOrderId: -1,
     currentOrderDate: '',
-    dishesFromOrder: [],
     orders: [],
-    dishes_orders: [],
-    dishes_from_order: [],
+    order: {
+      id: -1,
+      status: '',
+      created_at: '',
+      processed_at: '',
+      completed_at: '',
+    },
     dishes_from_order_data: []
   } as DataState, 
   reducers: {
     setCurrentOrderId(state, action: PayloadAction<number>) {
       state.currentOrderId = action.payload;
+      console.log('order id is', action.payload)
     },
-    setCurrentOrderDate(state, action: PayloadAction<string>) {
-      state.currentOrderDate = action.payload;
-    },
-    setDishFromOrder(state, action: PayloadAction<DishesData[]>) {
-      state.dishesFromOrder = action.payload;
-    },
-    setOrders(state, action: PayloadAction<OrderData[]>) {
+    setOrders(state, action: PayloadAction<OrderData[]>) {            // orders
       state.orders = action.payload;
       console.log('orders is', action.payload)
     },
-    setDishOrder(state, action: PayloadAction<DishOrder[]>) {
-      state.dishes_orders = action.payload;
-      console.log('dish_orders is', action.payload)
-    },
-    setDishesFromOrder(state, action: PayloadAction<DishesFromOrder[]>) {
-      state.dishes_from_order = action.payload;
-      console.log('dishes_from_orders is', action.payload)
+    setOrder(state, action: PayloadAction<OrderData>) {
+      state.order = action.payload;
+      console.log('order is', action.payload)
     },
     setDishesFromOrderData(state, action: PayloadAction<DishesFromOrderData[]>) {
       state.dishes_from_order_data = action.payload;
       console.log('dishes_from_order_data is', action.payload)
-    }
+    },
+    setOrderDate(state, action: PayloadAction<string>) {
+      state.order_date = action.payload;
+      console.log('dishes_date is', action.payload)
+    },
   },
 });
-
 
 export const useCurrentOrderId = () =>
   useSelector((state: { ordersData: DataState }) => state.ordersData.currentOrderId);
 
-export const useCurrentOrderDate = () =>
-  useSelector((state: { ordersData: DataState }) => state.ordersData.currentOrderDate);
-
-export const useDishFromOrder = () =>
-  useSelector((state: { ordersData: DataState }) => state.ordersData.dishesFromOrder);
-
 export const useOrders = () =>
   useSelector((state: { ordersData: DataState }) => state.ordersData.orders);
 
-export const useDishOrder = () =>
-  useSelector((state: { ordersData: DataState }) => state.ordersData.dishes_orders);
-
-export const useDishesFromOrder = () =>
-  useSelector((state: { ordersData: DataState }) => state.ordersData.dishes_from_order);
+export const useOrder = () =>
+  useSelector((state: { orderData: DataState }) => state.orderData.orders);
 
 export const useDishesFromOrderData = () =>
   useSelector((state: { ordersData: DataState }) => state.ordersData.dishes_from_order_data);
 
+export const useOrderDate = () =>
+  useSelector((state: { ordersData: DataState }) => state.ordersData.order_date);
+
 export const {
     setCurrentOrderId: setCurrentOrderIdAction,
-    setCurrentOrderDate: setCurrentOrderDateAction,
-    setDishFromOrder: setDishFromOrderAction,
     setOrders: setOrdersAction,
-    setDishOrder: setDishOrderAction,
-    setDishesFromOrder: setDishesFromOrderAction,
+    setOrder: setOrderAction,
     setDishesFromOrderData: setDishesFromOrderDataAction,
+    setOrderDate: setOrderDateAction
 } = dataSlice.actions;
 
 export default dataSlice.reducer;

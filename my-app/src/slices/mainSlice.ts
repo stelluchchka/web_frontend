@@ -6,7 +6,7 @@ interface DishesData {
   id: number;
   title: string;
   price: number;
-  tag: string;
+  tags: string;
   url: string;
 }
 

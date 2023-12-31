@@ -11,8 +11,8 @@ import { toast } from 'react-toastify';
 import {useDispatch} from "react-redux";
 import {useTitleValue, useDishes, setTitleValueAction, setDishesAction, setMinPriceValueAction, 
     setMaxPriceValueAction, useMaxPriceValue, useMinPriceValue, useTagValue, setTagValueAction} from "../../slices/mainSlice";
-import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
-import { setDishOrderAction, setDishesFromOrderDataAction, useCurrentOrderId } from '../../slices/orderSlice';
+// import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
+import { setCurrentOrderIdAction, setDishesFromOrderDataAction, useCurrentOrderId } from '../../slices/orderSlice';
 
 
 export type Dish = {
@@ -20,20 +20,9 @@ export type Dish = {
     title: string,
     price: number,
     url: string,
-    tag: string,
-}
-export type ReceivedDishData = {
-    id: number,
-    title: string,
-    price: number,
     tags: string,
-    url: string,
 }
-export type DishOrder = {
-    id: number,
-    dish: Dish,
-    quantity: number
-}
+
 export type ReceivedUserData = {
     id: number,
     email: string,
@@ -62,47 +51,44 @@ const mockDishes = [
         title: "бургер99",
         price: 100,
         url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
-        tag: "вег"
+        tags: "вег"
     },
     {
         id: 2,
         title: "сок",
         price: 200,
         url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
-        tag: "остро"
+        tags: "остро"
     },
     {
         id: 3,
         title: "бургер1",
         price: 300,
         url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
-        tag: "вег"
+        tags: "вег"
     },
     {
         id: 4,
         title: "бургер2",
         price: 400,
         url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
-        tag: "вег"
+        tags: "вег"
     },
     {
         id: 5,
         title: "сок2",
         price: 500,
         url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
-        tag: "остро"
+        tags: "остро"
     }
 ]
-interface DishesData {
+
+interface DishesFromOrder {
     id: number;
     title: string;
     price: number;
     tag: string;
     url: string;
-}
-interface RecievedDishesFromOrder {
-    id: number;
-    dish: DishesData
     quantity: number;
 }
 
@@ -113,17 +99,19 @@ const DishesPage: React.FC = () => {
     const titleValue = useTitleValue();
     const minPriceValue = useMinPriceValue();
     const maxPriceValue = useMaxPriceValue();
-    // const dish_order = useDishOrder();
-    const linksMap = useLinksMapData();
+    // const linksMap = useLinksMapData();
+    const order_id = useCurrentOrderId()
 
     React.useEffect(() => {
-        dispatch(setLinksMapDataAction(new Map<string, string>([
-            ['блюда', '/dishes']
-        ])))
-        // const storedDishOrder = localStorage.getItem('dish_order');
-        // if (storedDishOrder) {
-        //     dispatch(setDishOrderAction(JSON.parse(storedDishOrder)));
-        // }
+        // dispatch(setLinksMapDataAction(new Map<string, string>([
+        //     ['блюда', '/dishes']
+        // ])))
+        getDishes()
+        if (order_id == -1) {
+            setOrderId();
+        }
+        if (order_id != -1)
+            getDishesFromOrder()
     }, [])
 
     const getDishes = async () => {
@@ -139,11 +127,11 @@ const DishesPage: React.FC = () => {
                 withCredentials: true 
             });
             const jsonData = await response.data;
-            const newArr = jsonData.dishes.map((raw: ReceivedDishData) => ({
+            const newArr = jsonData.dishes.map((raw: Dish) => ({
                 id: raw.id,
                 title: raw.title,
                 price: raw.price,
-                tag: raw.tags,
+                tags: raw.tags,
                 url: raw.url,
             }))
             dispatch(setDishesAction(newArr));
@@ -151,7 +139,7 @@ const DishesPage: React.FC = () => {
         catch {
             console.log("запрос не прошел !")
             if (tagValue && tagValue !== 'тег') {
-                const filteredArray = mockDishes.filter(mockDishes => mockDishes.tag === tagValue);
+                const filteredArray = mockDishes.filter(mockDishes => mockDishes.tags === tagValue);
                 dispatch(setDishesAction(filteredArray));
             } else if (titleValue) {
                 const filteredArray = mockDishes.filter(mockDishes => mockDishes.title.includes(titleValue));
@@ -168,54 +156,53 @@ const DishesPage: React.FC = () => {
             }
         }
     };
-    const getOrder = async () => {
+
+    const getDishesFromOrder = async () => {
     try {
-        // console.log("id")
-        const id = useCurrentOrderId()
-        // console.log("id", id)
-        const order_response = await axios(`http://localhost:8000/orders/${id}`, {
+        const order_response = await axios(`http://localhost:8000/orders/${order_id}`, {
           method: 'GET',
           withCredentials: true,
         })
 
-        console.log("order_response", order_response)
-        const newDishesFromOrderDataArr = order_response.data.dishes.map((raw: RecievedDishesFromOrder) => ({
-          id: raw.id,
-          dish: raw.dish,
-          quantity: raw.quantity
-      }));
-      dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
-      console.log("newDishesFromOrderDataArr", newDishesFromOrderDataArr)
+        const newDishesFromOrderDataArr = order_response.data.dishes.map((raw: DishesFromOrder) => ({
+            id: raw.id,
+            title: raw.title,
+            price: raw.price,
+            tag: raw.tag,
+            url: raw.url,
+            quantity: raw.quantity,
+        }));
+        dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
       } catch(error) {
         throw error;
       }
     }
 
+    const setOrderId = async () => {
+        const response = await axios('http://localhost:8000/dishes', {
+            method: 'GET',
+            withCredentials: true 
+        });
+        if (response.data.order.id) {
+            const order_id = response.data.order.id
+            dispatch(setCurrentOrderIdAction(order_id))
+        }
+    }
 
     const postDishToOrder = async (id: number) => {
         try {
-            const response = await axios(`http://localhost:8000/dishes/${id}/post`, {
+            await axios(`http://localhost:8000/dishes/${id}/post`, {
                 method: 'POST',
                 withCredentials: true,
             })
-            // const addedDishOrder = {
-            //     id: response.data.dish.id,
-            //     dish: response.data.dish,
-            //     order: response.data.order,
-            //     quantity: response.data.quantity
-            // }
-            const formData = new FormData();
-            formData.append('quantity', response.data.quantity);
-            const dish_order_response = await axios.put(`http://localhost:8000/dishes_orders/${id}`, formData, {
-                method: 'PUT',
-                withCredentials: true,
-            })
-            getOrder()
-            dispatch(setDishOrderAction(dish_order_response.data))
 
-            // localStorage.setItem('dish_order', JSON.stringify([...dish_order, addedDishOrder]));
             toast.success("Блюдо успешно добавлено в заказ!");
             getDishes()
+            if (order_id == -1) {
+                setOrderId();
+            }
+            if (order_id != -1)
+                getDishesFromOrder()
         } catch {
             toast.error("Это блюдо уже добавлено в заказ!");
         }
@@ -251,7 +238,7 @@ const DishesPage: React.FC = () => {
     };
     return (
         <div className={styles.main_page}>
-            <Breadcrumps links={linksMap}></Breadcrumps>
+            {/* <Breadcrumps links={linksMap}></Breadcrumps> */}
             <div className={styles["hat"]}>
                 <h5 className={styles["header__logo"]}>**логотип</h5>
                 <h1 className={styles["header__title"]}>
@@ -318,7 +305,7 @@ const DishesPage: React.FC = () => {
                     </div>
                     <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'left', width: '100%', margin: '0 auto'}}>
                         {dishes.map((dish: Dish) => (
-                            <OneCard key={dish.id} id={dish.id} url={dish.url} title={dish.title} tag={dish.tag} price={Number(dish.price)} onButtonClick={() => postDishToOrder(dish.id)}></OneCard>
+                            <OneCard key={dish.id} id={dish.id} url={dish.url} title={dish.title} tags={dish.tags} price={Number(dish.price)} onButtonClick={() => postDishToOrder(dish.id)}></OneCard>
                         ))}
                     </div>
                 {dishes.length === 0 && <p className="dish-text"> <big>таких блюд у нас нет🥹</big></p>}

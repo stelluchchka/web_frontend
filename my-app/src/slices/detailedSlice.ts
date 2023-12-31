@@ -18,14 +18,14 @@ interface DishData {
 
 interface DataState {
   dish: DishData,
-  LinksMapData: Map<string, string>
+  // LinksMapData: Map<string, string>
 }
 
 const dataSlice = createSlice({
   name: "data",
   initialState: {
     dish: {},
-    LinksMapData: new Map<string, string>([['блюда', '/']])
+    // LinksMapData: new Map<string, string>([['блюда', '/']])
   } as DataState,
   reducers: {
     setDish(state, action: PayloadAction<DishData>) {
@@ -33,7 +33,7 @@ const dataSlice = createSlice({
     },
     setLinksMapData(state, action: PayloadAction<Map<string, string>>) {
       console.log(action.payload)
-      state.LinksMapData = action.payload
+      // state.LinksMapData = action.payload
   },
   },
 });
@@ -41,12 +41,12 @@ const dataSlice = createSlice({
 export const useDish = () =>
   useSelector((state: { detailedData: DataState }) => state.detailedData.dish);
 
-export const useLinksMapData = () =>
-  useSelector((state: { detailedData: DataState }) => state.detailedData.LinksMapData);
+// export const useLinksMapData = () =>
+//   useSelector((state: { detailedData: DataState }) => state.detailedData.LinksMapData);
 
 export const {
     setDish: setDishAction,
-    setLinksMapData: setLinksMapDataAction
+    // setLinksMapData: setLinksMapDataAction
 } = dataSlice.actions;
 
 export default dataSlice.reducer;

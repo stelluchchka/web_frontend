@@ -9,7 +9,7 @@ import {useDispatch} from "react-redux";
 import {useUser, useIsAuth, setIsAuthAction, setUserAction} from "../../slices/authSlice";
 import Cookies from "universal-cookie";
 import { toast } from 'react-toastify';
-import { useDishOrder } from '../../slices/orderSlice';
+import { useDishesFromOrderData } from '../../slices/orderSlice';
 import ProfileIcon from '../../components/Icons/ProfileIcon';
 import ApplicationIcon from '../../components/Icons/ApplicationIcon';
 
@@ -21,8 +21,7 @@ const Header: React.FC = () => {
     const dispatch = useDispatch();
     const [isProfileButtonClicked, setIsProfileButtonClicked] = useState(false);
     const isUserAuth = useIsAuth();
-    const dishes_orders = useDishOrder();
-    console.log(dishes_orders)
+    const dishes_orders = useDishesFromOrderData();
     let user = useUser();
 
     const logout = async () => {
@@ -64,13 +63,18 @@ const Header: React.FC = () => {
         <div className={styles.header}>
             <div className={styles.header__wrapper}>
                 <Link to='/' className={styles.header__logo}>DISHES</Link>
-                {isUserAuth && 
+                {isUserAuth && dishes_orders.length > 0 &&
                         <div className={styles['application__icon-wrapper']}>
                             <Link to={'/order'}>
                                 <div className={styles['application__icon-circle']}> <ApplicationIcon/>{dishes_orders.length} <br /> </div>
                             </Link>
                         </div>
-                    }
+                }
+                {isUserAuth && dishes_orders.length == 0 &&
+                        <div className={styles['application__icon-wrapper']}>
+                            <div className={styles['application__icon-circle']}> <ApplicationIcon/><br /> </div>
+                        </div>
+                }
                 <div className={styles.header__profile}>
                     <Link className={styles.header__profile} to='/dishes'>Блюда</Link>
                     {isUserAuth && <Link className={styles.header__profile} to='/orders'>Мои заказы</Link>}

@@ -8,40 +8,14 @@ import { useDispatch } from 'react-redux';
 import BasketIcon from '../Icons/BasketIcon';
 
 
-// interface OrderData {
-//   id: number;
-//   status: string;
-//   created_at: string;
-//   processed_at: string;
-//   completed_at: string;
-// }
-// interface DishOrderData {
-//   id: number;
-//   dish: DishesData;
-//   order: OrderData;
-//   quantity: number;
-// }
-
-interface DishesData {
+interface DishFromOrder {
   id: number;
   title: string;
   price: number;
   tag: string;
   url: string;
-}
-interface DishFromOrder {
-  id: number;
-  dish: DishesData;
   quantity: number;
 }
-// interface DishesFromOrder {
-//   id: number;
-//   status: string;
-//   created_at: string;
-//   processed_at: string;
-//   completed_at: string;
-//   dish: DishFromOrder[];
-// }
 
 export type DishesTableProps = {
   dishes: DishFromOrder[];
@@ -51,8 +25,6 @@ export type DishesTableProps = {
 
 const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
   useDispatch();
-  // const dishes_orders = useDishOrder();
-  console.log("dishes", dishes)
 
   const deleteDishFromOrder = async (id: number) => {
     try {
@@ -60,18 +32,52 @@ const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
         method: 'DELETE',
         withCredentials: true
       })
-
-      // dispatch(setDishesFromOrderAction(dishes.dish.filter(dish => dish.id !== id)))///////
-      // localStorage.setItem('dish_orders', JSON.stringify([]));
       toast.success("успешно удаленo!");
     } catch(error) {
       throw error;
     }
   }
 
+  const reduceQuantity = async(id: number, quantity: number) => {
+    try {
+      const formData = new FormData();
+      const new_num = String(quantity - 1)
+      formData.append('quantity', new_num);
+      await axios.put(`http://localhost:8000/dishes_orders/${id}`, formData, {
+          method: 'PUT',
+          withCredentials: true,
+      })
+      toast.success("успешно уменьшено!");
+    }
+    catch(error) {
+      throw error;
+    }
+  }
+
+  const increaseQuantity = async(id: number, quantity: number) => {
+    try {
+      const formData = new FormData();
+      const new_num = String(quantity + 1)
+      formData.append('quantity', new_num);
+      await axios.put(`http://localhost:8000/dishes_orders/${id}`, formData, {
+          method: 'PUT',
+          withCredentials: true,
+      })
+      toast.success("успешно увеличено!");
+    }
+    catch(error) {
+      throw error;
+    }
+  }
 
   const handleDeleteButtonClick = (id: number) => {
     deleteDishFromOrder(id)
+  }
+  const handleMinusClick = (id: number, quantity: number) => {
+    reduceQuantity(id, quantity)
+  }
+  const handlePlusClick = (id: number, quantity: number) => {
+    increaseQuantity(id, quantity)
   }
 
   return (
@@ -90,10 +96,14 @@ const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
           {dishes.map((dishes: DishFromOrder, index: number) => (
             <tr key={dishes.id}>
               <td>{++index}</td>
-              <td>{dishes.dish.title}</td>
-              <td>{dishes.quantity}</td>
-              <td>{dishes.dish.price} ₽</td>
-              {!flag && <td className={styles.table__action}><BasketIcon onClick={() => handleDeleteButtonClick(dishes.dish.id)}/></td>}
+              <td>{dishes.title}</td>
+              <td>
+              <button style={{marginRight: '20px'}} onClick={() => handleMinusClick(dishes.id, dishes.quantity)}>-</button>
+              {dishes.quantity}
+              <button style={{marginLeft: '20px'}} onClick={() => handlePlusClick(dishes.id, dishes.quantity)}>+</button>
+              </td>
+              <td>{dishes.price} ₽</td>
+              {!flag && <td className={styles.table__action}><BasketIcon onClick={() => handleDeleteButtonClick(dishes.id)}/></td>}
             </tr>
           ))}
         </tbody>

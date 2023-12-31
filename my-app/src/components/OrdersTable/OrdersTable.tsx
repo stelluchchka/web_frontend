@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 import ModalWindow from '../../components/ModalWindow'
 import cn from 'classnames';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 interface OrderData {
   id: number;
@@ -16,14 +17,10 @@ interface OrderData {
   completed_at: string;
 }
 
-interface DishData {
-  title: string;
-  price: number;
-}
-
 export type ReceivedDishData = {
   id: number;
-  dish: DishData
+  title: string;
+  price: number;
   quantity: number;
 }
 
@@ -34,8 +31,9 @@ export type DishesTableProps = {
 
 const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
   useDispatch();
-  const [isModalWindowOpened, setIsModalWindowOpened] = useState(false);
-  const [currentDishes, setCurrentDishes] = useState<DishData[]>([])
+  const [currentDishes, setCurrentDishes] = useState<ReceivedDishData[]>([])
+
+  
   const getCurrentOrder = async (id: number) => {
     try {
       const response = await axios(`http://localhost:8000/orders/${id}`, {
@@ -45,8 +43,8 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
       console.log("data", response.data)
       const newArr = response.data.dishes.map((raw: ReceivedDishData) => ({
         id: raw.id,
-        title: raw.dish.title,
-        price: raw.dish.price,
+        title: raw.title,
+        price: raw.price,
         quantity: raw.quantity
     }));
     setCurrentDishes(newArr)
@@ -57,7 +55,7 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
 
   const handleDetailedButtonClick = (id: number) => {
     getCurrentOrder(id);
-    setIsModalWindowOpened(true)
+    // setIsModalWindowOpened(true)
   };
 
   return (
@@ -83,11 +81,11 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
               <td>{order.processed_at ? order.processed_at : '-'}</td>
               <td>{order.completed_at ? order.completed_at : '-'}</td>
               <td className={styles.table__action}>
-                {/* <Link to={`/orders/${order.id}`}>
-                <Button>Подробнее</Button>
-                </Link> */}
+                <Link to={`/order`}>
+                  <Button>Подробнее</Button>
+                </Link>
                 {/* <Link to={`/orders/${order.id}`}> */}
-                  <Button onClick={() => handleDetailedButtonClick(order.id)}>Подробнее</Button>
+                  {/* <Button onClick={() => handleDetailedButtonClick(order.id)}>Подробнее</Button> */}
                 {/* </Link> */}
               </td>
             </tr>
@@ -96,10 +94,10 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
       </Table>
     </div>
 
-      <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>
+      {/* <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>
       {/* <h3 className={styles.modal__title}>Добавленные блюда</h3> */}
-      <div className={styles.modal__list}>
-        {currentDishes.map((dish: DishData) => (
+      {/* <div className={styles.modal__list}>
+        {currentDishes.map((dish: ReceivedDishData) => (
           <div className={styles['modal__list-item']}>
             <div className={styles['modal__list-item-title']}>
               {dish.title}
@@ -108,7 +106,7 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
           </div>
         ))}
       </div>
-      </ModalWindow>
+      </ModalWindow> */}
     </>
   );
 }

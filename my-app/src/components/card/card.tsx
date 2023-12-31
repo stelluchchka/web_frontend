@@ -9,14 +9,14 @@ export type CardProps = {
   id?: number,
   url?: string;
   title: React.ReactNode;
-  tag?: React.ReactNode;
+  tags?: React.ReactNode;
   price?: number;
   chef?: string;
   onButtonClick?: React.MouseEventHandler;
   onImageClick?: React.MouseEventHandler;
 };
 
-const OneCard: React.FC<CardProps> = ({id, title, tag, price, url, chef, onButtonClick, onImageClick }) => {
+const OneCard: React.FC<CardProps> = ({id, title, tags, price, url, chef, onButtonClick, onImageClick }) => {
   return (
     <Card style={{marginRight: '3%', marginLeft: '3%', width: '345px', boxShadow: '0 0 10px #3c3a3a'}}>
       <Link to={`/dishes/${id}`} style={{ textDecoration: 'none', color: 'black' }}>
@@ -49,7 +49,7 @@ const OneCard: React.FC<CardProps> = ({id, title, tag, price, url, chef, onButto
                       marginLeft: '3%',
                       marginBottom: '1%'
               }} >{title}</p>   
-            <h5 style={{fontFamily: 'sans-serif', backgroundColor: '#f53100', color: 'white', fontWeight: '800', right: '0', margin: '5px', padding: '3px 15px 3px', borderRadius: '5px'}}>{tag}</h5>         
+            <h5 style={{fontFamily: 'sans-serif', backgroundColor: '#f53100', color: 'white', fontWeight: '800', right: '0', margin: '5px', padding: '3px 15px 3px', borderRadius: '5px'}}>{tags}</h5>         
         </div>
 
         <h4 style={{fontFamily: 'sans-serif', marginLeft: '3%', fontWeight: '800', color: '#3c3a3a', fontSize: 'large', marginTop: '0', marginBottom: '0%', textAlign: 'center'}}>{price}$</h4>

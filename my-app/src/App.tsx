@@ -10,7 +10,7 @@ import Cookies from "universal-cookie";
 import {setUserAction, setIsAuthAction, useIsAuth} from "../src/slices/authSlice";
 import {useDispatch} from "react-redux";
 import axios, {AxiosResponse} from 'axios';
-import { setCurrentOrderIdAction} from '../src/slices/orderSlice'
+import { setCurrentOrderIdAction, setDishesFromOrderDataAction, setOrderAction, setOrderDateAction } from '../src/slices/orderSlice'
 import { setDishesAction} from "../src/slices/mainSlice";
 import React from 'react';
 import OrderPage from "./pages/order";
@@ -22,7 +22,7 @@ const mockDishes = [
       title: "бургер99",
       price: 100,
       url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
-      tag: "вег",
+      tags: "вег",
       status: "есть",
       weight: 100,
       energy_value: 1,
@@ -37,7 +37,7 @@ const mockDishes = [
       title: "сок",
       price: 200,
       url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
-      tag: "остро",
+      tags: "остро",
       status: "есть",
       weight: 100,
       energy_value: 1,
@@ -52,7 +52,7 @@ const mockDishes = [
       title: "бургер1",
       price: 300,
       url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
-      tag: "вег",
+      tags: "вег",
       status: "есть",
       weight: 100,
       energy_value: 1,
@@ -67,7 +67,7 @@ const mockDishes = [
       title: "бургер2",
       price: 400,
       url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
-      tag: "вег",
+      tags: "вег",
       status: "есть",
       weight: 100,
       energy_value: 1,
@@ -82,7 +82,7 @@ const mockDishes = [
       title: "сок2",
       price: 500,
       url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
-      tag: "остро",
+      tags: "остро",
       status: "есть",
       weight: 100,
       energy_value: 1,
@@ -96,41 +96,27 @@ const mockDishes = [
 
 const cookies = new Cookies();
 
-export type ReceivedDishData = {
-  id: number,
-  title: string,
-  price: number,
-  tag: string,
-  url: string
+export type ReceivedOrderData = {
+  id: number;
+  status: string;
+  created_at: string;
+  processed_at: string;
+  completed_at: string;
 }
 
-// interface DishesData {
-//   id: number;
-//   title: string;
-//   price: number;
-//   tag: string;
-//   url: string;
-// }
-// interface RecievedDishesFromOrder {
-//   id: number;
-//   dish: DishesData
-//   quantity: number;
-// }
-// interface RecievedDishesFromOrder {
-//   id: number;
-//   status: string;
-//   created_at: string;
-//   processed_at: string;
-//   completed_at: string;
-//   dish: DishFromOrder;
-// }
+interface DishesFromOrder {
+  id: number;
+  title: string;
+  price: number;
+  tag: string;
+  url: string;
+  quantity: number;
+}
 
 function App() {
   const dispatch = useDispatch();
   const isAuth = useIsAuth();
   const getInitialUserInfo = async () => {
-
-    console.log(cookies.get("session_id"))
     try {
       const response: AxiosResponse = await axios('http://localhost:8000/user_info',
       { 
@@ -156,48 +142,41 @@ function App() {
     }
   }
 
-  // const getCurrentOrder = async (id: number) => {
-  //   try {
-  //     const response = await axios(`http://localhost:8000/orders/${id}`, {
-  //       method: 'GET',
-  //       withCredentials: true,
-  //     })
-  //     dispatch(setCurrentOrderDateAction(response.data.created_at))
-  //     const newDishArr = response.data.dishes.map((raw: ReceivedDishData) => ({
-  //       id: raw.id,
-  //       title: raw.title,
-  //       price: raw.price,
-  //       tag: raw.tag,
-  //       url: raw.url
-  //   }));
-  //   dispatch(setDishFromOrderAction(newDishArr))
-  //   console.log("newDishArr", response.data.dishes)
-  // } catch(error) {
-  //     throw error;
-  //   }
-  // }
-
-  const getDishes = async () => {
+  const getDishesAndOrder = async () => {
     try {
         const response = await axios('http://localhost:8000/dishes', {
             method: 'GET',
             withCredentials: true 
         });
-        const dishes = response.data.dishes;
         console.log("response.data", response.data)
         if (response.data.order.id) {
-          dispatch(setCurrentOrderIdAction(response.data.order.id))
-        }
-        // const id = useCurrentOrderId()
-        // console.log("id", id)
-        const newArr = dishes.map((raw: ReceivedDishData) => ({
+          const order_id = response.data.order.id
+          dispatch(setCurrentOrderIdAction(order_id))
+
+          const order = response.data.order
+          const NewOrderArr = {
+            id: order.id,
+            status: order.status,
+            created_at: order.created_at,
+            processed_at: order.processed_at,
+            completed_at: order.completed_at,
+          }
+          const order_response = await axios(`http://localhost:8000/orders/${order_id}`, {
+            method: 'GET',
+            withCredentials: true,
+          })
+          const newDishesFromOrderDataArr = order_response.data.dishes.map((raw: DishesFromOrder) => ({
             id: raw.id,
             title: raw.title,
             price: raw.price,
             tag: raw.tag,
             url: raw.url,
-        }));
-        dispatch(setDishesAction(newArr));
+            quantity: raw.quantity,
+          }));
+          dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
+          dispatch(setOrderAction(NewOrderArr));
+          dispatch(setOrderDateAction(order_response.data.created_at))
+        }
     }
     catch {
       dispatch(setDishesAction(mockDishes));
@@ -208,8 +187,7 @@ function App() {
     if (cookies.get("session_id")) {
       getInitialUserInfo();
     }
-    getDishes();
-    console.log("isAuth: ", isAuth)
+    getDishesAndOrder();
   }, [])
     
   return (

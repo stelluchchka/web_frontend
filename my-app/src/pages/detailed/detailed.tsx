@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
 import Breadcrumps from '../../components/breadcrumps';
 import {useDispatch} from "react-redux";
-import { useDish, useLinksMapData, setDishAction, setLinksMapDataAction } from '../../slices/detailedSlice';
+import { useDish, setDishAction } from '../../slices/detailedSlice';
 import axios from 'axios';
 
 export type Dish = {
@@ -114,8 +114,7 @@ const DetailesPage = () => {
   const dish = useDish();
   const params = useParams();
   const id = params.id === undefined ? '' : params.id;
-  const linksMap = useLinksMapData();
-
+  // const linksMap = useLinksMapData();
   // let currentUrl = '/'
   // const [linksMap, setLinksMap] = useState<Map<string, string>>(
   //   new Map<string, string>([['блюда ', '/dishes']])
@@ -138,9 +137,9 @@ const DetailesPage = () => {
               chef_url: jsonData.chef_url,
               expiry_date: jsonData.expiry_date
           }))
-          const newLinksMap = new Map<string, string>(linksMap); // Копирование старого Map
-          newLinksMap.set(jsonData.title, '/dishes/' + id);
-          dispatch(setLinksMapDataAction(newLinksMap))
+          // const newLinksMap = new Map<string, string>(linksMap); // Копирование старого Map
+          // newLinksMap.set(jsonData.title, '/dishes/' + id);
+          // dispatch(setLinksMapDataAction(newLinksMap))
       } catch {
           const dish = mockDishes.find(item => item.id === Number(id));
           if (dish) {
@@ -150,9 +149,10 @@ const DetailesPage = () => {
   };
   useEffect(() => {
       getDish();
-      return () => {
-        dispatch(setLinksMapDataAction(new Map<string, string>([['Блюда', '/dishes']])))
-    }  }, []);
+    //   return () => {
+    //     dispatch(setLinksMapDataAction(new Map<string, string>([['Блюда', '/dishes']])))
+    // }  
+  }, []);
 
   return (
     <div style={{backgroundColor: '#FBAF00', 
@@ -160,7 +160,7 @@ const DetailesPage = () => {
         width: '100%',
         height: '100vh',
         position: 'relative'}}>
-      <Breadcrumps links={linksMap}/>
+      {/* <Breadcrumps links={linksMap}/> */}
       <div style={{backgroundColor: 'white', 
           height: '100%', 
           width: '70%', 
