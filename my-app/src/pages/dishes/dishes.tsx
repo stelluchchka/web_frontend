@@ -1,5 +1,4 @@
-import React from 'react';
-import { ChangeEvent } from 'react';
+import React, { ChangeEvent } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -111,7 +110,7 @@ const DishesPage: React.FC = () => {
             setOrderId();
         }
         if (order_id != -1)
-            getDishesFromOrder()
+            getDishesFromOrder(order_id)
     }, [])
 
     const getDishes = async () => {
@@ -157,25 +156,26 @@ const DishesPage: React.FC = () => {
         }
     };
 
-    const getDishesFromOrder = async () => {
-    try {
-        const order_response = await axios(`http://localhost:8000/orders/${order_id}`, {
-          method: 'GET',
-          withCredentials: true,
-        })
+    const getDishesFromOrder = async (id: number) => {
+        try {
+            const order_response = await axios(`http://localhost:8000/orders/${id}`, {
+            method: 'GET',
+            withCredentials: true,
+            })
 
-        const newDishesFromOrderDataArr = order_response.data.dishes.map((raw: DishesFromOrder) => ({
-            id: raw.id,
-            title: raw.title,
-            price: raw.price,
-            tag: raw.tag,
-            url: raw.url,
-            quantity: raw.quantity,
-        }));
-        dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
-      } catch(error) {
-        throw error;
-      }
+            const newDishesFromOrderDataArr = order_response.data.dishes.map((raw: DishesFromOrder) => ({
+                id: raw.id,
+                title: raw.title,
+                price: raw.price,
+                tag: raw.tag,
+                url: raw.url,
+                quantity: raw.quantity,
+            }));
+            dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
+        } 
+        catch(error) {
+            throw error;
+        }
     }
 
     const setOrderId = async () => {
@@ -184,8 +184,8 @@ const DishesPage: React.FC = () => {
             withCredentials: true 
         });
         if (response.data.order.id) {
-            const order_id = response.data.order.id
-            dispatch(setCurrentOrderIdAction(order_id))
+            const id = response.data.order.id
+            dispatch(setCurrentOrderIdAction(id))
         }
     }
 
@@ -195,18 +195,18 @@ const DishesPage: React.FC = () => {
                 method: 'POST',
                 withCredentials: true,
             })
-
             toast.success("Блюдо успешно добавлено в заказ!");
-            getDishes()
-            if (order_id == -1) {
-                setOrderId();
-            }
-            console.log(order_id)
-            if (order_id != -1)
-                getDishesFromOrder()
-            dispatch(setOrderDateAction(response.data.created_at))
-        } catch {
-            toast.error("Это блюдо уже добавлено в заказ!");
+            dispatch(setCurrentOrderIdAction(response.data.id))
+            dispatch(setOrderDateAction(response.data.created_at))  
+            setOrderId()
+            if (order_id != -1) {
+                getDishesFromOrder(order_id)
+            } 
+            else 
+                getDishesFromOrder(response.data.id)
+        }
+        catch(error) {
+            throw error;
         }
     }
 

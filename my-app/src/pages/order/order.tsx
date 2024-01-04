@@ -64,27 +64,6 @@ const OrderPage = () => {
     getDishesFromOrder()
   }, [])
 
-  // const getDishesFromCurrentOrder = async () => {
-  //   try {
-  //     const order_response = await axios(`http://localhost:8000/orders/${currentOrderId}`, {
-  //       method: 'GET',
-  //       withCredentials: true,
-  //     })
-  //     const newDishesFromOrderDataArr = order_response.data.dishes.map((raw: DishesFromOrder) => ({
-  //       id: raw.id,
-  //       title: raw.title,
-  //       price: raw.price,
-  //       tag: raw.tag,
-  //       url: raw.url,
-  //       quantity: raw.quantity,
-  //     }));
-  //     dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
-  //   }
-  //   catch(error) {
-  //     throw error;
-  //   }
-  // };
-
   const getDishesFromOrder = async () => {
     try {
       const order_response = await axios(`http://localhost:8000/orders/${OrderId}`, {

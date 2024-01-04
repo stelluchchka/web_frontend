@@ -148,7 +148,6 @@ function App() {
             method: 'GET',
             withCredentials: true 
         });
-        console.log("response.data", response.data)
         if (response.data.order.id) {
           const order_id = response.data.order.id
           dispatch(setCurrentOrderIdAction(order_id))
