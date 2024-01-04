@@ -6,7 +6,7 @@ import Table from 'react-bootstrap/Table';
 import cn from 'classnames';
 import { useDispatch } from 'react-redux';
 import BasketIcon from '../Icons/BasketIcon';
-import { setCurrentOrderIdAction, setDishesFromOrderDataAction, useDishesFromOrderData } from '../../slices/orderSlice';
+import { setCurrentOrderIdAction, setDishesFromOrderDataAction, setOrderDateAction, useDishesFromOrderData } from '../../slices/orderSlice';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -33,9 +33,28 @@ const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
   React.useEffect(() => {
     if (dishesFromOrder.length == 0) {
       dispatch(setCurrentOrderIdAction(-1));
+      dispatch(setOrderDateAction(''))
       navigate("/")
     }
   }, [])
+
+  const deleteOrder = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('status', "отменен");
+      await axios.put(`http://localhost:8000/orders/accept`, formData, {
+          method: 'PUT',
+          withCredentials: true,
+      })
+      toast.success("Заказ успешно удален!");
+      dispatch(setDishesFromOrderDataAction([]))
+      dispatch(setCurrentOrderIdAction(-1))
+      navigate("/")
+    }
+    catch(error) {
+      throw error;
+    }
+  }
 
   const deleteDishFromOrder = async (id: number) => {
     try {
@@ -47,12 +66,9 @@ const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
       const newDishesFromOrderDataArr = dishesFromOrder.filter((raw: DishFromOrder) => {
         return raw.id !== id
       });
-      console.log(newDishesFromOrderDataArr)
       dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
-      console.log(dishesFromOrder.length)
       if (dishesFromOrder.length == 1) {
-        dispatch(setCurrentOrderIdAction(-1));
-        navigate("/")
+        deleteOrder()
       }
     } catch(error) {
       throw error;

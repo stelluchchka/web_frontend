@@ -201,6 +201,7 @@ const DishesPage: React.FC = () => {
             if (order_id == -1) {
                 setOrderId();
             }
+            console.log(order_id)
             if (order_id != -1)
                 getDishesFromOrder()
             dispatch(setOrderDateAction(response.data.created_at))
