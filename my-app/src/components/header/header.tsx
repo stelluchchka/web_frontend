@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import styles from './header.module.scss'
 import { useState } from 'react';
 import ProfileWindow from "../../components/ProfileWindow";
@@ -17,6 +17,7 @@ const cookies = new Cookies();
 
 const Header: React.FC = () => {
     const dispatch = useDispatch();
+    const location = useLocation();
     const [isProfileButtonClicked, setIsProfileButtonClicked] = useState(false);
     const isUserAuth = useIsAuth();
     const dishes_orders = useDishesFromOrderData();
@@ -68,7 +69,7 @@ const Header: React.FC = () => {
                             </Link>
                         </div>
                 }
-                {isUserAuth && dishes_orders.length == 0 &&
+                {isUserAuth && dishes_orders.length == 0 && location.pathname === '/dishes' &&
                         <div className={styles['application__icon-wrapper']}>
                             <div className={styles['application__icon-circle']}> <ApplicationIcon/><br /> </div>
                         </div>
@@ -78,6 +79,7 @@ const Header: React.FC = () => {
                     {isUserAuth && <Link className={styles.header__profile} to='/orders'>Мои заказы</Link>}
                 </div>
                 {isUserAuth ? <ProfileIcon className={styles['header__profile-icon']} onClick={handleProfileButtonClick}/> : <Link to='/registration' className={styles.header__profile}><ProfileIcon/></Link>}
+
 
                 <AnimatePresence>
                 {isUserAuth && isProfileButtonClicked && (

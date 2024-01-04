@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import axios from 'axios'
 import styles from './orders.module.scss'
-import ModalWindow from '../../components/ModalWindow'
+// import ModalWindow from '../../components/ModalWindow'
 import OrdersTable from '../../components/OrdersTable'
 import BreadCrumbs from '../../components/breadcrumps'
 import { useDispatch } from 'react-redux'
@@ -43,7 +43,7 @@ const OrdersListPage = () => {
     const dispatch = useDispatch();
     const orders = useOrders();
     const linksMap = useLinksMapData();
-    const [isModalWindowOpened, setIsModalWindowOpened] = useState(false);
+    // const [isModalWindowOpened, setIsModalWindowOpened] = useState(false);
 
     const getAllOrders = async () => {
         try {
@@ -79,9 +79,9 @@ const OrdersListPage = () => {
                 <h5 className={styles['orders__page-subtitle']}>
                 </h5>
                 <OrdersTable orders={orders}/>
-                <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>
+                {/* <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>
                     <h3 className={styles.modal__title}>Регистрация прошла успешно!</h3>
-                </ModalWindow>
+                </ModalWindow> */}
             </div>
         </div>
     )

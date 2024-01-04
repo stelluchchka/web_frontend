@@ -4,11 +4,12 @@ import { toast } from 'react-toastify';
 import styles from './order.module.scss'
 import Button from 'react-bootstrap/Button'
 import BreadCrumbs from '../../components/breadcrumps';
-import { setDishesFromOrderDataAction, useCurrentOrderId, useDishesFromOrderData, useOrderDate } from '../../slices/orderSlice'
+import { setCurrentOrderIdAction, setDishesFromOrderDataAction, useCurrentOrderId, useDishesFromOrderData, useOrderDate } from '../../slices/orderSlice'
 import DishesTable from '../../components/DishesTable'
 import { useDispatch } from 'react-redux'
-import { Navigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
+import { useNavigate } from "react-router-dom"
 
 interface DishesFromOrder {
   id: number;
@@ -35,46 +36,54 @@ const OrderPage = () => {
   const OrderId = Number(params.id);
   const [dishesFromOrder, setDishesFromOrder] = useState<DishesFromOrder[]>([]);
   const flag = (currentOrderId != OrderId)
-
-  if (currentOrderId == -1) {
-    return <Navigate to="/" replace />;
-  }
+  const navigate = useNavigate()
 
   React.useEffect(() => {
-    console.log(currentOrderId)
-    if (currentOrderId == OrderId) {
+    if (currentOrderId == -1 && !flag) {
+      navigate("/")
+    }
+    if (!flag) {
       dispatch(setLinksMapDataAction(new Map<string, string>([
           ['Текущий заказ', `orders/${currentOrderId}`]
       ])))
     }
-  
-  if (currentOrderId == OrderId)
-    getDishesFromCurrentOrder()
-  else 
+    else if (flag && currentOrderId != -1) {
+      const newLinksMap = new Map<string, string>(linksMap);
+      newLinksMap.set(String(OrderId), '/orders/' + OrderId);
+      dispatch(setLinksMapDataAction(newLinksMap))
+    } 
+    else {
+      deleteOrder()
+      navigate("/")
+      dispatch(setLinksMapDataAction(new Map<string, string>([
+        ['Главная', `/`]
+    ])))
+    }
+
+  if (OrderId != -1)
     getDishesFromOrder()
   }, [])
 
-  const getDishesFromCurrentOrder = async () => {
-    try {
-      const order_response = await axios(`http://localhost:8000/orders/${currentOrderId}`, {
-        method: 'GET',
-        withCredentials: true,
-      })
-      const newDishesFromOrderDataArr = order_response.data.dishes.map((raw: DishesFromOrder) => ({
-        id: raw.id,
-        title: raw.title,
-        price: raw.price,
-        tag: raw.tag,
-        url: raw.url,
-        quantity: raw.quantity,
-      }));
-      dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
-      // setIsLoading(false);
-    }
-    catch(error) {
-      throw error;
-    }
-  };
+  // const getDishesFromCurrentOrder = async () => {
+  //   try {
+  //     const order_response = await axios(`http://localhost:8000/orders/${currentOrderId}`, {
+  //       method: 'GET',
+  //       withCredentials: true,
+  //     })
+  //     const newDishesFromOrderDataArr = order_response.data.dishes.map((raw: DishesFromOrder) => ({
+  //       id: raw.id,
+  //       title: raw.title,
+  //       price: raw.price,
+  //       tag: raw.tag,
+  //       url: raw.url,
+  //       quantity: raw.quantity,
+  //     }));
+  //     dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
+  //   }
+  //   catch(error) {
+  //     throw error;
+  //   }
+  // };
 
   const getDishesFromOrder = async () => {
     try {
@@ -91,7 +100,6 @@ const OrderPage = () => {
         quantity: raw.quantity,
       }));
       setDishesFromOrder(newDishesFromOrderDataArr)
-      // setIsLoading(false);
     }
     catch(error) {
       throw error;
@@ -106,9 +114,10 @@ const OrderPage = () => {
           method: 'PUT',
           withCredentials: true,
       })
-      toast.success("Заказ успешно удален!");
-      if (currentOrderId != -1)
-        getDishesFromCurrentOrder()
+      toast.success("Заказ успешно оформлен!");
+      dispatch(setDishesFromOrderDataAction([]))
+      dispatch(setCurrentOrderIdAction(-1))
+      navigate("/")
     }
     catch(error) {
       throw error;
@@ -124,8 +133,9 @@ const OrderPage = () => {
           withCredentials: true,
       })
       toast.success("Заказ успешно удален!");
-      if (currentOrderId != -1)
-        getDishesFromCurrentOrder()
+      dispatch(setDishesFromOrderDataAction([]))
+      dispatch(setCurrentOrderIdAction(-1))
+      navigate("/")
     }
     catch(error) {
       throw error;
@@ -171,7 +181,7 @@ const OrderPage = () => {
           </div>
         </div>
       }
-        {(OrderId != currentOrderId) && (dishesFromOrder.length == 0) &&
+        {(OrderId != currentOrderId) && (dishesFromOrder.length == 0) && 
         <div>
           <h1 className={styles['order-title']}>
             Заказ пуст

@@ -22,8 +22,8 @@ interface DataState {
   currentOrderId: number;
   currentOrderDate: string;
   orders: OrderData[];
-  order: OrderData;
   dishes_from_order_data: DishesFromOrderData[];
+  LinksMapData: Map<string, string>
 }
 
 const dataSlice = createSlice({
@@ -33,14 +33,8 @@ const dataSlice = createSlice({
     currentOrderId: -1,
     currentOrderDate: '',
     orders: [],
-    order: {
-      id: -1,
-      status: '',
-      created_at: '',
-      processed_at: '',
-      completed_at: '',
-    },
-    dishes_from_order_data: []
+    dishes_from_order_data: [],
+    LinksMapData: new Map<string, string>([['Заказы', '/']])
   } as DataState, 
   reducers: {
     setCurrentOrderId(state, action: PayloadAction<number>) {
@@ -51,10 +45,6 @@ const dataSlice = createSlice({
       state.orders = action.payload;
       console.log('orders is', action.payload)
     },
-    setOrder(state, action: PayloadAction<OrderData>) {
-      state.order = action.payload;
-      console.log('order is', action.payload)
-    },
     setDishesFromOrderData(state, action: PayloadAction<DishesFromOrderData[]>) {
       state.dishes_from_order_data = action.payload;
       console.log('dishes_from_order_data is', action.payload)
@@ -62,6 +52,10 @@ const dataSlice = createSlice({
     setOrderDate(state, action: PayloadAction<string>) {
       state.order_date = action.payload;
       console.log('dishes_date is', action.payload)
+    },
+    setLinksMapData(state, action: PayloadAction<Map<string, string>>) {
+      console.log(action.payload)
+      state.LinksMapData = action.payload
     },
   },
 });
@@ -72,21 +66,21 @@ export const useCurrentOrderId = () =>
 export const useOrders = () =>
   useSelector((state: { ordersData: DataState }) => state.ordersData.orders);
 
-export const useOrder = () =>
-  useSelector((state: { orderData: DataState }) => state.orderData.orders);
-
 export const useDishesFromOrderData = () =>
   useSelector((state: { ordersData: DataState }) => state.ordersData.dishes_from_order_data);
 
 export const useOrderDate = () =>
   useSelector((state: { ordersData: DataState }) => state.ordersData.order_date);
 
+export const useLinksMapData = () =>
+  useSelector((state: { detailedData: DataState }) => state.detailedData.LinksMapData);
+
 export const {
     setCurrentOrderId: setCurrentOrderIdAction,
     setOrders: setOrdersAction,
-    setOrder: setOrderAction,
     setDishesFromOrderData: setDishesFromOrderDataAction,
-    setOrderDate: setOrderDateAction
+    setOrderDate: setOrderDateAction,
+    setLinksMapData: setLinksMapDataAction
 } = dataSlice.actions;
 
 export default dataSlice.reducer;

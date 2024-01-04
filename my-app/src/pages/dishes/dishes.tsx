@@ -12,7 +12,7 @@ import {useDispatch} from "react-redux";
 import {useTitleValue, useDishes, setTitleValueAction, setDishesAction, setMinPriceValueAction, 
     setMaxPriceValueAction, useMaxPriceValue, useMinPriceValue, useTagValue, setTagValueAction} from "../../slices/mainSlice";
 import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
-import { setCurrentOrderIdAction, setDishesFromOrderDataAction, useCurrentOrderId } from '../../slices/orderSlice';
+import { setCurrentOrderIdAction, setDishesFromOrderDataAction, setOrderDateAction, useCurrentOrderId } from '../../slices/orderSlice';
 
 
 export type Dish = {
@@ -191,7 +191,7 @@ const DishesPage: React.FC = () => {
 
     const postDishToOrder = async (id: number) => {
         try {
-            await axios(`http://localhost:8000/dishes/${id}/post`, {
+            const response = await axios(`http://localhost:8000/dishes/${id}/post`, {
                 method: 'POST',
                 withCredentials: true,
             })
@@ -203,6 +203,7 @@ const DishesPage: React.FC = () => {
             }
             if (order_id != -1)
                 getDishesFromOrder()
+            dispatch(setOrderDateAction(response.data.created_at))
         } catch {
             toast.error("Это блюдо уже добавлено в заказ!");
         }

@@ -10,7 +10,7 @@ import Cookies from "universal-cookie";
 import {setUserAction, setIsAuthAction, useIsAuth} from "../src/slices/authSlice";
 import {useDispatch} from "react-redux";
 import axios, {AxiosResponse} from 'axios';
-import { setCurrentOrderIdAction, setDishesFromOrderDataAction, setOrderAction, setOrderDateAction } from '../src/slices/orderSlice'
+import { setCurrentOrderIdAction, setDishesFromOrderDataAction } from '../src/slices/orderSlice'
 import { setDishesAction} from "../src/slices/mainSlice";
 import React from 'react';
 import OrderPage from "./pages/order";
@@ -152,15 +152,6 @@ function App() {
         if (response.data.order.id) {
           const order_id = response.data.order.id
           dispatch(setCurrentOrderIdAction(order_id))
-
-          const order = response.data.order
-          const NewOrderArr = {
-            id: order.id,
-            status: order.status,
-            created_at: order.created_at,
-            processed_at: order.processed_at,
-            completed_at: order.completed_at,
-          }
           const order_response = await axios(`http://localhost:8000/orders/${order_id}`, {
             method: 'GET',
             withCredentials: true,
@@ -174,8 +165,6 @@ function App() {
             quantity: raw.quantity,
           }));
           dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
-          dispatch(setOrderAction(NewOrderArr));
-          dispatch(setOrderDateAction(order_response.data.created_at))
         }
     }
     catch {

@@ -6,6 +6,8 @@ import Table from 'react-bootstrap/Table';
 import cn from 'classnames';
 import { useDispatch } from 'react-redux';
 import BasketIcon from '../Icons/BasketIcon';
+import { setCurrentOrderIdAction, setDishesFromOrderDataAction, useDishesFromOrderData } from '../../slices/orderSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 interface DishFromOrder {
@@ -24,15 +26,34 @@ export type DishesTableProps = {
 };
 
 const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
-  useDispatch();
+  const dispatch = useDispatch();
+  const dishesFromOrder = useDishesFromOrderData();
+  const navigate = useNavigate()
+
+  React.useEffect(() => {
+    if (dishesFromOrder.length == 0) {
+      dispatch(setCurrentOrderIdAction(-1));
+      navigate("/")
+    }
+  }, [])
 
   const deleteDishFromOrder = async (id: number) => {
     try {
-      axios(`http://localhost:8000/dishes_orders/${id}`, {
+      await axios(`http://localhost:8000/dishes_orders/${id}`, {
         method: 'DELETE',
         withCredentials: true
       })
       toast.success("успешно удаленo!");
+      const newDishesFromOrderDataArr = dishesFromOrder.filter((raw: DishFromOrder) => {
+        return raw.id !== id
+      });
+      console.log(newDishesFromOrderDataArr)
+      dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
+      console.log(dishesFromOrder.length)
+      if (dishesFromOrder.length == 1) {
+        dispatch(setCurrentOrderIdAction(-1));
+        navigate("/")
+      }
     } catch(error) {
       throw error;
     }
@@ -40,14 +61,40 @@ const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
 
   const reduceQuantity = async(id: number, quantity: number) => {
     try {
-      const formData = new FormData();
-      const new_num = String(quantity - 1)
-      formData.append('quantity', new_num);
-      await axios.put(`http://localhost:8000/dishes_orders/${id}`, formData, {
-          method: 'PUT',
-          withCredentials: true,
-      })
-      toast.success("успешно уменьшено!");
+      if (quantity <= 1)
+        deleteDishFromOrder(id)
+      else {
+        const formData = new FormData();
+        const new_num = String(quantity - 1)
+        formData.append('quantity', new_num);
+        const response = await axios.put(`http://localhost:8000/dishes_orders/${id}`, formData, {
+            method: 'PUT',
+            withCredentials: true,
+        })
+        toast.success("успешно уменьшено!");
+        const newDishesFromOrderDataArr = dishesFromOrder.map((raw: DishFromOrder) => {
+          if (raw.id === id) {
+            return {
+              id: raw.id,
+              title: response.data.dish.title,
+              price: response.data.dish.price,
+              tag: response.data.dish.tag,
+              url: response.data.dish.url,
+              quantity: raw.quantity-1,
+            };
+          } else {
+            return {
+              id: raw.id,
+              title: raw.title,
+              price: raw.price,
+              tag: raw.tag,
+              url: raw.url,
+              quantity: raw.quantity,
+            };
+          }
+        });
+        dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
+      }
     }
     catch(error) {
       throw error;
@@ -59,11 +106,34 @@ const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
       const formData = new FormData();
       const new_num = String(quantity + 1)
       formData.append('quantity', new_num);
-      await axios.put(`http://localhost:8000/dishes_orders/${id}`, formData, {
+      const response = await axios.put(`http://localhost:8000/dishes_orders/${id}`, formData, {
           method: 'PUT',
           withCredentials: true,
       })
       toast.success("успешно увеличено!");
+      console.log(response.data.dish)
+      const newDishesFromOrderDataArr = dishesFromOrder.map((raw: DishFromOrder) => {
+        if (raw.id === id) {
+          return {
+            id: raw.id,
+            title: response.data.dish.title,
+            price: response.data.dish.price,
+            tag: response.data.dish.tag,
+            url: response.data.dish.url,
+            quantity: raw.quantity+1,
+          };
+        } else {
+          return {
+            id: raw.id,
+            title: raw.title,
+            price: raw.price,
+            tag: raw.tag,
+            url: raw.url,
+            quantity: raw.quantity,
+          };
+        }
+      });      
+      dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
     }
     catch(error) {
       throw error;
