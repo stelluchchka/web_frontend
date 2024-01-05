@@ -52,7 +52,7 @@ const OneCard: React.FC<CardProps> = ({id, title, tags, price, url, chef, onButt
             <h5 style={{fontFamily: 'sans-serif', backgroundColor: '#f53100', color: 'white', fontWeight: '800', right: '0', margin: '5px', padding: '3px 15px 3px', borderRadius: '5px'}}>{tags}</h5>         
         </div>
 
-        <h4 style={{fontFamily: 'sans-serif', marginLeft: '3%', fontWeight: '800', color: '#3c3a3a', fontSize: 'large', marginTop: '0', marginBottom: '0%', textAlign: 'center'}}>{price}$</h4>
+        <h4 style={{fontFamily: 'sans-serif', marginLeft: '3%', fontWeight: '800', color: '#3c3a3a',fontSize: 'large', marginTop: '0', marginBottom: '0%', textAlign: 'center'}}>{price}₽</h4>
         <h4 style={{fontFamily: 'sans-serif', marginLeft: '3%', fontWeight: '100', marginTop: '2%', marginBottom: '2%', textAlign: 'center'}}>{chef}</h4>
         <div style={{textAlign: 'right', marginRight: '5px'}}>
           <Button style={{padding: '10px 20px', marginBottom: "5px"}} onClick={onButtonClick} variant="primary">🗑</Button>

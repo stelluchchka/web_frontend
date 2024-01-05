@@ -24,7 +24,7 @@ const dataSlice = createSlice({
     titleValue: '',
     tagValue: 'тег',
     minPriceValue: 0, 
-    maxPriceValue: 10000000,
+    maxPriceValue: 10000,
     dishes: []
   } as DataState,
   reducers: {

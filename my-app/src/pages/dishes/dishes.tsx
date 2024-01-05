@@ -247,7 +247,7 @@ const DishesPage: React.FC = () => {
                 </h4>
                     <div style={{display: 'flex', justifyContent: 'center' }}>
                             <Form.Group controlId="name">
-                                <Form.Control type="text" placeholder="название" style={{ width: '95%', borderRadius: '10px 0px 0px 10px', height: '60px', fontSize: '18px', border: 'none', marginRight: '5px'}} onChange={handleTitleValueChange}/>
+                                <Form.Control value={titleValue} type="text" placeholder="название" style={{ width: '95%', borderRadius: '10px 0px 0px 10px', height: '60px', fontSize: '18px', border: 'none', marginRight: '5px'}} onChange={handleTitleValueChange}/>
                             </Form.Group>
                             <Form.Group controlId="tag">
                                 <Dropdown onSelect={handleTagSelect}>
@@ -282,10 +282,10 @@ const DishesPage: React.FC = () => {
                                 </Dropdown>
                             </Form.Group>
                             <Form.Group controlId="min_price">
-                                <Form.Control type="text" placeholder="цена от" style={{ width: '95%', borderRadius: '0px 0px 0px 0px', height: '60px', fontSize: '18px', border: 'none', marginRight: '5px' }} onChange={handleMinPriceValueChange}/>
+                                <Form.Control value={minPriceValue} type="text" placeholder="цена от" style={{ width: '95%', borderRadius: '0px 0px 0px 0px', height: '60px', fontSize: '18px', border: 'none', marginRight: '5px' }} onChange={handleMinPriceValueChange}/>
                             </Form.Group>
                             <Form.Group controlId="max_price">
-                                <Form.Control type="text" placeholder="цена до" style={{borderRadius: '0 10px 10px 0', width: '95%', height: '60px', fontSize: '18px', border: 'none' }} onChange={handleMaxPriceValueChange}/>
+                                <Form.Control value={maxPriceValue} type="text" placeholder="цена до" style={{borderRadius: '0 10px 10px 0', width: '95%', height: '60px', fontSize: '18px', border: 'none' }} onChange={handleMaxPriceValueChange}/>
                             </Form.Group>
                             <Button variant="primary" type="submit" style={{color: 'white', 
                                     backgroundColor: '#f53100',
