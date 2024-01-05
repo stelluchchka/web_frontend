@@ -12,7 +12,6 @@ import {useTitleValue, useDishes, setTitleValueAction, setDishesAction, setMinPr
     setMaxPriceValueAction, useMaxPriceValue, useMinPriceValue, useTagValue, setTagValueAction} from "../../slices/mainSlice";
 import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
 import { setCurrentOrderIdAction, setDishesFromOrderDataAction, setOrderDateAction, useCurrentOrderId } from '../../slices/orderSlice';
-import { useUser } from '../../slices/authSlice';
 
 
 export type Dish = {
@@ -101,7 +100,6 @@ const DishesPage: React.FC = () => {
     const maxPriceValue = useMaxPriceValue();
     const linksMap = useLinksMapData();
     const order_id = useCurrentOrderId();
-    const user = useUser();
 
     React.useEffect(() => {
         dispatch(setLinksMapDataAction(new Map<string, string>([
@@ -289,7 +287,6 @@ const DishesPage: React.FC = () => {
                             <Form.Group controlId="max_price">
                                 <Form.Control value={maxPriceValue} type="text" placeholder="цена до" style={{borderRadius: '0 10px 10px 0', width: '95%', height: '60px', fontSize: '18px', border: 'none' }} onChange={handleMaxPriceValueChange}/>
                             </Form.Group> 
-                            {user.isSuperuser &&
                             <Button variant="primary" type="submit" style={{color: 'white', 
                                     backgroundColor: '#f53100',
                                     border: 'none',
@@ -303,7 +300,6 @@ const DishesPage: React.FC = () => {
                             onClick={() => handleSearchButtonClick()}>
                                 Поиск
                             </Button>
-                        }
                     </div>
                     <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'left', width: '100%', margin: '0 auto'}}>
                         {dishes.map((dish: Dish) => (
