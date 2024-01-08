@@ -8,6 +8,7 @@ interface OrderData {
   created_at: string;
   processed_at: string;
   completed_at: string;
+  is_success: string;
 }
 interface DishesFromOrderData {
   id: number;

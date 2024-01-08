@@ -14,6 +14,7 @@ interface OrderData {
   created_at: string;
   processed_at: string;
   completed_at: string;
+  is_success: string;
 }
 
 export type ReceivedDishData = {
@@ -44,6 +45,7 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
             <th>Дата создания</th>
             <th>Дата формирования</th>
             <th>Дата завершения</th>
+            <th>Оплата</th>
             <th></th>
           </tr>
         </thead>
@@ -58,6 +60,7 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
               <td>{order.created_at}</td>
               <td>{order.processed_at ? order.processed_at : '-'}</td>
               <td>{order.completed_at ? order.completed_at : '-'}</td>
+              <td>{order.is_success}</td>
               <td className={styles.table__action}>
               {!user.isSuperuser ?
                 <Link to={`/orders/${order.id}`}>

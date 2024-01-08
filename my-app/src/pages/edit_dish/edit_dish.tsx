@@ -1,6 +1,6 @@
 // import styles from './detailed.module.scss'
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Breadcrumps from '../../components/breadcrumps';
 import {useDispatch} from "react-redux";
 import { useDish, useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
@@ -16,6 +16,7 @@ const EditDishPage = () => {
   const params = useParams();
   const id = params.id === undefined ? '' : Number(params.id);
   const linksMap = useLinksMapData();
+  const navigate = useNavigate();
   const [titleValue, setTitleValue] = useState(dish.title);
   const [urlValue, setUrlValue] = useState(dish.url);
   const [chefUrlValue, setChefUrlValue] = useState(dish.chef_url);
@@ -43,8 +44,34 @@ const EditDishPage = () => {
       getDish();
   }, []);
 
+  const editDish = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('title', titleValue);
+      formData.append('price', String(priceValue));
+      formData.append('weight', String(weightValue));
+      formData.append('energy_value', String(energyValue));
+      formData.append('content', contentValue);
+      formData.append('chef_name', chef_nameValue);
+      // formData.append('pic', urlValue);
+      formData.append('chef_post', chef_postValue);
+      // formData.append('chef_pic', chefUrlValue);
+      formData.append('status', "есть");
+      formData.append('expiry_date', dateValue);
+
+      await axios.post(`http://localhost:8000/dishes/`, formData, {
+          method: 'PUT',
+          withCredentials: true,
+      })
+      navigate("/dishes")
+    }
+    catch(error) {
+      throw error;
+    }
+  }
+
   const handleEditButtonClick = () => {
-    console.log("1")
+    editDish()
   }
   return (
     <div className={styles['body']}>

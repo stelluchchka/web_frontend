@@ -44,6 +44,7 @@ export type ReceivedOrderData = {
     created_at: string;
     processed_at: string;
     completed_at: string;
+    is_success: string;
 }
 const OrdersListPage = () => {
     const dispatch = useDispatch();
@@ -90,6 +91,7 @@ const OrdersListPage = () => {
             created_at: raw.created_at,
             processed_at: raw.processed_at,
             completed_at: raw.completed_at,
+            is_success: raw.is_success
         }));
         dispatch(setOrdersAction(OrderArr))
         } catch(error) {
