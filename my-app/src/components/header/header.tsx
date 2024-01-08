@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import styles from './header.module.scss'
 import { useState } from 'react';
 import ProfileWindow from "../../components/ProfileWindow";
@@ -24,6 +24,7 @@ const Header: React.FC = () => {
     let user = useUser();
     const order_id = useCurrentOrderId();
     const isSuperuser = user.isSuperuser;
+    const navigate = useNavigate();
 
     const logout = async () => {
         try {
@@ -46,6 +47,7 @@ const Header: React.FC = () => {
                 last_name: "",
                 isSuperuser: false
             }))
+            navigate('/')
             setIsProfileButtonClicked(false);
             toast.success("Выход выполнен  успешно");
         }
@@ -80,7 +82,7 @@ const Header: React.FC = () => {
                     {isUserAuth && !isSuperuser && <Link className={styles.header__profile} to='/orders'>Мои заказы</Link>}
                     {isUserAuth && isSuperuser && <Link className={styles.header__profile} to='/orders'>Все заказы</Link>}
                 </div>
-                {isUserAuth ? <ProfileIcon className={styles['header__profile-icon']} onClick={handleProfileButtonClick}/> : <Link to='/registration' className={styles.header__profile}><ProfileIcon/></Link>}
+                {isUserAuth ? <ProfileIcon className={styles['header__profile-icon']} onClick={handleProfileButtonClick}/> : <Link to='/login' className={styles.header__profile}><ProfileIcon/></Link>}
 
 
                 <AnimatePresence>

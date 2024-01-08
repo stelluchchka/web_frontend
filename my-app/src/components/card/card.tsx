@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image'
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
-import { useUser } from '../../slices/authSlice';
+import { useIsAuth, useUser } from '../../slices/authSlice';
 // import styles from './card.module.scss';
 
 export type CardProps = {
@@ -21,6 +21,7 @@ export type CardProps = {
 
 const OneCard: React.FC<CardProps> = ({id, title, tags, price, url, chef, onPlusButtonClick, onPutButtonClick, onDelButtonClick, onImageClick }) => {
   const user = useUser();
+  const isAuth = useIsAuth();
   return (
     <Card style={{marginRight: '3%', marginLeft: '3%', width: '27%', boxShadow: '0 0 10px #3c3a3a'}}>
       { id != 0 ? 
@@ -81,7 +82,7 @@ const OneCard: React.FC<CardProps> = ({id, title, tags, price, url, chef, onPlus
         <br/>
         }
           <h4 style={{fontFamily: 'sans-serif', marginLeft: '3%', fontWeight: '100', marginTop: '2%', marginBottom: '2%', textAlign: 'center'}}>{chef}</h4>
-        {!user.isSuperuser &&
+        {isAuth && !user.isSuperuser &&
           <div style={{textAlign: 'right', marginRight: '5px'}}>
             <br />
             <Button style={{padding: '0px 0px', marginBottom: "5px", height: "40px", width: "40px"}} onClick={onPlusButtonClick} variant="primary">+</Button>
