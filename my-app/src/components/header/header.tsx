@@ -22,7 +22,8 @@ const Header: React.FC = () => {
     const isUserAuth = useIsAuth();
     const dishes_orders = useDishesFromOrderData();
     let user = useUser();
-    const order_id = useCurrentOrderId()
+    const order_id = useCurrentOrderId();
+    const isSuperuser = user.isSuperuser;
 
     const logout = async () => {
         try {
@@ -62,21 +63,22 @@ const Header: React.FC = () => {
         <div className={styles.header}>
             <div className={styles.header__wrapper}>
                 <Link to='/' className={styles.header__logo}>DISHES</Link>
-                {isUserAuth && dishes_orders.length > 0 &&
+                {isUserAuth && !isSuperuser && dishes_orders.length > 0 &&
                         <div className={styles['application__icon-wrapper']}>
                             <Link to={`/orders/${order_id}`}>
                                 <div className={styles['application__icon-circle']}> <ApplicationIcon/>{dishes_orders.length} <br /> </div>
                             </Link>
                         </div>
                 }
-                {isUserAuth && dishes_orders.length == 0 && location.pathname === '/dishes' &&
+                {isUserAuth && !isSuperuser && dishes_orders.length == 0 && location.pathname === '/dishes' &&
                         <div className={styles['application__icon-wrapper']}>
                             <div className={styles['application__icon-circle']}> <ApplicationIcon/><br /> </div>
                         </div>
                 }
                 <div className={styles.header__profile}>
                     <Link className={styles.header__profile} to='/dishes'>Блюда</Link>
-                    {isUserAuth && <Link className={styles.header__profile} to='/orders'>Мои заказы</Link>}
+                    {isUserAuth && !isSuperuser && <Link className={styles.header__profile} to='/orders'>Мои заказы</Link>}
+                    {isUserAuth && isSuperuser && <Link className={styles.header__profile} to='/orders'>Все заказы</Link>}
                 </div>
                 {isUserAuth ? <ProfileIcon className={styles['header__profile-icon']} onClick={handleProfileButtonClick}/> : <Link to='/registration' className={styles.header__profile}><ProfileIcon/></Link>}
 

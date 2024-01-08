@@ -10,8 +10,10 @@ import { toast } from 'react-toastify';
 import {useDispatch} from "react-redux";
 import {useTitleValue, useDishes, setTitleValueAction, setDishesAction, setMinPriceValueAction, 
     setMaxPriceValueAction, useMaxPriceValue, useMinPriceValue, useTagValue, setTagValueAction} from "../../slices/mainSlice";
-import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
+import { useLinksMapData, setLinksMapDataAction, setDishAction, useDish } from '../../slices/detailedSlice';
 import { setCurrentOrderIdAction, setDishesFromOrderDataAction, setOrderDateAction, useCurrentOrderId } from '../../slices/orderSlice';
+import { useUser } from '../../slices/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 export type Dish = {
@@ -20,6 +22,7 @@ export type Dish = {
     price: number,
     url: string,
     tags: string,
+    chef_post: string
 }
 
 export type ReceivedUserData = {
@@ -50,35 +53,40 @@ const mockDishes = [
         title: "бургер99",
         price: 100,
         url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
-        tags: "вег"
+        tags: "вег",
+        chef_post: "aa"
     },
     {
         id: 2,
         title: "сок",
         price: 200,
         url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
-        tags: "остро"
+        tags: "остро",
+        chef_post: "aa"
     },
     {
         id: 3,
         title: "бургер1",
         price: 300,
         url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
-        tags: "вег"
+        tags: "вег",
+        chef_post: "aa"
     },
     {
         id: 4,
         title: "бургер2",
         price: 400,
         url: "https://png.pngtree.com/png-clipart/20190921/original/pngtree-hand-drawn-delicious-burger-illustration-png-image_4752009.jpg",
-        tags: "вег"
+        tags: "вег",
+        chef_post: "aa"
     },
     {
         id: 5,
         title: "сок2",
         price: 500,
         url: "https://madeindream.com/image/data/statya/sravnenie-domashnego-soka-i-pokupnogo/mid-komissiya-sok-iz-magazina-1-big.png",
-        tags: "остро"
+        tags: "остро",
+        chef_post: "aa"
     }
 ]
 
@@ -100,6 +108,9 @@ const DishesPage: React.FC = () => {
     const maxPriceValue = useMaxPriceValue();
     const linksMap = useLinksMapData();
     const order_id = useCurrentOrderId();
+    const user = useUser();
+    const navigate = useNavigate()
+    const dish = useDish()
 
     React.useEffect(() => {
         dispatch(setLinksMapDataAction(new Map<string, string>([
@@ -125,14 +136,15 @@ const DishesPage: React.FC = () => {
                 method: 'GET',
                 withCredentials: true 
             });
-            const jsonData = await response.data;
-            const newArr = jsonData.dishes.map((raw: Dish) => ({
+            const newArr = response.data.dishes.map((raw: Dish) => ({
                 id: raw.id,
                 title: raw.title,
                 price: raw.price,
                 tags: raw.tags,
                 url: raw.url,
+                chef_post: raw.chef_post
             }))
+            console.log(newArr)
             dispatch(setDishesAction(newArr));
         }
         catch {
@@ -208,6 +220,45 @@ const DishesPage: React.FC = () => {
         catch(error) {
             throw error;
         }
+    }
+    const handleDeleteButton = async (id: number) => {
+        try {
+            await axios(`http://localhost:8000/dishes/${id}`, {
+                method: 'DELETE',
+                withCredentials: true,
+            })
+            toast.success("Блюдо успешно удалено");
+            getDishes()
+        }
+        catch(error) {
+            throw error;
+        }
+    }
+
+    const handlePutButton = async (id: number) => {
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/dishes/${id}`);
+            console.log(response.data)
+            dispatch(setDishAction({
+                id: Number(response.data.id),
+                title: response.data.title,
+                price: response.data.price,
+                url: response.data.url,
+                tag: response.data.tag,
+                weight: response.data.weight,
+                energy_value: response.data.energy_value,
+                content: response.data.content,
+                chef_name: response.data.chef_name,
+                chef_post: response.data.chef_post,
+                chef_url: response.data.chef_url,
+                expiry_date: response.data.expiry_date
+            }))
+            console.log(dish)
+            if(dish)
+              navigate(`/edit_dish/${id}`)
+          } catch(error) {
+            throw error
+          }
     }
 
     const handleSearchButtonClick = () => {
@@ -296,14 +347,14 @@ const DishesPage: React.FC = () => {
                                     width: '18%', 
                                     marginLeft: '20px',
                                     fontFamily: 'sans-serif'}} 
-
                             onClick={() => handleSearchButtonClick()}>
                                 Поиск
                             </Button>
                     </div>
                     <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'left', width: '100%', margin: '0 auto'}}>
+                        {user.isSuperuser && <OneCard key={0} id={0} url='https://imgpng.ru/d/plus_PNG68.png' title="новое блюдо" tags="new" price={0} onPlusButtonClick={() => console.log(1)} onDelButtonClick={() => console.log(1)}></OneCard>}
                         {dishes.map((dish: Dish) => (
-                            <OneCard key={dish.id} id={dish.id} url={dish.url} title={dish.title} tags={dish.tags} price={Number(dish.price)} onButtonClick={() => postDishToOrder(dish.id)}></OneCard>
+                            <OneCard key={dish.id} id={dish.id} url={dish.url} title={dish.title} chef={dish.chef_post} tags={dish.tags} price={Number(dish.price)} onPlusButtonClick={() => postDishToOrder(dish.id)} onPutButtonClick={() => handlePutButton(dish.id)} onDelButtonClick={() => handleDeleteButton(dish.id)}></OneCard>
                         ))}
                     </div>
                 {dishes.length === 0 && <p className="dish-text"> <big>таких блюд у нас нет🥹</big></p>}

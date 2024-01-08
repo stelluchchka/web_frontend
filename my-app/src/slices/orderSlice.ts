@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 
 interface OrderData {
   id: number;
+  user: string;
   status: string;
   created_at: string;
   processed_at: string;

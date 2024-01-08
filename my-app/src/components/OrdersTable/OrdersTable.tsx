@@ -5,9 +5,11 @@ import Button from 'react-bootstrap/Button';
 import cn from 'classnames';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useUser } from '../../slices/authSlice';
 
 interface OrderData {
   id: number;
+  user: string;
   status: string;
   created_at: string;
   processed_at: string;
@@ -28,6 +30,7 @@ export type DishesTableProps = {
 
 const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
   useDispatch();
+  const user = useUser();
 
   return (
     <>
@@ -36,6 +39,7 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
         <thead>
           <tr className={styles.tableHead}>
             <th>№</th>
+            {user.isSuperuser && <th>Почта пользователя</th>}
             <th>Статус</th>
             <th>Дата создания</th>
             <th>Дата формирования</th>
@@ -47,14 +51,27 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
           {orders.map((order: OrderData, index: number) => (
             <tr key={order.id}>
               <td>{++index}</td>
+              {user.isSuperuser &&
+                <td>{order.user}</td>
+              }
               <td>{order.status}</td>
               <td>{order.created_at}</td>
               <td>{order.processed_at ? order.processed_at : '-'}</td>
               <td>{order.completed_at ? order.completed_at : '-'}</td>
               <td className={styles.table__action}>
+              {!user.isSuperuser ?
                 <Link to={`/orders/${order.id}`}>
                   <Button>Подробнее</Button>
                 </Link>
+                :
+                <Link to={`/moderator_orders/${order.id}`}>
+                  {order.status=="сформирован" ?
+                  <Button style={{backgroundColor: '#f53100', color: 'white'}}>Подробнее</Button>
+                  :
+                  <Button>Подробнее</Button>
+                  }
+                </Link>
+              }
                 {/* <Link to={`/orders/${order.id}`}> */}
                   {/* <Button onClick={() => handleDetailedButtonClick(order.id)}>Подробнее</Button> */}
                 {/* </Link> */}
@@ -65,19 +82,6 @@ const OrdersTable: React.FC<DishesTableProps> = ({orders, className}) => {
       </Table>
     </div>
 
-      {/* <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>
-      {/* <h3 className={styles.modal__title}>Добавленные блюда</h3> */}
-      {/* <div className={styles.modal__list}>
-        {currentDishes.map((dish: ReceivedDishData) => (
-          <div className={styles['modal__list-item']}>
-            <div className={styles['modal__list-item-title']}>
-              {dish.title}
-            </div>
-            <b>{dish.quantity} x {dish.price} ₽</b>
-          </div>
-        ))}
-      </div>
-      </ModalWindow> */}
     </>
   );
 }

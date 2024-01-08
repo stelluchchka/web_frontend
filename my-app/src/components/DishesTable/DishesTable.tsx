@@ -31,6 +31,7 @@ const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
   const navigate = useNavigate()
 
   React.useEffect(() => {
+    console.log(dishesFromOrder)
     if (dishesFromOrder.length == 0) {
       dispatch(setCurrentOrderIdAction(-1));
       dispatch(setOrderDateAction(''))

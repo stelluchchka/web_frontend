@@ -1,10 +1,13 @@
 // import styles from './detailed.module.scss'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Breadcrumps from '../../components/breadcrumps';
 import {useDispatch} from "react-redux";
 import { useDish, setDishAction, useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
+import styles from './detailed.module.scss'
+
 import axios from 'axios';
+import { Button } from 'react-bootstrap';
 
 export type Dish = {
   id: number,
@@ -25,7 +28,7 @@ export type ReceivedDishData = {
   id: number,
   title: string,
   price: number,
-  tag: string,
+  tags: string,
   url: string,
 }
 
@@ -107,13 +110,23 @@ const mockDishes = [
   }
 ]
 
-
 const DetailesPage = () => {  
   const dispatch = useDispatch();
   const dish = useDish();
   const params = useParams();
-  const id = params.id === undefined ? '' : params.id;
+  const id = params.id === undefined ? '' : Number(params.id);
   const linksMap = useLinksMapData();
+  const [titleValue, setTitleValue] = useState('');
+  const [urlValue, setUrlValue] = useState('');
+  const [chefUrlValue, setChefUrlValue] = useState('');
+  const [chef_nameValue, setChef_nameValue] = useState('');
+  const [chef_postValue, setChef_postValue] = useState('');
+  const [weightValue, setWeightValue] = useState(0);
+  const [priceValue, setPriceValue] = useState(0);
+  const [energyValue, setEnergyValue] = useState(0);
+  const [dateValue, setDateValue] = useState('');
+  const [contentValue, setContentValue] = useState('');
+
 
   const getDish = async () => {
       try {
@@ -134,7 +147,10 @@ const DetailesPage = () => {
               expiry_date: jsonData.expiry_date
           }))
           const newLinksMap = new Map<string, string>(linksMap); // Копирование старого Map
-          newLinksMap.set(jsonData.title, '/dishes/' + id);
+          if (id == 0)
+            newLinksMap.set("Новое блюдо", '/dishes/' + id);
+          else
+            newLinksMap.set(jsonData.title, '/dishes/' + id);
           dispatch(setLinksMapDataAction(newLinksMap))
       } catch {
           const dish = mockDishes.find(item => item.id === Number(id));
@@ -143,158 +159,127 @@ const DetailesPage = () => {
           }
       }
   };
+
   useEffect(() => {
       getDish();
-    //   return () => {
-    //     dispatch(setLinksMapDataAction(new Map<string, string>([['блюда', '/dishes']])))
-    // }  
   }, []);
 
+  const handleCreateButtonClick = () => {
+    console.log("1")
+  }
   return (
-    <div style={{backgroundColor: '#FBAF00', 
-        minHeight: '100vh', 
-        width: '100%',
-        height: '100vh',
-        position: 'relative'}}>
+    <div className={styles['body']}>
       <Breadcrumps links={linksMap}/>
-      <div style={{backgroundColor: 'white', 
-          height: '100%', 
-          width: '70%', 
-          marginLeft: '15%', 
-          display: 'flex', 
-          flexWrap: 'wrap', 
-          justifyContent: 'space-around', 
-          position: 'absolute'}}>
-       
-          <div style={{width: '40%'}}>
-            <p style={{textAlign: 'left', borderRadius: '10px'}}>
-              <div style={{fontSize: '25px',
-                  fontFamily: 'sans-serif',
-                  fontWeight: '600',
-                  textAlign: 'center',
-                  color: 'black',
-                  marginBottom: '3%'}}>{dish?.title}</div>
-              <img style={{width: '90%',
-                  height: '30', 
-                  marginTop: '3%', 
-                  borderRadius: '15px', 
-                  marginLeft: '10%', 
-                  backgroundColor: 'white',}} 
-                  src={dish?.url} alt="dish"/>
-              <div style={{position: 'relative',
-                    display: 'flex',
-                    width: '80%',
-                    margin: '0 auto'}}>
-                  <img style={{display: 'inline-block',
-                    borderRadius: '50%',
-                    overflow: 'hidden',
-                    width: '80px',
-                    height: '80px',
-                    marginTop: '5%'}} src={dish?.chef_url} alt="chef"/>
-                  <div>
-                      <p style={{position: 'absolute',
-                        width: '90%',
-                        fontSize: '18px',
-                        fontFamily: 'sans-serif',
-                        fontWeight: '200',
-                        color: '#3c3a3a',
-                        textAlign: 'right',
-                        fontStyle: 'italic'}}>{dish?.chef_name}
-                      </p> 
-                      <br /><br />
-                      <p style={{position: 'absolute',
-                        width: '90%',
-                        fontSize: '18px',
-                        fontFamily: 'sans-serif',
-                        fontWeight: '200',
-                        color: '#3c3a3a',
-                        textAlign: 'right',
-                        fontStyle: 'italic'}}>{dish?.chef_post}</p>
-                  </div>
+      <div className={styles['container']}> 
+        { id == 0 && 
+        <div>
+          <div className= {styles['title']} >Информация о поваре </div>   
+          <div style={{display: 'flex', justifyContent: 'center', marginBottom: '5%'}}>
+            <div style={{marginRight:'40%'}}>
+              <input value={chef_nameValue} placeholder='имя повара' name="chef_post" onChange={e => setChef_nameValue(e.target.value)} className={styles['dish-chef-p']} style={{textAlign: 'left', width:'25%'}}/> <br/><br/>
+              <input value={chef_postValue} placeholder='пост повара' name="chef_post" onChange={e => setChef_postValue(e.target.value)} className={styles['dish-chef-p']} style={{textAlign: 'left', width:'25%'}}/>
+            </div>
+            <div >
+              <p style={{fontSize: '18px', fontFamily: 'sans-serif'}}>фото повара:</p>
+              <input type="file" value={chefUrlValue} onChange={e=>setChefUrlValue(e.target.value)}/>
+            </div>
+          </div>
+          <div className= {styles['title']} >Информация о блюде </div>
+          <div style={{display: 'flex', justifyContent: 'center'}}>
+            <input value={titleValue} placeholder='название блюда' name="title" className={styles['title']} onChange={e => setTitleValue(e.target.value)} style={{marginRight:'10%', fontSize: '20px', height: '40px', width: '40%', fontWeight: '400'}}/>
+            <div> 
+              <p style={{fontSize: '18px', fontFamily: 'sans-serif'}}>фото блюда:</p>
+              <input type="file" value={urlValue} onChange={e=>setUrlValue(e.target.value)}/><br/><br/>
+            </div>
+          </div>
+          <br/>
+        </div>
+        }
+        {id != 0 ?
+          <div className={styles['content-container']}>
+            <div style={{width: '40%'}}>
+              <div className={styles['title']}>{dish?.title}</div>
+              <img className={styles['dish-img']} src={dish?.url} alt="dish"/>
+              <div className={styles['dish-chef-div']}> 
+                <img className= {styles['dish-chef-img']} src={dish?.chef_url} alt="chef"/>
+                <div>
+                  <p className={styles['dish-chef-p']}> {dish?.chef_name} </p>
+                  <div><br /><br /><p className={styles['dish-chef-p']}>{dish?.chef_post}</p></div>
+                </div>
               </div>   
-            </p>     
-          </div>
-          <div style={{width: '23%', marginTop: '3%'}}>
-              <div className="weight-section" style={{display: 'flex', justifyContent: 'space-between'}}>
-                <span style={{fontSize: '15px',
-                  fontFamily: 'sans-serif',
-                  fontWeight: '500',
-                  color: '#3c3a3a',
-                  textAlign: 'left',
-                  marginTop: '3%',
-                  wordWrap: 'break-word'}}>ВЕС, Г</span>
-                <span style={{fontSize: '32px',
-                  fontFamily: 'Merriweather',
-                  fontWeight: '800',
-                  color: '#FBAF00',
-                  textAlign: 'right'}}>{dish?.weight}</span>
+            </div>
+            <div style={{width: '23%', marginTop: '3%'}}>
+              <div className={styles['weight-section']} style={{display: 'flex', justifyContent: 'space-between'}}>
+                <span className={styles['dish-text']}>ВЕС, Г</span>
+                <span className={styles['dish-digit']}>{dish?.weight}</span>
               </div>
-              <div style={{marginBottom: '10%', marginTop: '10%', borderBottom: '1px solid #FBAF00'}}></div> 
+              <div className={styles['line']}></div> 
               <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <span style={{fontSize: '15px',
-                  fontFamily: 'sans-serif',
-                  fontWeight: '500',
-                  color: '#3c3a3a',
-                  textAlign: 'left',
-                  marginTop: '3%',
-                  wordWrap: 'break-word'}}>ЦЕНА, $</span>
-                <span style={{fontSize: '32px',
-                  fontFamily: 'Merriweather',
-                  fontWeight: '800',
-                  color: '#FBAF00',
-                  textAlign: 'right'}}>{dish?.price}</span>
+                <span className={styles['dish-text']}>ЦЕНА, ₽</span>
+                <span className={styles['dish-digit']}>{dish?.price}</span>
               </div>
-              <div style={{marginBottom: '10%', marginTop: '10%', borderBottom: '1px solid #FBAF00'}}></div> 
+              <div className={styles['line']}></div> 
               <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <span style={{fontSize: '15px',
-                  fontFamily: 'sans-serif',
-                  fontWeight: '500',
-                  color: '#3c3a3a',
-                  textAlign: 'left',
-                  marginTop: '3%',
-                  wordWrap: 'break-word'}}>ЭНЕРГЕТИЧЕСКАЯ ЦЕННОСТЬ, ККАЛ/100 Г</span>
-                <span style={{fontSize: '32px',
-                  fontFamily: 'Merriweather',
-                  fontWeight: '800',
-                  color: '#FBAF00',
-                  textAlign: 'right'}}>{dish?.energy_value}</span>
+                <span className={styles['dish-text']}>ЭНЕРГЕТИЧЕСКАЯ ЦЕННОСТЬ, ККАЛ/100 Г</span>
+                <span className={styles['dish-digit']}>{dish?.energy_value}</span>
               </div>
-              <div style={{marginBottom: '10%', marginTop: '10%', borderBottom: '1px solid #FBAF00'}}></div> 
-              <span style={{fontSize: '15px',
-                  fontFamily: 'sans-serif',
-                  fontWeight: '500',
-                  color: '#3c3a3a',
-                  textAlign: 'left',
-                  marginTop: '3%',
-                  wordWrap: 'break-word'}}>СРОК ГОДНОСТИ</span>
-              <div style={{marginBottom: '5%', marginTop: '5%', borderBottom: '1px solid #635f5f'}}></div>
-              <span style={{fontSize: '15px',
-                  fontFamily: 'sans-serif',
-                  fontWeight: '500',
-                  color: '#3c3a3a',
-                  textAlign: 'left',
-                  marginTop: '3%',
-                  wordWrap: 'break-word'}}>{dish?.expiry_date}</span>
-          </div>
-          <div style={{width: '23%', marginTop: '3%'}}>
+              <div className={styles['line']}></div> 
+              <span className={styles['dish-text']}>СРОК ГОДНОСТИ</span>
+              <div className={styles['gray-line']}></div>
+              <span className={styles['dish-text']}>{dish?.expiry_date}</span>
+            </div>
+            <div style={{width: '23%', marginTop: '3%'}}>
               <div>
-                <span style={{fontSize: '15px',
-                  fontFamily: 'sans-serif',
-                  fontWeight: '500',
-                  color: '#3c3a3a',
-                  textAlign: 'left',
-                  marginTop: '3%',
-                  wordWrap: 'break-word'}}>СОСТАВ</span>
-                <div style={{marginBottom: '10%', marginTop: '10%', borderBottom: '1px solid #FBAF00'}}></div> 
-                <span style={{fontSize: '15px',
-                  fontFamily: 'sans-serif',
-                  fontWeight: '500',
-                  color: '#3c3a3a',
-                  textAlign: 'left',
-                  marginTop: '3%',
-                  wordWrap: 'break-word'}}>{dish?.content}</span>
+                <span className={styles['dish-text']}>СОСТАВ</span>
+                <div className={styles['line']}></div> 
+                <span className={styles['dish-text']}>{dish?.content}</span>
               </div>
+            </div>
           </div>
+        :
+        <div>
+          <div style={{display:'flex', flex: 'space-around'}}>
+          <div style={{width: '45%', marginLeft: '10%'}}>
+            <div className={styles['weight-section']} style={{display: 'flex', justifyContent: 'space-between'}}>
+              <span className={styles['dish-text']}>ВЕС, Г</span>
+              <input value={weightValue} type="number" step="50" name="weight" className={styles['dish-digit']} onChange={e => setWeightValue(Number(e.target.value))} style={{width: '80px'}}/>
+            </div>
+            <div className={styles['line']}></div> 
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+              <span className={styles['dish-text']}>ЦЕНА, ₽</span>
+              <input value={priceValue} type="number" step="50" name="price" className={styles['dish-digit']} onChange={e => setPriceValue(Number(e.target.value))} style={{width: '80px'}}/>
+            </div>
+            <div className={styles['line']}></div> 
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+              <span className={styles['dish-text']}>ЭНЕРГЕТИЧЕСКАЯ ЦЕННОСТЬ,<br/>ККАЛ/100 Г</span>
+              <input value={energyValue} type="number" step="50" name="energy" className={styles['dish-digit']} onChange={e => setEnergyValue(Number(e.target.value))} style={{width: '80px'}}/>
+            </div>
+            <div className={styles['line']}></div> 
+            <span className={styles['dish-text']}>СРОК ГОДНОСТИ</span>
+            <input value={dateValue} placeholder='введите срок годности..' name="date" onChange={e => setDateValue(e.target.value)} className={styles['input']}  style={{marginTop: '4%'}}/>
+          </div>
+          <div style={{width: '35%', marginLeft: '5%'}}>
+            <div>
+              <span className={styles['dish-text']}>СОСТАВ</span>
+              <textarea value={contentValue} placeholder='введите состав блюда..' name="content" onChange={e => setContentValue(e.target.value)} className={styles['input']} style={{height: '300px'}}/>
+            </div>
+          </div>
+        </div>
+        <div style={{textAlign: 'right', marginRight: '5%', marginTop: '1%'}}>
+          <Button variant="primary" type="submit" style={{color: 'white', 
+            backgroundColor: '#f53100',
+            border: 'none',
+            height: '40px', 
+            fontSize: '20px',
+            borderRadius: '10px 10px 10px 10px',
+            width: '20%', 
+            fontFamily: 'sans-serif'}} 
+            onClick={() => handleCreateButtonClick()}>
+              Создать!
+          </Button>
+        </div>
+      </div>
+        }
       </div>
     </div>
   );

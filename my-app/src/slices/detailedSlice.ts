@@ -25,7 +25,7 @@ const dataSlice = createSlice({
   name: "data",
   initialState: {
     dish: {},
-    LinksMapData: new Map<string, string>([['Блюда', '/']])
+    LinksMapData: new Map<string, string>([['Блюда', '/dishes']])
   } as DataState,
   reducers: {
     setDish(state, action: PayloadAction<DishData>) {

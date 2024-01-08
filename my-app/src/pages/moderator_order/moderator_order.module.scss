@@ -1,7 +1,7 @@
 @import '../../styles/variables.scss';
 @import '../../styles/mixins.scss';
 
-.applications__page {
+.order__page {
     &-wrapper {
         padding-top: 90px;
         max-width: 1240px;
@@ -22,43 +22,60 @@
         color: gray;
         margin-bottom: 50px;
     }
-}
 
-.applications__page-subtitle {
-    font-size: 18px;
-        max-width: 60%;
-        text-align: center;
+    &-info {
         margin: 0 auto;
-        color: gray;
-        margin-bottom: 50px;
+        margin-top: 50px;
+        width: 70%;
+        
+        &-title {
+            // display: inline-block;
+            // background-color: #3D348B;
+            border-radius: 10px 10px 0 0;
+            // padding: 10px 25px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            // color: #fff;
+            text-align: left;
+            
+        }
+
+        &-btns {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        &-btn {
+            width: 130px;
+            height: 50px;
+            background-color: #2787F5;
+        }
+    }
 }
 
-.status-search {
-    width: '25%'; 
-    border-radius: '10px 0px 0px 10px'; 
-    height: '40px'; 
-    font-size: '18px'; 
-    border: 'none'; 
-    margin-right: '5px'; 
-    background-color: 'black'; 
-    margin-top: '15px'
-}
 
 
 @include tablet {
-    .applications__page-wrapper {
+    .order__page-wrapper {
       max-width: 1100px;
     }
 }
   
 @include largeTablet {
-    .applications__page-wrapper {
-      max-width: 900px;
+    .order__page {
+        &-wrapper {
+            max-width: 900px;
+        }
+
+        &-info {
+            width: 100%;
+        }
     }
 }
   
 @include mediumTablet {
-    .applications__page {
+    .order__page {
         &-wrapper {
             max-width: 800px;
         }
@@ -70,7 +87,7 @@
 }
   
 @include smallTablet {
-    .applications__page {
+    .order__page {
         &-wrapper {
             max-width: 700px;
         }
@@ -83,7 +100,7 @@
 }
 
 @include mobileLandscape {
-    .applications__page {
+    .order__page {
         &-wrapper {
             max-width: 600px;
         }
@@ -95,7 +112,7 @@
 }
   
 @include mobile {
-    .applications__page {
+    .order__page {
         &-wrapper {
             max-width: 500px;
         }
@@ -103,7 +120,7 @@
 }
   
 @include smallMobile {
-    .applications__page {
+    .order__page {
         &-wrapper {
             max-width: 450px;
         }
@@ -111,13 +128,13 @@
 }
   
 @include extraSmallMobile {
-    .applications__page-wrapper {
+    .order__page-wrapper {
       max-width: 380px;
     }
 }
   
 @include ultraSmallMobile {
-    .applications__page {
+    .order__page {
         &-wrapper {
             max-width: 330px;
         }
@@ -125,7 +142,7 @@
 }
   
 @include tinyMobile {
-    .applications__page-wrapper {
+    .order__page-wrapper {
       max-width: 290px;
     }
 }

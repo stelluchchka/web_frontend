@@ -15,6 +15,8 @@ import { setDishesAction} from "../src/slices/mainSlice";
 import React from 'react';
 import OrderPage from "./pages/order";
 import OrdersPage from "./pages/orders";
+import EditDishPage from "./pages/edit_dish";
+import ModeratorOrderPage from "./pages/moderator_order/moderator_order";
 
 const mockDishes = [
   {
@@ -185,9 +187,11 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/dishes" element={<Dishes />} />
         <Route path="/dishes/:id" element={<DetailedPage />} />
+        <Route path="/edit_dish/:id" element={<EditDishPage />} />
         <Route>{!isAuth && <Route path='/registration' element={<RegistrationPage/>} />}</Route>
         <Route path='/login' element={<LoginPage/>} />
         {<Route path='/orders/:id' element={<OrderPage/>}/>}
+        {<Route path='/moderator_orders/:id' element={<ModeratorOrderPage/>}/>}
         {<Route path='/orders' element={<OrdersPage/>}/>}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
