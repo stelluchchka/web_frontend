@@ -1,6 +1,16 @@
 @import '../../styles/variables.scss';
 @import '../../styles/mixins.scss';
 
+th {
+    background-color: #3D348B !important;
+    color: #fff !important;
+}
+
+td {
+    // background-color: #aaaaaa !important;
+    background-color: #dddce4 !important;
+
+}
 
 .table {
     width: 100%;

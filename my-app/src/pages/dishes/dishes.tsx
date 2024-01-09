@@ -12,7 +12,8 @@ import {useTitleValue, useDishes, setTitleValueAction, setDishesAction, setMinPr
 import { useLinksMapData, setLinksMapDataAction, setDishAction, useDish } from '../../slices/detailedSlice';
 import { setCurrentOrderIdAction, setDishesFromOrderDataAction, setOrderDateAction, useCurrentOrderId } from '../../slices/orderSlice';
 import { useUser } from '../../slices/authSlice';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import AdminDishesTable from '../../components/AdminDishesTable';
 
 
 export type Dish = {
@@ -357,12 +358,20 @@ const DishesPage: React.FC = () => {
                     </div>
                     {dishes.length === 0 && <p className="dish-text"> <big>таких блюд у нас нет🥹</big></p>}
                     <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'left', width: '100%', margin: '0 auto'}}>
-                        {user.isSuperuser && <OneCard key={0} id={0} url='http://localhost:9000/img/plus.png' title="новое блюдо" tags="new" price={0} onPlusButtonClick={() => console.log(1)} onDelButtonClick={() => console.log(1)}></OneCard>}
-                        {dishes.map((dish: Dish) => (
-                            <OneCard key={dish.id} id={dish.id} url={dish.url} title={dish.title} chef={dish.chef_post} tags={dish.tags} price={Number(dish.price)} onPlusButtonClick={() => postDishToOrder(dish.id)} onPutButtonClick={() => handlePutButton(dish.id)} onDelButtonClick={() => handleDeleteButton(dish.id)}></OneCard>
-                        ))}
+                        {user.isSuperuser && 
+                        <Link to={'/dishes/0/'} style={{marginLeft: '5%', marginTop: '2%'}}>
+                            <div style={{fontSize: '20px', fontWeight: '500', color: 'black', backgroundColor: 'white', borderRadius: '5px', width: '115%'}}>Добавить новое блюдo</div>
+                        </Link>
+                        }
+                        {!user.isSuperuser &&
+                            dishes.map((dish: Dish) => (
+                            <OneCard key={dish.id} id={dish.id} url={dish.url} title={dish.title} chef={dish.chef_post} tags={dish.tags} price={Number(dish.price)} onPlusButtonClick={() => postDishToOrder(dish.id)}></OneCard>))
+                        }
                     </div>
             </div>
+            {user.isSuperuser && (dishes.length > 0) &&
+                <AdminDishesTable dishes={dishes} onPutButtonClick={() => handlePutButton(dish.id)} onDelButtonClick={() => handleDeleteButton(dish.id)}/>
+            }
         </div>
      )
 };

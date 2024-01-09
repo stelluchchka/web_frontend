@@ -14,12 +14,10 @@ export type CardProps = {
   price?: number;
   chef?: string;
   onPlusButtonClick?: React.MouseEventHandler;
-  onPutButtonClick?: React.MouseEventHandler;
-  onDelButtonClick?: React.MouseEventHandler;
   onImageClick?: React.MouseEventHandler;
 };
 
-const OneCard: React.FC<CardProps> = ({id, title, tags, price, url, chef, onPlusButtonClick, onPutButtonClick, onDelButtonClick, onImageClick }) => {
+const OneCard: React.FC<CardProps> = ({id, title, tags, price, url, chef, onPlusButtonClick, onImageClick }) => {
   const user = useUser();
   const isAuth = useIsAuth();
   return (
@@ -91,8 +89,8 @@ const OneCard: React.FC<CardProps> = ({id, title, tags, price, url, chef, onPlus
         {user.isSuperuser && id != 0 &&
           <div style={{textAlign: 'right', marginRight: '5px'}}>
             <br />
-            <Button style={{padding: '0px 0px', marginBottom: "5px", marginRight: "5px", height: "40px", width: "40px"}} onClick={onPutButtonClick} variant="primary">✏️</Button>
-            <Button style={{padding: '0px 0px', marginBottom: "5px", height: "40px", width: "40px"}} onClick={onDelButtonClick} variant="primary">🗑</Button>
+            {/* <Button style={{padding: '0px 0px', marginBottom: "5px", marginRight: "5px", height: "40px", width: "40px"}} onClick={onPutButtonClick} variant="primary">✏️</Button>
+            <Button style={{padding: '0px 0px', marginBottom: "5px", height: "40px", width: "40px"}} onClick={onDelButtonClick} variant="primary">🗑</Button> */}
           </div>          
         }
         
