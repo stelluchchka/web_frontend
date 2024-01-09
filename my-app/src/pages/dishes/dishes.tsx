@@ -244,7 +244,7 @@ const DishesPage: React.FC = () => {
                 title: response.data.title,
                 price: response.data.price,
                 url: response.data.url,
-                tag: response.data.tag,
+                tag: response.data.tags,
                 weight: response.data.weight,
                 energy_value: response.data.energy_value,
                 content: response.data.content,
@@ -352,7 +352,7 @@ const DishesPage: React.FC = () => {
                             </Button>
                     </div>
                     <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'left', width: '100%', margin: '0 auto'}}>
-                        {user.isSuperuser && <OneCard key={0} id={0} url='https://imgpng.ru/d/plus_PNG68.png' title="новое блюдо" tags="new" price={0} onPlusButtonClick={() => console.log(1)} onDelButtonClick={() => console.log(1)}></OneCard>}
+                        {user.isSuperuser && <OneCard key={0} id={0} url='http://localhost:9000/img/plus.png' title="новое блюдо" tags="new" price={0} onPlusButtonClick={() => console.log(1)} onDelButtonClick={() => console.log(1)}></OneCard>}
                         {dishes.map((dish: Dish) => (
                             <OneCard key={dish.id} id={dish.id} url={dish.url} title={dish.title} chef={dish.chef_post} tags={dish.tags} price={Number(dish.price)} onPlusButtonClick={() => postDishToOrder(dish.id)} onPutButtonClick={() => handlePutButton(dish.id)} onDelButtonClick={() => handleDeleteButton(dish.id)}></OneCard>
                         ))}

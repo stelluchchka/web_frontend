@@ -34,6 +34,7 @@ const EditDishPage = () => {
   const [energyValue, setEnergyValue] = useState(dish.energy_value);
   const [dateValue, setDateValue] = useState(dish.expiry_date);
   const [contentValue, setContentValue] = useState(dish.content);
+  const [tagValue, setTagValue] = useState(dish.tag);
 
   const getDish = async () => {
       try {
@@ -67,6 +68,7 @@ const EditDishPage = () => {
         formData.append('chef_pic', dict.chef_pic)
       if (dict.pic)
         formData.append('pic', dict.pic)
+      formData.append('tags', tagValue);
 
       await axios.put(`http://localhost:8000/dishes/${id}`, formData, {
           method: 'PUT',
@@ -108,8 +110,11 @@ const EditDishPage = () => {
           </div>
           <div className= {styles['title']} >Информация о блюде </div>
           <div style={{display: 'flex', justifyContent: 'center'}}>
-            <input value={titleValue} placeholder='название блюда' name="title" className={styles['title']} onChange={e => setTitleValue(e.target.value)} style={{marginRight:'10%', fontSize: '20px', height: '40px', width: '40%', fontWeight: '400'}}/>
-              <div> 
+            <div style={{marginRight:'40%'}}>
+              <input value={titleValue} placeholder='название блюда' name="title" onChange={e => setTitleValue(e.target.value)} className={styles['dish-chef-p']} style={{textAlign: 'left', width:'25%', fontWeight: '600'}}/><br/><br/>
+              <input value={tagValue} placeholder='тег' name="tag" onChange={e => setTagValue(e.target.value)} className={styles['dish-chef-p']} style={{textAlign: 'left', width:'25%'}}/>
+            </div>              
+            <div> 
               <p style={{fontSize: '18px', fontFamily: 'sans-serif'}}>фото блюда:</p>
               <input type="file" onChange={e=>{
                 if (e.target.files && e.target.files.length > 0) {

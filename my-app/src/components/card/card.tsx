@@ -71,7 +71,7 @@ const OneCard: React.FC<CardProps> = ({id, title, tags, price, url, chef, onPlus
                       marginLeft: '3%',
                       marginBottom: '1%'
               }} >{title}</p>   
-            {id != 0 &&
+            {id != 0 && tags != null && tags != '' &&
               <h5 style={{fontFamily: 'sans-serif', backgroundColor: '#f53100', color: 'white', fontWeight: '800', right: '0', margin: '5px', padding: '3px 15px 3px', borderRadius: '5px'}}>{tags}</h5>         
             }
             </div>

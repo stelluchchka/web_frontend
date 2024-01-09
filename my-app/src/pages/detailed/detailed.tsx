@@ -21,7 +21,7 @@ export type Dish = {
   chef_name: string,
   chef_post: string,
   chef_url: string,
-  expiry_date: string
+  expiry_date: string,
 }
 
 export type ReceivedDishData = {
@@ -134,6 +134,7 @@ const DetailesPage = () => {
     pic: undefined,
     chef_pic: undefined
   })
+  const [tagValue, setTagValue] = useState('');
 
   const getDish = async () => {
       try {
@@ -144,7 +145,7 @@ const DetailesPage = () => {
               title: jsonData.title,
               price: jsonData.price,
               url: jsonData.url,
-              tag: jsonData.tag,
+              tag: jsonData.tags,
               weight: jsonData.weight,
               energy_value: jsonData.energy_value,
               content: jsonData.content,
@@ -187,6 +188,7 @@ const DetailesPage = () => {
         formData.append('pic', dict.pic)
       if (dict.chef_pic)
         formData.append('chef_pic', dict.chef_pic)
+      formData.append('tags', tagValue);
 
       await axios.post(`http://localhost:8000/dishes/`, formData, {
           method: 'POST',
@@ -229,7 +231,10 @@ const DetailesPage = () => {
           </div>
           <div className= {styles['title']} >Информация о блюде </div>
           <div style={{display: 'flex', justifyContent: 'center'}}>
-            <input value={titleValue} placeholder='название блюда' name="title" className={styles['title']} onChange={e => setTitleValue(e.target.value)} style={{marginRight:'10%', fontSize: '20px', height: '40px', width: '40%', fontWeight: '400'}}/>
+            <div style={{marginRight:'40%'}}>
+              <input value={titleValue} placeholder='название блюда' name="title" onChange={e => setTitleValue(e.target.value)} className={styles['dish-chef-p']} style={{textAlign: 'left', width:'25%', fontWeight: '600'}}/><br/><br/>
+              <input value={tagValue} placeholder='тег' name="tag" onChange={e => setTagValue(e.target.value)} className={styles['dish-chef-p']} style={{textAlign: 'left', width:'25%'}}/>
+            </div>
             <div> 
               <p style={{fontSize: '18px', fontFamily: 'sans-serif'}}>фото блюда:</p>
               <input type="file" onChange={e=>{
