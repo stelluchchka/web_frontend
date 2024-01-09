@@ -1,7 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Dropdown from 'react-bootstrap/Dropdown';
 import OneCard from '../../components/card';
 import styles from './dishes.module.scss';
 import Breadcrumps from '../../components/breadcrumps';
@@ -33,20 +32,20 @@ export type ReceivedUserData = {
     password: string,
     is_superuser: boolean,
 }
-const tags = [ 
-    {
-        key: "tag",
-        value: "тег"
-    },
-     {
-        key: "hot",
-        value: "остро"
-    },
-    {
-        key: "veg",
-        value: "вег"
-    }
-]
+// const tags = [ 
+//     {
+//         key: "tag",
+//         value: "тег"
+//     },
+//      {
+//         key: "hot",
+//         value: "остро"
+//     },
+//     {
+//         key: "veg",
+//         value: "вег"
+//     }
+// ]
 const mockDishes = [
     {
         id: 1,
