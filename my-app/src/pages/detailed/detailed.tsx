@@ -110,6 +110,11 @@ const mockDishes = [
   }
 ]
 
+interface PicData {
+  pic?: File;
+  chef_pic?: File; 
+}
+
 const DetailesPage = () => {  
   const dispatch = useDispatch();
   const dish = useDish();
@@ -118,8 +123,6 @@ const DetailesPage = () => {
   const linksMap = useLinksMapData();
   const navigate = useNavigate();
   const [titleValue, setTitleValue] = useState('');
-  const [urlValue, setUrlValue] = useState('');
-  const [chefUrlValue, setChefUrlValue] = useState('');
   const [chef_nameValue, setChef_nameValue] = useState('');
   const [chef_postValue, setChef_postValue] = useState('');
   const [weightValue, setWeightValue] = useState(0);
@@ -127,7 +130,10 @@ const DetailesPage = () => {
   const [energyValue, setEnergyValue] = useState(0);
   const [dateValue, setDateValue] = useState('');
   const [contentValue, setContentValue] = useState('');
-
+  const [dict, setDict] = useState<PicData>({
+    pic: undefined,
+    chef_pic: undefined
+  })
 
   const getDish = async () => {
       try {
@@ -174,11 +180,13 @@ const DetailesPage = () => {
       formData.append('energy_value', String(energyValue));
       formData.append('content', contentValue);
       formData.append('chef_name', chef_nameValue);
-      formData.append('pic', urlValue);
       formData.append('chef_post', chef_postValue);
-      formData.append('chef_pic', chefUrlValue);
       formData.append('status', "есть");
       formData.append('expiry_date', dateValue);
+      if (dict.pic)
+        formData.append('pic', dict.pic)
+      if (dict.chef_pic)
+        formData.append('chef_pic', dict.chef_pic)
 
       await axios.post(`http://localhost:8000/dishes/`, formData, {
           method: 'POST',
@@ -208,7 +216,15 @@ const DetailesPage = () => {
             </div>
             <div >
               <p style={{fontSize: '18px', fontFamily: 'sans-serif'}}>фото повара:</p>
-              <input type="file" value={chefUrlValue} onChange={e=>setChefUrlValue(e.target.value)}/>
+              <input type="file" onChange={e=>{
+                if (e.target.files && e.target.files.length > 0) {
+                  const new_dict = { 
+                    ...dict,
+                    ['chef_pic']: e.target.files[0]
+                  };
+                  setDict(new_dict);
+                }
+              }}/>
             </div>
           </div>
           <div className= {styles['title']} >Информация о блюде </div>
@@ -216,7 +232,15 @@ const DetailesPage = () => {
             <input value={titleValue} placeholder='название блюда' name="title" className={styles['title']} onChange={e => setTitleValue(e.target.value)} style={{marginRight:'10%', fontSize: '20px', height: '40px', width: '40%', fontWeight: '400'}}/>
             <div> 
               <p style={{fontSize: '18px', fontFamily: 'sans-serif'}}>фото блюда:</p>
-              <input type="file" value={urlValue} onChange={e=>setUrlValue(e.target.value)}/><br/><br/>
+              <input type="file" onChange={e=>{
+                if (e.target.files && e.target.files.length > 0) {
+                  const new_dict = { 
+                    ...dict,
+                    ['pic']: e.target.files[0]
+                  };
+                  setDict(new_dict);
+                }
+              }}/>
             </div>
           </div>
           <br/>
