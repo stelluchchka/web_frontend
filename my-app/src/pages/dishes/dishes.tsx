@@ -277,13 +277,14 @@ const DishesPage: React.FC = () => {
         dispatch(setMaxPriceValueAction(Number(event.target.value)));
     };
 
-    const handleTagSelect = (eventKey: string | null) => {
-        if (eventKey) {
-          const selectedTag = tags.find(tag => tag.key === eventKey);
-          if (selectedTag) {
-            dispatch(setTagValueAction(selectedTag.value));
-          }
-        }
+    const handleTagValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+        // if (eventKey) {
+        //   const selectedTag = tags.find(tag => tag.key === eventKey);
+        //   if (selectedTag) {
+        //     dispatch(setTagValueAction(selectedTag.value));
+        //   }
+        // }
+        dispatch(setTagValueAction(event.target.value));
     };
     return (
         <div className={styles.main_page}>
@@ -300,7 +301,8 @@ const DishesPage: React.FC = () => {
                             <Form.Group controlId="name">
                                 <Form.Control value={titleValue} type="text" placeholder="название" style={{ width: '95%', borderRadius: '10px 0px 0px 10px', height: '60px', fontSize: '18px', border: 'none', marginRight: '5px'}} onChange={handleTitleValueChange}/>
                             </Form.Group>
-                            <Form.Group controlId="tag">
+
+                            {/* <Form.Group controlId="tag">
                                 <Dropdown onSelect={handleTagSelect}>
                                     <Dropdown.Toggle style={{
                                         height: '60px',
@@ -331,6 +333,9 @@ const DishesPage: React.FC = () => {
                                         ))}
                                     </Dropdown.Menu>
                                 </Dropdown>
+                            </Form.Group> */}
+                            <Form.Group controlId="tag">
+                                <Form.Control value={tagValue} type="text" placeholder="тег" style={{ width: '95%', borderRadius: '0px 0px 0px 0px', height: '60px', fontSize: '18px', border: 'none', marginRight: '5px' }} onChange={handleTagValueChange}/>
                             </Form.Group>
                             <Form.Group controlId="min_price">
                                 <Form.Control value={minPriceValue} type="text" placeholder="цена от" style={{ width: '95%', borderRadius: '0px 0px 0px 0px', height: '60px', fontSize: '18px', border: 'none', marginRight: '5px' }} onChange={handleMinPriceValueChange}/>
@@ -351,13 +356,13 @@ const DishesPage: React.FC = () => {
                                 Поиск
                             </Button>
                     </div>
+                    {dishes.length === 0 && <p className="dish-text"> <big>таких блюд у нас нет🥹</big></p>}
                     <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'left', width: '100%', margin: '0 auto'}}>
                         {user.isSuperuser && <OneCard key={0} id={0} url='http://localhost:9000/img/plus.png' title="новое блюдо" tags="new" price={0} onPlusButtonClick={() => console.log(1)} onDelButtonClick={() => console.log(1)}></OneCard>}
                         {dishes.map((dish: Dish) => (
                             <OneCard key={dish.id} id={dish.id} url={dish.url} title={dish.title} chef={dish.chef_post} tags={dish.tags} price={Number(dish.price)} onPlusButtonClick={() => postDishToOrder(dish.id)} onPutButtonClick={() => handlePutButton(dish.id)} onDelButtonClick={() => handleDeleteButton(dish.id)}></OneCard>
                         ))}
                     </div>
-                {dishes.length === 0 && <p className="dish-text"> <big>таких блюд у нас нет🥹</big></p>}
             </div>
         </div>
      )
