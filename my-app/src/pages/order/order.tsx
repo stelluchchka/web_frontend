@@ -39,15 +39,16 @@ const OrderPage = () => {
   const navigate = useNavigate()
 
   React.useEffect(() => {
+
     if (currentOrderId == -1 && !flag) {
       navigate("/")
     }
-    if (!flag) {
+    else if (!flag) {
       dispatch(setLinksMapDataAction(new Map<string, string>([
           ['Текущий заказ', `orders/${currentOrderId}`]
       ])))
     }
-    else if (flag && currentOrderId != -1) {
+    else if (flag) {
       const newLinksMap = new Map<string, string>(linksMap);
       newLinksMap.set(String(OrderId), '/orders/' + OrderId);
       dispatch(setLinksMapDataAction(newLinksMap))
