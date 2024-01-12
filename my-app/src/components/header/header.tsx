@@ -64,7 +64,11 @@ const Header: React.FC = () => {
     return (
         <div className={styles.header}>
             <div className={styles.header__wrapper}>
+            {/* {isSuperuser && <div className={styles.header__profile}>Менеджер {user.first_name} {user.last_name}</div>} */}
+                {isSuperuser ? <Link to='/' className={styles.header__logo} style={{color: 'red'}}>DISHES</Link>
+                :
                 <Link to='/' className={styles.header__logo}>DISHES</Link>
+                }
                 {isUserAuth && !isSuperuser && dishes_orders.length > 0 &&
                         <div className={styles['application__icon-wrapper']}>
                             <Link to={`/orders/${order_id}`}>

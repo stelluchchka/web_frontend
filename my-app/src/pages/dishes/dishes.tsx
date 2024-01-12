@@ -9,10 +9,10 @@ import { toast } from 'react-toastify';
 import {useDispatch} from "react-redux";
 import {useTitleValue, useDishes, setTitleValueAction, setDishesAction, setMinPriceValueAction, 
     setMaxPriceValueAction, useMaxPriceValue, useMinPriceValue, useTagValue, setTagValueAction} from "../../slices/mainSlice";
-import { useLinksMapData, setLinksMapDataAction, setDishAction, useDish } from '../../slices/detailedSlice';
+import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
 import { setCurrentOrderIdAction, setDishesFromOrderDataAction, setOrderDateAction, useCurrentOrderId } from '../../slices/orderSlice';
 import { useUser } from '../../slices/authSlice';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import AdminDishesTable from '../../components/AdminDishesTable';
 
 
@@ -109,8 +109,6 @@ const DishesPage: React.FC = () => {
     const linksMap = useLinksMapData();
     const order_id = useCurrentOrderId();
     const user = useUser();
-    const navigate = useNavigate()
-    const dish = useDish()
 
     React.useEffect(() => {
         dispatch(setLinksMapDataAction(new Map<string, string>([
@@ -220,45 +218,6 @@ const DishesPage: React.FC = () => {
         catch(error) {
             throw error;
         }
-    }
-    const handleDeleteButton = async (id: number) => {
-        try {
-            await axios(`http://localhost:8000/dishes/${id}`, {
-                method: 'DELETE',
-                withCredentials: true,
-            })
-            toast.success("Блюдо успешно удалено");
-            getDishes()
-        }
-        catch(error) {
-            throw error;
-        }
-    }
-
-    const handlePutButton = async (id: number) => {
-        try {
-            const response = await axios.get(`http://127.0.0.1:8000/dishes/${id}`);
-            console.log(response.data)
-            dispatch(setDishAction({
-                id: Number(response.data.id),
-                title: response.data.title,
-                price: response.data.price,
-                url: response.data.url,
-                tag: response.data.tags,
-                weight: response.data.weight,
-                energy_value: response.data.energy_value,
-                content: response.data.content,
-                chef_name: response.data.chef_name,
-                chef_post: response.data.chef_post,
-                chef_url: response.data.chef_url,
-                expiry_date: response.data.expiry_date
-            }))
-            console.log(dish)
-            if(dish)
-              navigate(`/edit_dish/${id}`)
-          } catch(error) {
-            throw error
-          }
     }
 
     const handleSearchButtonClick = () => {
@@ -370,7 +329,7 @@ const DishesPage: React.FC = () => {
                     </div>
             </div>
             {user.isSuperuser && (dishes.length > 0) &&
-                <AdminDishesTable dishes={dishes} onPutButtonClick={() => handlePutButton(dish.id)} onDelButtonClick={() => handleDeleteButton(dish.id)}/>
+                <AdminDishesTable dishes={dishes}/>
             }
         </div>
      )

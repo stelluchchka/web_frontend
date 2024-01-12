@@ -9,7 +9,6 @@ import { setOrdersAction, useOrders } from '../../slices/orderSlice'
 import { setLinksMapDataAction, useLinksMapData } from '../../slices/detailedSlice'
 import { useUser } from '../../slices/authSlice'
 import Form from 'react-bootstrap/Form';
-import { Button } from 'react-bootstrap'
 import { setEmailValueAction, setFinishDateValueAction, setStartDateValueAction, setStatusValueAction, useEmailValue, useFinishDateValue, useStartDateValue, useStatusValue } from '../../slices/mainSlice'
 
 // import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
@@ -69,9 +68,9 @@ const OrdersListPage = () => {
     const handleFinishDateValueChange = (event: ChangeEvent<HTMLInputElement>) => {
         dispatch(setFinishDateValueAction(event.target.value));
     };
-    const handleSearchButtonClick = () => {
-        getAllOrders();
-    }
+    // const handleSearchButtonClick = () => {
+    //     getAllOrders();
+    // }
 
     const getAllOrders = async () => {
         let url = 'http://localhost:8000/orders'
@@ -104,7 +103,13 @@ const OrdersListPage = () => {
             ['Заказы', '/orders']
         ])))
         getAllOrders()
-    }, [])
+        const pollingInterval = setInterval(() => {
+            getAllOrders();
+        }, 3000);
+        return () => {
+          clearInterval(pollingInterval);
+        };
+    }, [start_dateValue, finish_dateValue, statusValue, emailValue])
     
     return (
         <div className={styles.orders__page}>
@@ -113,39 +118,10 @@ const OrdersListPage = () => {
                 <h1 className={styles['orders__page-title']}>История заказов</h1>
                 {user.isSuperuser &&
                 <div style={{display: 'flex', justifyContent: 'center'}}>
-                    {/* <form onSubmit={handleSubmit(onSubmit)} style={{display: 'flex', justifyContent: 'center'}}> */}
                     <Form.Group controlId="name">
                         <Form.Control type="text" value={emailValue} onChange={handleEmailValueChange} placeholder="пользователь" style={{ width: '95%', borderRadius: '10px 0px 0px 10px', height: '40px', fontSize: '18px', border: 'none', marginRight: '5px', backgroundColor: '#827e7a', marginTop: '15px', marginBottom: '10px'}}/>
-                        {/* <Form.Control className={styles['status-search']} type="text" placeholder="название"/> */}
                     </Form.Group>
                     
-                    {/* <div>
-                        <select
-                        name="status"
-                        id="status"
-                        required
-                        aria-labelledby="status"
-                        onChange={(event) => setStatusValue(event.target.value)}
-                        style={{
-                            height: '40px',
-                            backgroundColor: "#827e7a",
-                            color: 'black',
-                            width: '100%',
-                            textAlign: 'left',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            borderRadius: '0 0 0 0',
-                            marginRight: '5px',
-                            marginTop: "15px",
-                            marginBottom: '10px',
-                            fontSize: '18px'
-                        }}>
-                        <option value="">статус</option>
-                        <option value="сформирован">сформирован</option>
-                        <option value="отказ">отказ</option>
-                        <option value="готов">готов</option>
-                        </select>
-                    </div>                     */}
                     <Form.Group controlId="status">
                     <Form.Control type="text" value={statusValue} onChange={handleStatusValueChange} placeholder="статус" style={{ width: '95%', borderRadius: '0px 0px 0px 0px', height: '40px', fontSize: '18px', border: 'none', marginRight: '5px', backgroundColor: '#827e7a', marginTop: '15px', marginBottom: '10px'}}/>
                     </Form.Group>
@@ -157,9 +133,8 @@ const OrdersListPage = () => {
                     <Form.Group controlId="date_finish">
                         <Form.Control type="date" value={finish_dateValue} onChange={handleFinishDateValueChange} placeholder="дата создания до" style={{ width: '95%', borderRadius: '0px 10px 10px 0px', height: '40px', fontSize: '18px', border: 'none', marginRight: '5px', backgroundColor: '#827e7a', marginTop: '15px', marginBottom: '10px'}}/>
                     </Form.Group>
-                    {/* </form> */}
 
-                    <Button variant="primary" type="submit" style={{color: 'white', 
+                    {/* <Button variant="primary" type="submit" style={{color: 'white', 
                                     backgroundColor: '#f53100',
                                     border: 'none',
                                     height: '40px', 
@@ -173,7 +148,7 @@ const OrdersListPage = () => {
 
                             onClick={() => handleSearchButtonClick()}>
                                 Поиск
-                    </Button>
+                    </Button> */}
                 </div>
                 }
                 <h5 className={styles['orders__page-subtitle']}>

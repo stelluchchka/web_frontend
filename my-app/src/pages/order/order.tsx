@@ -37,6 +37,7 @@ const OrderPage = () => {
   const [dishesFromOrder, setDishesFromOrder] = useState<DishesFromOrder[]>([]);
   const flag = (currentOrderId != OrderId)
   const navigate = useNavigate()
+  const [isLoad, setLoad] = useState(false)
 
   React.useEffect(() => {
 
@@ -86,7 +87,25 @@ const OrderPage = () => {
     }
   };
 
+  const if_success = async () => {
+    
+    try {
+      const formData = new FormData();
+      formData.append('order_id', String(currentOrderId));
+      await axios.post(`http://localhost:8000/calc`, formData, {
+            method: 'POST',
+            withCredentials: true,
+      });
+      dispatch(setDishesFromOrderDataAction([]))
+      dispatch(setCurrentOrderIdAction(-1))
+      navigate("/")
+    } catch(error) {
+      console.log("Что-то пошло не так")
+    }
+  }
+
   const sendOrder = async () => {
+    setLoad(true)
     try {
       const formData = new FormData();
       formData.append('status', "сформирован");
@@ -95,11 +114,10 @@ const OrderPage = () => {
           withCredentials: true,
       })
       toast.success("Заказ успешно оформлен!");
-      dispatch(setDishesFromOrderDataAction([]))
-      dispatch(setCurrentOrderIdAction(-1))
-      navigate("/")
+      setLoad(false)
     }
     catch(error) {
+      setLoad(false)
       throw error;
     }
   }
@@ -124,6 +142,8 @@ const OrderPage = () => {
 
   const handleSendButtonClick = () => {
     sendOrder();
+    if(!isLoad)
+      if_success();  //async
   }
 
   const handleDeleteButtonClick = () => {
