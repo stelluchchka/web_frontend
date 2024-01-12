@@ -10,7 +10,7 @@ import {useDispatch} from "react-redux";
 import {useTitleValue, useDishes, setTitleValueAction, setDishesAction, setMinPriceValueAction, 
     setMaxPriceValueAction, useMaxPriceValue, useMinPriceValue, useTagValue, setTagValueAction} from "../../slices/mainSlice";
 import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
-import { setCurrentOrderIdAction, setDishesFromOrderDataAction, setOrderDateAction, useCurrentOrderId } from '../../slices/orderSlice';
+import { setCurrentOrderIdAction, setOrderDateAction } from '../../slices/orderSlice';
 import { useUser } from '../../slices/authSlice';
 import { Link } from 'react-router-dom';
 import AdminDishesTable from '../../components/AdminDishesTable';
@@ -90,15 +90,6 @@ const mockDishes = [
     }
 ]
 
-interface DishesFromOrder {
-    id: number;
-    title: string;
-    price: number;
-    tag: string;
-    url: string;
-    quantity: number;
-}
-
 const DishesPage: React.FC = () => {
     const dispatch = useDispatch()
     const dishes = useDishes();
@@ -107,7 +98,6 @@ const DishesPage: React.FC = () => {
     const minPriceValue = useMinPriceValue();
     const maxPriceValue = useMaxPriceValue();
     const linksMap = useLinksMapData();
-    const order_id = useCurrentOrderId();
     const user = useUser();
 
     React.useEffect(() => {
@@ -115,11 +105,6 @@ const DishesPage: React.FC = () => {
             ['Блюда  ', '/dishes']
         ])))
         getDishes()
-        if (order_id == -1) {
-            setOrderId();
-        }
-        if (order_id != -1)
-            getDishesFromOrder(order_id)
     }, [])
 
     const getDishes = async () => {
@@ -166,39 +151,6 @@ const DishesPage: React.FC = () => {
         }
     };
 
-    const getDishesFromOrder = async (id: number) => {
-        try {
-            const order_response = await axios(`http://localhost:8000/orders/${id}`, {
-            method: 'GET',
-            withCredentials: true,
-            })
-
-            const newDishesFromOrderDataArr = order_response.data.dishes.map((raw: DishesFromOrder) => ({
-                id: raw.id,
-                title: raw.title,
-                price: raw.price,
-                tag: raw.tag,
-                url: raw.url,
-                quantity: raw.quantity,
-            }));
-            dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
-        } 
-        catch(error) {
-            throw error;
-        }
-    }
-
-    const setOrderId = async () => {
-        const response = await axios('http://localhost:8000/dishes', {
-            method: 'GET',
-            withCredentials: true 
-        });
-        if (response.data.order.id) {
-            const id = response.data.order.id
-            dispatch(setCurrentOrderIdAction(id))
-        }
-    }
-
     const postDishToOrder = async (id: number) => {
         try {
             const response = await axios(`http://localhost:8000/dishes/${id}/post`, {
@@ -206,14 +158,9 @@ const DishesPage: React.FC = () => {
                 withCredentials: true,
             })
             toast.success("Блюдо успешно добавлено в заказ!");
+            console.log(response.data.id)
             dispatch(setCurrentOrderIdAction(response.data.id))
             dispatch(setOrderDateAction(response.data.created_at))  
-            setOrderId()
-            if (order_id != -1) {
-                getDishesFromOrder(order_id)
-            } 
-            else 
-                getDishesFromOrder(response.data.id)
         }
         catch(error) {
             throw error;
@@ -237,12 +184,6 @@ const DishesPage: React.FC = () => {
     };
 
     const handleTagValueChange = (event: ChangeEvent<HTMLInputElement>) => {
-        // if (eventKey) {
-        //   const selectedTag = tags.find(tag => tag.key === eventKey);
-        //   if (selectedTag) {
-        //     dispatch(setTagValueAction(selectedTag.value));
-        //   }
-        // }
         dispatch(setTagValueAction(event.target.value));
     };
     return (
@@ -260,39 +201,6 @@ const DishesPage: React.FC = () => {
                             <Form.Group controlId="name">
                                 <Form.Control value={titleValue} type="text" placeholder="название" style={{ width: '95%', borderRadius: '10px 0px 0px 10px', height: '60px', fontSize: '18px', border: 'none', marginRight: '5px'}} onChange={handleTitleValueChange}/>
                             </Form.Group>
-
-                            {/* <Form.Group controlId="tag">
-                                <Dropdown onSelect={handleTagSelect}>
-                                    <Dropdown.Toggle style={{
-                                        height: '60px',
-                                        backgroundColor: "#ffff",
-                                        color: '#827e7e',   //gray
-                                        width: '95%',
-                                        textAlign: 'left',
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        borderRadius: '0 0 0 0',
-                                        marginRight: '5px'
-                                    }}
-                                    variant="success"
-                                    id="dropdown-basic">
-                                        {tagValue || "тег"}
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu style={{
-                                        width: '16%',
-                                        textAlign: 'left',
-                                        textDecoration: 'none'
-                                    }}>
-                                        {tags.map(tag => (
-                                            <Dropdown.Item key={tag.key} eventKey={tag.key}
-                                            style={{display: 'block', backgroundColor: 'white', color: '#827e7e'}}>
-                                                {tag.value}
-                                            </Dropdown.Item>
-                                        ))}
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </Form.Group> */}
                             <Form.Group controlId="tag">
                                 <Form.Control value={tagValue} type="text" placeholder="тег" style={{ width: '95%', borderRadius: '0px 0px 0px 0px', height: '60px', fontSize: '18px', border: 'none', marginRight: '5px' }} onChange={handleTagValueChange}/>
                             </Form.Group>

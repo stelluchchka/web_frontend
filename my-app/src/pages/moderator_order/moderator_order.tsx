@@ -109,6 +109,9 @@ const ModeratorOrderPage = () => {
         <BreadCrumbs links={linksMap}></BreadCrumbs>
         {dishesFromOrder.length > 0 &&
         <div>
+          <h1 className={styles['order-title']}>
+            Заказ
+          </h1>
           <br />
           <div className={styles['order-info']}>
 

@@ -40,7 +40,6 @@ const OrderPage = () => {
   const [isLoad, setLoad] = useState(false)
 
   React.useEffect(() => {
-
     if (currentOrderId == -1 && !flag) {
       navigate("/")
     }
@@ -48,6 +47,7 @@ const OrderPage = () => {
       dispatch(setLinksMapDataAction(new Map<string, string>([
           ['Текущий заказ', `orders/${currentOrderId}`]
       ])))
+      getDishesFromOrder()
     }
     else if (flag) {
       const newLinksMap = new Map<string, string>(linksMap);
@@ -80,15 +80,17 @@ const OrderPage = () => {
         url: raw.url,
         quantity: raw.quantity,
       }));
-      setDishesFromOrder(newDishesFromOrderDataArr)
+      if (flag)
+        setDishesFromOrder(newDishesFromOrderDataArr)
+      else 
+        dispatch(setDishesFromOrderDataAction(newDishesFromOrderDataArr))
     }
     catch(error) {
       throw error;
     }
   };
 
-  const if_success = async () => {
-    
+  const if_success = async () => {    
     try {
       const formData = new FormData();
       formData.append('order_id', String(currentOrderId));

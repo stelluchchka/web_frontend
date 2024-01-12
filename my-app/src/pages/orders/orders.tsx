@@ -1,7 +1,6 @@
 import React, { ChangeEvent } from 'react'
 import axios from 'axios'
 import styles from './orders.module.scss'
-// import ModalWindow from '../../components/ModalWindow'
 import OrdersTable from '../../components/OrdersTable'
 import BreadCrumbs from '../../components/breadcrumps'
 import { useDispatch } from 'react-redux'
@@ -10,8 +9,6 @@ import { setLinksMapDataAction, useLinksMapData } from '../../slices/detailedSli
 import { useUser } from '../../slices/authSlice'
 import Form from 'react-bootstrap/Form';
 import { setEmailValueAction, setFinishDateValueAction, setStartDateValueAction, setStatusValueAction, useEmailValue, useFinishDateValue, useStartDateValue, useStatusValue } from '../../slices/mainSlice'
-
-// import { useLinksMapData, setLinksMapDataAction } from '../../slices/detailedSlice';
 
 export type  DishesData = {
     id: number;

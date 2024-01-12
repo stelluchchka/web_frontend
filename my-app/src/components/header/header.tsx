@@ -1,26 +1,22 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import styles from './header.module.scss'
-import { useState } from 'react';
-import ProfileWindow from "../../components/ProfileWindow";
-import { motion, AnimatePresence } from "framer-motion";
 import axios from 'axios';
 import {useDispatch} from "react-redux";
 import {useUser, useIsAuth, setIsAuthAction, setUserAction} from "../../slices/authSlice";
 import Cookies from "universal-cookie";
 import { toast } from 'react-toastify';
-import { useCurrentOrderId, useDishesFromOrderData } from '../../slices/orderSlice';
+import { useCurrentOrderId } from '../../slices/orderSlice';
 import ProfileIcon from '../../components/Icons/ProfileIcon';
 import ApplicationIcon from '../../components/Icons/ApplicationIcon';
+import BlackApplicationIcon from '../Icons/BlackApplicationIcon';
 
 const cookies = new Cookies();
 
 const Header: React.FC = () => {
     const dispatch = useDispatch();
     const location = useLocation();
-    const [isProfileButtonClicked, setIsProfileButtonClicked] = useState(false);
     const isUserAuth = useIsAuth();
-    const dishes_orders = useDishesFromOrderData();
     let user = useUser();
     const order_id = useCurrentOrderId();
     const isSuperuser = user.isSuperuser;
@@ -48,69 +44,45 @@ const Header: React.FC = () => {
                 isSuperuser: false
             }))
             navigate('/')
-            setIsProfileButtonClicked(false);
             toast.success("Выход выполнен  успешно");
         }
         catch(error) {
             console.log(error)
         }
     }    
-    const handleProfileButtonClick = () => {
-        setIsProfileButtonClicked(!isProfileButtonClicked);
-    };
+
     const handleSubmit = async () => {
         await logout();
     };
     return (
         <div className={styles.header}>
             <div className={styles.header__wrapper}>
-            {/* {isSuperuser && <div className={styles.header__profile}>Менеджер {user.first_name} {user.last_name}</div>} */}
                 {isSuperuser ? <Link to='/' className={styles.header__logo} style={{color: 'red'}}>DISHES</Link>
                 :
                 <Link to='/' className={styles.header__logo}>DISHES</Link>
                 }
-                {isUserAuth && !isSuperuser && dishes_orders.length > 0 &&
+                {isUserAuth && !isSuperuser && location.pathname === '/dishes' && (order_id != -1) &&
                         <div className={styles['application__icon-wrapper']}>
                             <Link to={`/orders/${order_id}`}>
-                                <div className={styles['application__icon-circle']}> <ApplicationIcon/>{dishes_orders.length} <br /> </div>
+                                <div style={{marginRight: "20px"}} className={styles['application__icon-circle']}> <ApplicationIcon/><br /> </div>
                             </Link>
                         </div>
                 }
-                {isUserAuth && !isSuperuser && dishes_orders.length == 0 && location.pathname === '/dishes' &&
+                {isUserAuth && !isSuperuser && location.pathname === '/dishes' && (order_id == -1) &&
+
                         <div className={styles['application__icon-wrapper']}>
-                            <div className={styles['application__icon-circle']}> <ApplicationIcon/><br /> </div>
+                            <div style={{marginRight: "20px"}} className={styles['application__icon-circle']}> <BlackApplicationIcon/><br /> </div>
                         </div>
                 }
-                <div className={styles.header__profile}>
-                    <Link className={styles.header__profile} to='/dishes'>Блюда</Link>
-                    {isUserAuth && !isSuperuser && <Link className={styles.header__profile} to='/orders'>Мои заказы</Link>}
-                    {isUserAuth && isSuperuser && <Link className={styles.header__profile} to='/orders'>Все заказы</Link>}
+                <div className={styles.header__profile} style={{display: 'flex'}}>
+                    <Link className={styles.header__profile} to='/dishes' style={{marginTop: '8px'}}>Блюда</Link>
+                    {isUserAuth && !isSuperuser && <Link className={styles.header__profile} to='/orders' style={{marginTop: '8px'}}>Мои заказы</Link>}
+                    {isUserAuth && isSuperuser && <Link className={styles.header__profile} to='/orders' style={{marginTop: '8px'}}>Все заказы</Link>}
+                    {isUserAuth && isSuperuser && <div style={{marginTop: '8px', marginRight: '10px'}}>менеджер</div>}
+                    {isUserAuth && <div style={{marginTop: '8px'}}> {user.first_name} {user.last_name}</div>}
+                    {isUserAuth && <button className={styles.header__profile} style={{backgroundColor: 'white', marginLeft: "50px"}} onClick={handleSubmit}>Выйти</button>}
                 </div>
-                {isUserAuth ? <ProfileIcon className={styles['header__profile-icon']} onClick={handleProfileButtonClick}/> : <Link to='/login' className={styles.header__profile}><ProfileIcon/></Link>}
-
-
-                <AnimatePresence>
-                {isUserAuth && isProfileButtonClicked && (
-                    <motion.div
-                    initial={{ opacity: 0, y: -50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -50 }}
-                    transition={{ duration: 0.3 }}
-                    style={{
-                        marginTop: 400,
-                        position: "absolute",
-                        right: 0,
-                    }}
-                    >
-                    <ProfileWindow
-                        email={user.email}
-                        first_name={user.first_name}
-                        last_name={user.last_name}
-                        onClick={handleSubmit}
-                    />
-                    </motion.div>
-                )}
-                </AnimatePresence>
+                {!isUserAuth && <Link to='/login' className={styles.header__profile}><ProfileIcon/></Link>}
             </div>
         </div>
     )

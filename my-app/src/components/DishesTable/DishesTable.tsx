@@ -9,7 +9,6 @@ import BasketIcon from '../Icons/BasketIcon';
 import { setCurrentOrderIdAction, setDishesFromOrderDataAction, setOrderDateAction, useDishesFromOrderData } from '../../slices/orderSlice';
 import { useNavigate } from 'react-router-dom';
 
-
 interface DishFromOrder {
   id: number;
   title: string;
@@ -31,8 +30,7 @@ const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
   const navigate = useNavigate()
 
   React.useEffect(() => {
-    console.log(dishes)
-    if (dishes.length == 0) {
+    if (dishesFromOrder.length == 0) {
       dispatch(setCurrentOrderIdAction(-1));
       dispatch(setOrderDateAction(''))
       navigate("/")
