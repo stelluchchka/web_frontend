@@ -14,7 +14,6 @@ const Header: React.FC = () => {
                     <Link className={styles.header__block} to='/'>О нас</Link>
                     <Link className={styles.header__block} to='/'>Поддержка</Link>
                 </div> */}
-                <Link to='/' className={styles.header__profile}>Корзина</Link>
                 <Link to='/' className={styles.header__profile}>Личный кабинет</Link>
             </div>
         </div>

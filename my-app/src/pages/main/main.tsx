@@ -285,7 +285,7 @@ const MainPage: React.FC = () => {
                     <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'left', width: '100%', margin: '0 auto'}}>
                         {
                         dishes.map((dish: Dish) => (
-                            <OneCard key={dish.id} id={dish.id} url={dish.url} chef={dish.chef_post} title={dish.title} tag={dish.tag} price={Number(dish.price)} onButtonClick={() => console.log('add to order')}></OneCard>
+                            <OneCard key={dish.id} id={dish.id} url={dish.url} chef={dish.chef_post} title={dish.title} tag={dish.tag} price={Number(dish.price)}></OneCard>
                         ))}
                     </div>
                 {dishes.length === 0 && <p className="dish-text"> <big>таких блюд у нас нет🥹</big></p>}

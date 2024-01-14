@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image'
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
@@ -16,7 +15,7 @@ export type CardProps = {
   onImageClick?: React.MouseEventHandler;
 };
 
-const OneCard: React.FC<CardProps> = ({id, title, tag, price, url, chef, onButtonClick, onImageClick }) => {
+const OneCard: React.FC<CardProps> = ({id, title, tag, price, url, chef, onImageClick }) => {
   return (
     <Card style={{marginRight: '3%', marginLeft: '3%', width: '345px', boxShadow: '0 0 10px #3c3a3a'}}>
       <Link to={`/dishes/${id}`} style={{ textDecoration: 'none', color: 'black' }}>
@@ -54,10 +53,10 @@ const OneCard: React.FC<CardProps> = ({id, title, tag, price, url, chef, onButto
 
         <h4 style={{fontFamily: 'sans-serif', marginLeft: '3%', fontWeight: '800', color: '#3c3a3a', fontSize: 'large', marginTop: '0', marginBottom: '0%', textAlign: 'center'}}>{price}$</h4>
         <h4 style={{fontFamily: 'sans-serif', marginLeft: '3%', fontWeight: '100', marginTop: '2%', marginBottom: '2%', textAlign: 'center'}}>{chef}</h4>
-        <div style={{textAlign: 'right', marginRight: '5px'}}>
-          <Button style={{padding: '10px 20px', marginBottom: "5px"}} onClick={onButtonClick} variant="primary">🗑</Button>
+        {/* <div style={{textAlign: 'right', marginRight: '5px'}}>
+          <Button style={{padding: '10px 20px', marginBottom: "5px"}} onClick={onButtonClick} variant="primary">+</Button>
         </div>
-        
+         */}
       </Card.Body>
     </Card>
   );
