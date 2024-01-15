@@ -74,13 +74,13 @@ const OrdersListPage = () => {
         url += `?start=${start_dateValue}`
         url += `&end=${finish_dateValue}`
         url += `&status=${statusValue}`
-        url += `&email=${emailValue}`
+        // url += `&email=${emailValue}`
         try {
           const response = await axios(url, {
             method: 'GET',
             withCredentials: true
           })
-          const OrderArr = response.data.map((raw: ReceivedOrderData) => ({
+          const OrderArr = response.data.filter((raw: ReceivedOrderData) => raw.user.includes(emailValue)).map((raw: ReceivedOrderData) => ({
             id: raw.id,
             user: raw.user,
             status: raw.status,
@@ -102,7 +102,7 @@ const OrdersListPage = () => {
         getAllOrders()
         const pollingInterval = setInterval(() => {
             getAllOrders();
-        }, 3000);
+        }, 1000);
         return () => {
           clearInterval(pollingInterval);
         };

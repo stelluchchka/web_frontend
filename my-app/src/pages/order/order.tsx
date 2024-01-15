@@ -41,7 +41,7 @@ const OrderPage = () => {
 
   React.useEffect(() => {
     if (currentOrderId == -1 && !flag) {
-      navigate("/")
+      navigate("/dishes")
     }
     else if (!flag) {
       dispatch(setLinksMapDataAction(new Map<string, string>([
@@ -56,9 +56,9 @@ const OrderPage = () => {
     } 
     else {
       deleteOrder()
-      navigate("/")
+      navigate("/dishes")
       dispatch(setLinksMapDataAction(new Map<string, string>([
-        ['Главная', `/`]
+        ['Блюда', `/dishes`]
     ])))
     }
 
@@ -100,7 +100,7 @@ const OrderPage = () => {
       });
       dispatch(setDishesFromOrderDataAction([]))
       dispatch(setCurrentOrderIdAction(-1))
-      navigate("/")
+      navigate("/dishes")
     } catch(error) {
       console.log("Что-то пошло не так")
     }
@@ -135,7 +135,7 @@ const OrderPage = () => {
       toast.success("Заказ успешно удален!");
       dispatch(setDishesFromOrderDataAction([]))
       dispatch(setCurrentOrderIdAction(-1))
-      navigate("/")
+      navigate("/dishes")
     }
     catch(error) {
       throw error;

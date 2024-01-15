@@ -160,7 +160,8 @@ const DishesPage: React.FC = () => {
             toast.success("Блюдо успешно добавлено в заказ!");
             console.log(response.data.id)
             dispatch(setCurrentOrderIdAction(response.data.id))
-            dispatch(setOrderDateAction(response.data.created_at))  
+            dispatch(setOrderDateAction(response.data.created_at))
+            getDishes();
         }
         catch(error) {
             throw error;
