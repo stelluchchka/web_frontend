@@ -33,7 +33,7 @@ const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
     if (dishesFromOrder.length == 0) {
       dispatch(setCurrentOrderIdAction(-1));
       dispatch(setOrderDateAction(''))
-      navigate("/")
+      navigate("/dishes")
     }
   }, [])
 
@@ -48,7 +48,7 @@ const DishesTable: React.FC<DishesTableProps> = ({dishes, className, flag}) => {
       toast.success("Заказ успешно удален!");
       dispatch(setDishesFromOrderDataAction([]))
       dispatch(setCurrentOrderIdAction(-1))
-      navigate("/")
+      navigate("/dishes")
     }
     catch(error) {
       throw error;

@@ -43,7 +43,7 @@ const Header: React.FC = () => {
                 last_name: "",
                 isSuperuser: false
             }))
-            navigate('/')
+            navigate('/dishes')
             toast.success("Выход выполнен  успешно");
         }
         catch(error) {
