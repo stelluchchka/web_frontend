@@ -3,11 +3,11 @@
 - Репозиторий бэкенда на Python:
 [https://github.com/stelluchchka/web_backend](https://github.com/stelluchchka/web_backend)
 
-- Репозиторий нативного приложения:
-[https://github.com/stelluchchka/dishes_native_app](https://github.com/stelluchchka/dishes_native_app)
-
 - Репозиторий асинхронного сервиса на Go:
 [https://github.com/stelluchchka/async_service](https://github.com/stelluchchka/async_service)
+
+- Репозиторий нативного приложения:
+[https://github.com/stelluchchka/dishes_native_app](https://github.com/stelluchchka/dishes_native_app)
 
 ## Описание проекта
 
